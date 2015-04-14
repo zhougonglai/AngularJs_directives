@@ -18,6 +18,10 @@ body * {
     left: 0;
     right: 0;
     background-color: #F8F8F8;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .g-dp-hd{
@@ -27,15 +31,35 @@ body * {
 }
 
 .u-dp-bk{
-    float: left;
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 50px;
-    background-color: #ddd;
+    height: 50px;
 }
+.u-dp-bk-icon{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    border-right: 1px solid #D30775;
+    border-top: 1px solid #D30775;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
 .u-dp-tt{
     font-size: 20px;
     font-weight: normal;
     text-align: center;
-    text-indent: -50px;
 }
 
 .g-dp-bd{
@@ -49,10 +73,7 @@ body * {
     color: #333;
     overflow-x: hidden;
     overflow-y: auto;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    -webkit-overflow-scrolling : touch;
 }
 .g-dp-ft{
     position: absolute;
@@ -169,4 +190,9 @@ body * {
 
 .m-dp-bd-date>span.highLight {
     color: #D30775;
+}
+
+.m-dp-bd-date>span.selected{
+    background-color: #D30775;
+    color: #fff !important;
 }
