@@ -1,0 +1,51 @@
+<div class="g-city-sct-container" ng-show="SelectCityController.open">
+    <div class="g-city-sct-hd">
+        <a class="u-back-btn" ng-click="SelectCityController.close()">取消</a>
+        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="输入城市名或拼音"/>
+    </div>
+    <div class="g-city-sct-bd">
+        <ul class="city-list">
+            <li id="CURRENT">
+                <h4 class="u-city-sct-cur-hd">当前定位城市区域</h4>
+                <div class="m-city-scr-cur">
+                    <div>
+                        <a href="">上海</a>
+                    </div>
+                </div>
+            </li>
+            <li id="HISTORY">
+                <h4 class="u-city-sct-hty-hd">历史选择城市</h4>
+                <div class="m-city-scr-hty">
+                    <div>
+                        <a href="">上海</a>
+                    </div>
+                    <div>
+                        <a href="">上海</a>
+                    </div>
+                    <div>
+                        <a href="">上海</a>
+                    </div>
+                </div>
+            </li>
+            <li id="HOT">
+                <h4 class="u-city-sct-hot-hd">热门城市</h4>
+                <div class="m-city-scr-hot">
+                    <div ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
+                        <a>{{city.cityname}}</a>
+                    </div>
+                </div>
+            </li>
+            <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList">
+                <h4>{{letter}}</h4>
+                <ul class="m-city-list">
+                    <li ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
+                        ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <ul class="g-letter-list">
+        <li><a href="#{{anchor}}" ng-repeat="anchor in SelectCityController.anchorWord">{{anchor}}</a></li>
+    </ul>
+</div>

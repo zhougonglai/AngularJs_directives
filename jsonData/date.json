@@ -1,0 +1,142 @@
+{
+  "code": "1",
+  "data": {
+    "count": 0,
+    "hasNext": false,
+    "list": [
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-15",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-16",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-17",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-18",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-19",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-20",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-21",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-22",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-23",
+        "stock": 0
+      },
+      {
+        "childOnSaleFlag": true,
+        "childSellPrice": 0,
+        "departureDate": "",
+        "distributorName": "",
+        "groupName": "",
+        "marketPrice": 100,
+        "marketPriceYuan": 1,
+        "productId": 0,
+        "sellPrice": 0,
+        "specDate": "2015-01-24",
+        "stock": 0
+      }
+    ]
+  },
+  "errorMessage": "",
+  "message": "",
+  "version": "c7ada1e52b25eaaf121f486939db8695"
+}
