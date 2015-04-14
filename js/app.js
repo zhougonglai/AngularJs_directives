@@ -32,6 +32,12 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
     });
 
     $scope.$on('onSelectDate', function(e, data) {
-        debugger;
-    })
+        console.log(data);
+    });
+
+    $scope.datePickerConfig = {
+        nextStepCallBack: function() {
+
+        }
+    }
 }]);
