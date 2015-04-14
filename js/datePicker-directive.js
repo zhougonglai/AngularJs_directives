@@ -49,7 +49,12 @@ datePickerDirective
             if(!self.dateArr) {
                 self.dateArr = self.getDateAdd(self.startDateArr, 'd');
             }
-            $scope.$emit('onSelectDate', self.dateArr);
+
+            var emitData = {
+                dateArr: self.dateArr,
+                count: $scope.count
+            };
+            $scope.$emit('onSelectDate', emitData);
         };
 
         /**
