@@ -76,6 +76,7 @@ body * {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling : touch;
+    -webkit-font-smoothing: antialiased;
 }
 .g-dp-ft{
     position: absolute;
@@ -179,6 +180,10 @@ body * {
 .m-dp-bd-day td{
     font-size: 12px;
 }
+.m-dp-bd-day td:first-child,
+.m-dp-bd-day td:last-child{
+    color: #D30775;
+}
 .m-dp-bd-date>span{
     height: 50px;
     line-height: 50px;
@@ -187,7 +192,7 @@ body * {
 }
 
 .m-dp-bd-date>span.unUsable{
-    color: #aaa;
+    color: #aaa!important;
 }
 
 .m-dp-bd-date>span.highLight {

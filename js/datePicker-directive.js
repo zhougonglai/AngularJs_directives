@@ -23,6 +23,8 @@ datePickerDirective
 
         var self = this,
             serverDate = '',
+            visaDate = '',
+            visaDateStr = '',
             daysOfMonth = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
             chineseDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 
@@ -34,7 +36,8 @@ datePickerDirective
             //测试系统时间
             self.show = true;
             $scope.count = 1;
-            self.startDateArr = self.getStartDate();
+            self.startDateArr = self.getDateArr(serverDate);
+            self.visaDateArr = self.getDateArr(visaDate);
             self.setDatePickerData();
         };
 
@@ -42,19 +45,14 @@ datePickerDirective
          * @description "下一步"点击事件，用户自定义
          */
         self.nextStep = function() {
+            if(!self.dateArr) {
+                alert('请选择游玩日期');
+                return ;
+            }
             var nextStepCallback = self.datePickerConfig.nextStepCallBack;
             if(angular.isFunction(nextStepCallback)) {
                 nextStepCallback();
             }
-            if(!self.dateArr) {
-                self.dateArr = self.getDateAdd(self.startDateArr, 'd');
-            }
-
-            var emitData = {
-                dateArr: self.dateArr,
-                count: $scope.count
-            };
-            $scope.$emit('onSelectDate', emitData);
         };
 
         /**
@@ -79,22 +77,27 @@ datePickerDirective
         self.getServerDate = function() {
             var getDateUrl = $location.absUrl(),
                 getVisaGroupDate = './jsonData/date.json';
-            //var serverDatePromise = $http({
-            //    method:'GET',
-            //    url: getDateUrl
-            //});
+            var serverDatePromise = $http({
+                method:'GET',
+                url: getDateUrl
+            });
             var datePromise = $http({
                 method: 'POST',
                 url: getVisaGroupDate
             });
 
-            datePromise.success(function(data) {
-                if(data) {
-                    var startDateStr = data.data.list[0]['specDate'];
-                    serverDate = self.rebuildServerDate(startDateStr);
-                    self.init();
-                }
+            serverDatePromise.success(function(data, status, headers) {
+                serverDate = headers('date');
+                datePromise.success(function(data) {
+                    if(data) {
+                        visaDateStr = data.data.list[0]['specDate'];
+                        visaDate = self.rebuildServerDate(visaDateStr);
+                        self.init();
+                    }
+                });
             });
+
+
         };
 
         /**
@@ -140,11 +143,11 @@ datePickerDirective
         };
 
         /**
-         * @description 获取当前日期年，月，日
-         * @returns {*[]} 返回当前日期年,月,日为元素的数组
+         * @description 获取日期年，月，日
+         * @returns {*[]} 返回日期年,月,日为元素的数组
          */
-        self.getStartDate = function() {
-            var startDate = new Date(serverDate);
+        self.getDateArr = function(someDate) {
+            var startDate = new Date(someDate);
             var date = startDate.getDate(),
                 month = startDate.getMonth() + 1,
                 year = startDate.getFullYear();
@@ -156,10 +159,9 @@ datePickerDirective
          * @description 获取结束日期年，月，日
          * @returns {*[]} 返回结束日期年，月，日为元素的数组
          */
-        self.getEndDate = function() {
-            var startDateArr = self.getStartDate();
-            return self.getDateAdd(startDateArr, 'm', 5);
-        };
+        //self.getEndDate = function() {
+        //    return self.getDateAdd(self.startDateArr, 'm', 5);
+        //};
 
         /**
          * @description 获取几年，几个月，几天以后的日期
@@ -229,7 +231,10 @@ datePickerDirective
                 isUsable = false,
                 curYear = self.startDateArr[0],
                 curMonth = self.startDateArr[1],
-                curDate = self.startDateArr[2];
+                curDate = self.startDateArr[2],
+                visaDate = self.visaDateArr[2],
+                visaMonth = self.visaDateArr[1],
+                visaYear = self.visaDateArr[0];
             for(; i < self.renderMonthCount; i++) {
 
                 //每个月的总天数dateCount
@@ -269,10 +274,21 @@ datePickerDirective
                             isSelected: isSelected
                         };
                     } else {
-                        var renderDate = date.getDate();
-                        if(renderDate === curDate && date.getMonth() + 1 === self.startDateArr[1] && date.getFullYear() === self.startDateArr[0]) {
-                            isUsable = true;
+                        var renderDate = date.getDate(),
+                            renderMonth = date.getMonth() + 1,
+                            renderYear = date.getFullYear(),
+                            renderDay = date.getDay();
+                        //是否是"今天"
+                        if(renderDate === curDate &&  renderMonth === self.startDateArr[1] && renderYear === self.startDateArr[0]) {
                             isToday = 1;
+                        }
+                        //是否是"可选日期"
+                        if(renderDate === visaDate && renderMonth === visaMonth && renderYear === visaYear) {
+                            isUsable = true;
+                        }
+
+                        if(renderDay === 0 || renderDay === 6) {
+                            isHighLight = true;
                         }
 
                         switch (isToday) {
@@ -285,7 +301,7 @@ datePickerDirective
                                 renderDate = '明天';
                                 isToday++;
                                 isHighLight = true;
-                                isSelected = true;
+                                //isSelected = true;
                                 break;
                             case 3:
                                 renderDate = '后天';
@@ -372,6 +388,11 @@ datePickerDirective
                 }
             }
             self.dateArr = dateInfo.date;
+            var emitData = {
+                dateArr: self.dateArr,
+                count: $scope.count
+            };
+            $scope.$emit('onSelectDate', emitData);
         };
         /**
          * @description 获取日期对应星期几，每个月的1号在视图中开始渲染的位置

@@ -34,10 +34,9 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
     $scope.$on('onSelectDate', function(e, data) {
         console.log(data);
     });
-
     $scope.datePickerConfig = {
         nextStepCallBack: function() {
-
+            alert('用户自定义下一步请求回调')
         }
     }
 }]);
