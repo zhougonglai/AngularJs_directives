@@ -1,7 +1,7 @@
 <div class="g-city-sct-container" ng-show="SelectCityController.open">
     <div class="g-city-sct-hd">
         <a class="u-back-btn" ng-click="SelectCityController.close()">取消</a>
-        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="输入城市名或拼音"/>
+        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="{{SelectCityController.inputPlaceholder}}"/>
     </div>
     <div class="g-city-sct-bd">
         <ul class="city-list">
@@ -17,21 +17,20 @@
                 <h4 class="u-city-sct-hty-hd">历史选择城市</h4>
                 <div class="m-city-scr-hty">
                     <div>
-                        <a href="">上海</a>
-                    </div>
-                    <div>
-                        <a href="">上海</a>
-                    </div>
-                    <div>
-                        <a href="">上海</a>
+                        <a>上海</a>
                     </div>
                 </div>
             </li>
             <li id="HOT">
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
-                    <div ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
+                    <div ng-if="SelectCityController.cityList"
+                         ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
                         <a>{{city.cityname}}</a>
+                    </div>
+                    <div ng-if="SelectCityController.provinceList"
+                         ng-repeat="province in SelectCityController.provinceList | filter: {is_hot: 'Y'}">
+                        <a>{{province.station_name}}</a>
                     </div>
                 </div>
             </li>
@@ -40,6 +39,9 @@
                 <ul class="m-city-list">
                     <li ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
                         ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}
+                    </li>
+                    <li ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter}"
+                        ng-click="SelectCityController.selectCity(province.station_name)">{{province.station_name}}
                     </li>
                 </ul>
             </li>

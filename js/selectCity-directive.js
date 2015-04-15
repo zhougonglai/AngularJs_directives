@@ -2,43 +2,70 @@
  * Created by dulin on 2015/4/3.
  */
 
-var selectCityDirective = angular.module('selectCityDirective', []);
+var selectCity = angular.module('selectCityDirective', []);
 
-selectCityDirective.directive('selectCity', ['$http', '$filter', function($http, $filter) {
+
+selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter) {
     return {
         restrict: 'EA',
         replace: true,
         transclude: true,
         scope: {
-            cityModel: '='
+            cityConfig: '='
         },
         templateUrl: './templates/selectCity.tpl.html',
         require: ['selectCity'],
-        controller: function($scope, $element, $attrs) {
-            var $cityContainer = $element,
+        controller: function($scope, $element, $filter) {
+            var self = this,
+                $cityContainer = $element,
                 $letterList = $cityContainer.children().eq(2),
-                viewClientHeight = $letterList[0].clientHeight;
+                viewClientHeight = $letterList[0].clientHeight,
+                headerClientHeight = $cityContainer.children().eq(0)[0].clientHeight,
+                cityConfig = $scope.cityConfig,
+                requestUrl = cityConfig.url,
+                type = cityConfig.type;
 
-            var self = this;
-            self.open = true;
-            self.headerClientHeight = $cityContainer.children().eq(0)[0].clientHeight;
-            var otherLetters = ['pt', 'CURRENT', 'HISTORY', 'HOT'];
+            var visaCountryList,
+                flightCityList;
 
-            $http({
-                method: 'POST',
-                url: './jsonData/city.json'
-            }).success(function(data, status, headers) {
-                self.cityList = data.data;
-                self.letterList = self.getCityFirstLetter(self.cityList);
-                self.anchorWord = otherLetters.concat(self.letterList);
-                self.anchorWord.splice(0, 1);
-                self.init();
-                self.bindIndexEvent(self.anchorWord);
-            }).error(function(data, status, headers) {
+            var visaProvince = visaProvince || {},
+                visaCountry = visaCountry || {},
+                flight = flight || {},
+                train = train || {};
 
+            self.open = false;
+            $scope.$on('openSelectCity', function(e, data) {
+                self.open = !self.open;
             });
 
+            self.requestData = function() {
+                $http({
+                    method: 'POST',
+                    url: requestUrl
+                }).success(function(data, status, headers) {
+                    if(data) {
+                        switch (type) {
+                            case 'visa-province':
+                                visaProvince.init(self, data);
+                                break;
+                            case 'flight':
+                                flightCityList = data.data;
+                                break;
+                            case 'train':
+                                train.init(self, data);
+                                break;
+                            case 'visa-country':
+                                visaCountryList = data.data;
+                                break;
+                            default:
+                                break;
+                        }
+                        self.init();
+                    }
+                }).error(function(data, status, headers) {
 
+                });
+            };
 
             /**
              * @description 页面初始化。
@@ -50,18 +77,21 @@ selectCityDirective.directive('selectCity', ['$http', '$filter', function($http,
                 self.setAnchor('#', true);
             };
 
-
             /**
              * @description 初始化字母列表样式，设置字母列表高度及"padding-top"。
              */
             self.initLetterListHeight = function () {
                 var items = $letterList.children(),
-                    len = self.anchorWord.length;
-                self.itemPt = viewClientHeight % len;
-                    self.itemHeight = (viewClientHeight - self.itemPt) / len;
+                    itemPt = viewClientHeight % 26;
+                self.itemHeight = (viewClientHeight - itemPt) / 26;
                 items.css({
                     height: self.itemHeight + 'px'
                 });
+                if(type === 'visa-province' || type === 'visa-country') {
+                    self.itemPt = itemPt + 50;
+                } else {
+                    self.itemPt = itemPt;
+                }
                 $letterList.css('padding-top', self.itemPt + 'px');
             };
 
@@ -112,32 +142,135 @@ selectCityDirective.directive('selectCity', ['$http', '$filter', function($http,
                 self.open = !self.open;
             };
 
+
             /**
-             * @description 获取城市首字母数组
-             * @param cityList 城市数组
-             * @returns {Array} 城市首字母数组
+             * @description 火车票城市选择单例对象
              */
-            self.getCityFirstLetter = function(cityList) {
-                if(!angular.isArray(cityList)) return;
-                var i = 0,
-                    len = cityList.length,
-                    letterList = [];
-                if(!len) return;
-                for(; i < len; i++) {
-                    for(var k in cityList[i]) {
-                        if(k !== 'firstletter') {
-                            continue;
+            train = function() {
+                return {
+                    letterList: [],
+                    otherLetters: ['pt', 'CURRENT', 'HISTORY', 'HOT'],
+                    anchorWord: null,
+                    cityList: null,
+
+                    getCityFirstLetter: function() {
+                        if(!angular.isArray(this.cityList)) return;
+                        var i = 0,
+                            cityList = this.cityList,
+                            len = cityList.length;
+                        if(!len) return;
+                        for(; i < len; i++) {
+                            for(var k in cityList[i]) {
+                                if(k !== 'firstletter') {
+                                    continue;
+                                }
+                                if(i === 0 || cityList[i - 1][k] !== cityList[i][k]) {
+                                    var lowercaseLetter = cityList[i][k],
+                                        uppercaseLetter = $filter('uppercase')(lowercaseLetter);
+                                    this.letterList.push(uppercaseLetter);
+                                }
+                            }
                         }
-                        if(i === 0 || cityList[i - 1][k] !== cityList[i][k]) {
-                            var lowercaseLetter = cityList[i][k],
-                                uppercaseLetter = $filter('uppercase')(lowercaseLetter);
-                            letterList.push(uppercaseLetter);
-                        }
+                        this.letterList.sort();
+                        return this;
+                    },
+
+                    getAnchorWord: function() {
+                        this.anchorWord = this.otherLetters.concat(this.letterList);
+                        this.anchorWord.splice(0, 1);
+                        return this;
+                    },
+
+                    getCityList: function(requestData) {
+                        this.cityList = requestData.data;
+                        return this;
+                    },
+
+                    bindControllerData: function(SCController) {
+                        SCController.cityList =  this.cityList;
+                        SCController.letterList = this.letterList;
+                        SCController.anchorWord = this.anchorWord;
+                        SCController.inputPlaceholder = '输入城市名或拼音';
+                        return this;
+                    },
+
+                    init: function(SCController, requestData) {
+                        this.getCityList(requestData)
+                            .getCityFirstLetter()
+                            .getAnchorWord()
+                            .bindControllerData(SCController);
+                        SCController.init();
+                        SCController.bindIndexEvent(train.anchorWord);
                     }
                 }
-                letterList.sort();
-                return letterList;
-            };
+            }();
+
+            /**
+             * @description 签证省份单例对象
+             */
+            visaProvince = function(){
+                return {
+                    letterList: [],
+                    anchorWord: null,
+                    provinceList: null,
+
+                    getProvinceFirstLetter: function() {
+                        if(!angular.isArray(this.provinceList)) return;
+                        var provinceList = this.provinceList,
+                            len = provinceList.length,
+                            provinceObj,
+                            pinyin,
+                            uppercaseLetter,
+                            letterArr = [],
+                            i = 0;
+                        for(; i < len; i++) {
+                            provinceObj =  provinceList[i];
+                            pinyin = provinceObj['pinyin'];
+                            letterArr.push(pinyin[0]);
+                        }
+                        var l = letterArr.length,
+                            j = 0;
+
+                        for(; j < l; j++) {
+                            if(j === 0 || letterArr[j - 1] !== letterArr[j]) {
+                                uppercaseLetter = $filter('uppercase')(letterArr[j]);
+                                this.letterList.push(uppercaseLetter);
+                            }
+                            provinceObj = provinceList[j];
+                            provinceObj.firstletter = $filter('uppercase')(letterArr[j]);
+                            this.letterList.sort();
+                        }
+                        return this;
+                    },
+
+                    getProvinceList: function(requestData) {
+                        this.provinceList = requestData.data;
+                        return this;
+                    },
+
+                    getAnchorWord: function() {
+                        this.anchorWord = this.letterList;
+                        return this;
+                    },
+
+                    bindControllerData: function(SCController) {
+                        SCController.provinceList =  this.provinceList;
+                        SCController.letterList = this.letterList;
+                        SCController.anchorWord = this.anchorWord;
+                        SCController.inputPlaceholder = '输入省份或自治区，直辖市';
+                        return this;
+                    },
+
+                    init: function(SCController, requestData) {
+                        this.getProvinceList(requestData)
+                            .getProvinceFirstLetter()
+                            .getAnchorWord()
+                            .bindControllerData(SCController);
+                        SCController.init();
+                        SCController.bindIndexEvent(this.anchorWord);
+                    }
+                }
+            }();
 
             /**
              * @description 选择城市事件处理
@@ -170,8 +303,9 @@ selectCityDirective.directive('selectCity', ['$http', '$filter', function($http,
                 $letterList.on('touchmove', function(e) {
                     var iH = self.itemHeight,
                         iPt = self.itemPt,
-                        tcY = e.changedTouches[0].clientY,
-                        hdH = self.headerClientHeight,
+                        tcYFixed = 10,
+                        tcY = e.changedTouches[0].clientY - tcYFixed,
+                        hdH = headerClientHeight,
                         i = 0;
 
                     for(; i < awLen; i++) {
@@ -195,10 +329,9 @@ selectCityDirective.directive('selectCity', ['$http', '$filter', function($http,
                 })
             };
 
-        },
-        controllerAs: 'SelectCityController',
-        link: function(scope, element, attrs, ctrls) {
+            self.requestData();
 
-        }
+        },
+        controllerAs: 'SelectCityController'
     }
 }]);

@@ -1,55 +1,27 @@
-<html>
+<!doctype html>
+<html ng-app="anchorScrollExample">
 	<head>
-		<title></title>
-		<script type="text/javascript" src="http://s2.lvjs.com.cn/js/new_v/jquery-1.7.2.min.js"></script>
-		<style>
-		body{
-			position: relative;
-		}
-			div{
-				width: 200px;
-				height: 20px;
-				position: absolute;
-				left: 40%;
-				top: 40%;
-				background-color: orange;
-				transform-origin: 0 0 -100px ;
-				perspective: 1000;
-				transform-style: preserve-3d;
-				transform:rotateX(0deg);
-				border: 1px dashed #000;
-			}
-			section{
-				position: absolute;
-				left: 40%;
-				top: 40%;
-				width: 200px;
-				height: 200px;
-				transform:rotateY(45deg);
-				perspective: 1000;
-				transform-style: preserve-3d;
-			}
-		</style>
+		<title>锚点测试</title>
+        <script src="../libs/angular.js"></script>
 	</head>
 	<body>
-		<section>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-		</section>
-		<script>
-			for(var i=0;i<$("div").length;i++){
-				$("div").eq(i).css("transform","rotateX(" + i*30 + "deg)");
-			}
-		</script>
+        <div id="scrollArea" ng-controller="ScrollController">
+            <a ng-click="gotoBottom()">Go to bottom</a>
+            <a id="bottom"></a> You're at the bottom!
+        </div>
+        <script>
+            angular.module('anchorScrollExample', [])
+                .controller('ScrollController', ['$scope', '$location', '$anchorScroll',
+                    function ($scope, $location, $anchorScroll) {
+                        $scope.gotoBottom = function() {
+                            // set the location.hash to the id of
+                            // the element you wish to scroll to.
+                            $location.hash('bottom');
+
+                            // call $anchorScroll()
+                            $anchorScroll();
+                        };
+                    }]);
+        </script>
 	</body>
 </html>
