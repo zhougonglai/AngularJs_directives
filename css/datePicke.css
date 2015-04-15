@@ -139,6 +139,7 @@ body * {
     color: #D30775;
     font-size: 20px;
     font-weight: bolder;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .u-dp-ft-count{
@@ -189,6 +190,7 @@ body * {
     line-height: 50px;
     font-size: 14px;
     border-bottom: 1px solid #dfdfdf;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .m-dp-bd-date>span.unUsable{

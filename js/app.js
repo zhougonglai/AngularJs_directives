@@ -5,7 +5,8 @@ var myApp = angular.module('myApp', [
     'modalDialogDirective',
     'selectCityDirective',
     'rollerPickerDirective',
-    'datePickerDirective'
+    'datePickerDirective',
+    'ngTouch'
 ]);
 
 myApp.controller('TestController', ['$scope', function($scope) {
