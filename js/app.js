@@ -18,6 +18,15 @@ myApp.controller('TestController', ['$scope', function($scope) {
 }]);
 
 myApp.controller('SelectCityController', ['$scope', '$http', function($scope, $http) {
+    $scope.show = function() {
+        $scope.$broadcast('openSelectCity', {});
+    };
+
+    $scope.selectCityConfig = {
+        url: './jsonData/visaProvince.json',
+        type: 'visa-province'
+    };
+
     $scope.$on('setCityName', function(e, cityName) {
         //debugger;
     });
@@ -25,12 +34,7 @@ myApp.controller('SelectCityController', ['$scope', '$http', function($scope, $h
 }]);
 
 myApp.controller('RPParentController', ['$scope','$http', function($scope, $http) {
-    $http({
-        method: 'POST',
-        url: './jsonData/city.json'
-    }).success(function(data) {
-        $scope.cityData = data.data;
-    });
+
 
     $scope.$on('onSelectDate', function(e, data) {
         console.log(data);
