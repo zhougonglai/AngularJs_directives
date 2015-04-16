@@ -1,7 +1,8 @@
 <div class="g-city-sct-container" ng-show="SelectCityController.open">
     <div class="g-city-sct-hd">
         <a class="u-back-btn" ng-click="SelectCityController.close()">取消</a>
-        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="{{SelectCityController.inputPlaceholder}}"/>
+        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="{{SelectCityController.inputPlaceholder}}"
+               ng-model="search"/>
     </div>
     <div class="g-city-sct-bd">
         <ul class="city-list">
@@ -29,7 +30,7 @@
                     </div>
                 </div>
             </li>
-            <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList">
+            <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList | filter: search[0]" >
                 <h4>{{letter}}</h4>
                 <ul class="m-city-list">
                     <li ng-if="SelectCityController.type === 'train'"
@@ -37,7 +38,7 @@
                         ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}
                     </li>
                     <li ng-if="SelectCityController.type === 'visa-province'"
-                        ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter}"
+                        ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter, pinyin: search}"
                         ng-click="SelectCityController.selectCity(province.station_name)">{{province.station_name}}
                     </li>
                 </ul>
