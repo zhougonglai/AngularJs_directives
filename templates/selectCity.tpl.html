@@ -6,41 +6,38 @@
     <div class="g-city-sct-bd">
         <ul class="city-list">
             <li id="CURRENT">
-                <h4 class="u-city-sct-cur-hd">当前定位城市区域</h4>
+                <h4 class="u-city-sct-cur-hd">{{SelectCityController.curPosition}}</h4>
                 <div class="m-city-scr-cur">
                     <div>
                         <a href="">上海</a>
                     </div>
                 </div>
             </li>
-            <li id="HISTORY">
-                <h4 class="u-city-sct-hty-hd">历史选择城市</h4>
+            <li id="HISTORY" ng-if="SelectCityController.historySelectedList">
+                <h4 class="u-city-sct-hty-hd">{{SelectCityController.historyOptions}}</h4>
                 <div class="m-city-scr-hty">
-                    <div>
-                        <a>上海</a>
+                    <div ng-repeat="item in SelectCityController.historySelectedList">
+                        <a ng-click="">{{item.name}}</a>
                     </div>
                 </div>
             </li>
-            <li id="HOT">
+            <li id="HOT" ng-if="SelectCityController.type === 'train'">
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
-                    <div ng-if="SelectCityController.cityList"
-                         ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
+                    <div ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
                         <a>{{city.cityname}}</a>
-                    </div>
-                    <div ng-if="SelectCityController.provinceList"
-                         ng-repeat="province in SelectCityController.provinceList | filter: {is_hot: 'Y'}">
-                        <a>{{province.station_name}}</a>
                     </div>
                 </div>
             </li>
             <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList">
                 <h4>{{letter}}</h4>
                 <ul class="m-city-list">
-                    <li ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
+                    <li ng-if="SelectCityController.type === 'train'"
+                        ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
                         ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}
                     </li>
-                    <li ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter}"
+                    <li ng-if="SelectCityController.type === 'visa-province'"
+                        ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter}"
                         ng-click="SelectCityController.selectCity(province.station_name)">{{province.station_name}}
                     </li>
                 </ul>

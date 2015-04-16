@@ -5,7 +5,7 @@
 var selectCity = angular.module('selectCityDirective', []);
 
 
-selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter) {
+selectCity.directive('selectCity', ['$http', function($http) {
     return {
         restrict: 'EA',
         replace: true,
@@ -15,7 +15,7 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
         },
         templateUrl: './templates/selectCity.tpl.html',
         require: ['selectCity'],
-        controller: function($scope, $element, $filter) {
+        controller: function($scope, $element, $filter, $window) {
             var self = this,
                 $cityContainer = $element,
                 $letterList = $cityContainer.children().eq(2),
@@ -25,6 +25,7 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                 requestUrl = cityConfig.url,
                 type = cityConfig.type;
 
+            self.type = type;
             var visaCountryList,
                 flightCityList;
 
@@ -36,6 +37,7 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
             self.open = false;
             $scope.$on('openSelectCity', function(e, data) {
                 self.open = !self.open;
+                self.initHistorySelected();
             });
 
             self.requestData = function() {
@@ -60,7 +62,6 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                             default:
                                 break;
                         }
-                        self.init();
                     }
                 }).error(function(data, status, headers) {
 
@@ -75,6 +76,11 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
             self.init = function() {
                 self.initLetterListHeight();
                 self.setAnchor('#', true);
+                self.initHistorySelected();
+            };
+
+            self.initHistorySelected = function() {
+                self.historySelectedList = angular.fromJson(localStorage.getItem('historySelectedList'));
             };
 
             /**
@@ -146,12 +152,14 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
             /**
              * @description 火车票城市选择单例对象
              */
-            train = function() {
+            train = function($window, angular) {
+                var storage = $window.localStorage;
                 return {
                     letterList: [],
                     otherLetters: ['pt', 'CURRENT', 'HISTORY', 'HOT'],
                     anchorWord: null,
                     cityList: null,
+                    historySelectedList: [],
 
                     getCityFirstLetter: function() {
                         if(!angular.isArray(this.cityList)) return;
@@ -187,10 +195,27 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                     },
 
                     bindControllerData: function(SCController) {
+
                         SCController.cityList =  this.cityList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.inputPlaceholder = '输入城市名或拼音';
+                        SCController.curPosition = '当前定位城市区域';
+                        SCController.historyOptions = '历史选择城市';
+
+                        return this;
+                    },
+
+                    updateHistorySelected: function(cityName,SCController) {
+                        this.historySelectedList.unshift({name: cityName});
+                        if(this.historySelectedList.length > 6) {
+                            this.historySelectedList.length = 6;
+                        }
+                        storage.setItem('historySelectedList',angular.toJson(this.historySelectedList));
+                        var historySelectedList = storage.getItem('historySelectedList');
+                        if(historySelectedList && historySelectedList.length > 0) {
+                            SCController.historySelectedList = historySelectedList;
+                        }
                         return this;
                     },
 
@@ -203,16 +228,18 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                         SCController.bindIndexEvent(train.anchorWord);
                     }
                 }
-            }();
+            }($window, angular);
 
             /**
              * @description 签证省份单例对象
              */
-            visaProvince = function(){
+            visaProvince = function($window, angular){
+                var storage = $window.localStorage;
                 return {
                     letterList: [],
                     anchorWord: null,
                     provinceList: null,
+                    historySelectedList: [],
 
                     getProvinceFirstLetter: function() {
                         if(!angular.isArray(this.provinceList)) return;
@@ -254,10 +281,43 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                     },
 
                     bindControllerData: function(SCController) {
+                        var historySelectedList = storage.getItem('historySelectedList');
                         SCController.provinceList =  this.provinceList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.inputPlaceholder = '输入省份或自治区，直辖市';
+                        SCController.curPosition = '当前定位区域';
+                        SCController.historyOptions = '历史选择';
+                        if(historySelectedList && historySelectedList.length > 0) {
+                            SCController.historySelectedList = historySelectedList;
+                        }
+                        return this;
+                    },
+
+                    updateHistorySelected: function(cityName, SCController) {
+                        if(cityName) {
+                            var historyList = angular.fromJson(storage.getItem('historySelectedList'));
+                            if(historyList && historyList.length > 0) {
+                                var len = historyList.length,
+                                    i = 0;
+                                for(; i < len; i++) {
+                                    var historyObj = historyList[i];
+                                    if(historyObj['name'] === cityName) {
+                                        return ;
+                                    }
+                                }
+                            }
+                            this.historySelectedList.unshift({name: cityName});
+                            if(this.historySelectedList.length > 6) {
+                                this.historySelectedList.length = 6;
+                            }
+                            storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
+                        }
+
+                        var historySelectedList = this.historySelectedList;
+                        if(historySelectedList && historySelectedList.length > 0) {
+                            SCController.historySelectedList = historySelectedList;
+                        }
                         return this;
                     },
 
@@ -270,14 +330,25 @@ selectCity.directive('selectCity', ['$http', '$filter', function($http, $filter)
                         SCController.bindIndexEvent(this.anchorWord);
                     }
                 }
-            }();
+            }($window, angular);
 
             /**
              * @description 选择城市事件处理
              * @param {String} cityName 城市名
              */
             self.selectCity = function(cityName) {
+                switch (type) {
+                    case 'visa-province':
+                        visaProvince.updateHistorySelected(cityName, self);
+                        break;
+                    case 'train':
+                        train.updateHistorySelected(cityName, self);
+                        break;
+                    default:
+                        break;
+                }
                 $scope.$emit('setCityName', cityName);
+
                 self.close();
             };
 
