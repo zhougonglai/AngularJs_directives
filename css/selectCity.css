@@ -55,6 +55,7 @@ ul{
     left: 0;
     right: 30px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .u-city-sct-cur-hd{
@@ -125,7 +126,7 @@ ul{
     top: 50px;
     bottom: 0;
     right: 0;
-    width: 30px;
+    width: 40px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
