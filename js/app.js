@@ -17,7 +17,7 @@ myApp.controller('TestController', ['$scope', function($scope) {
     };
 }]);
 
-myApp.controller('SelectCityController', ['$scope', '$http', function($scope, $http) {
+myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($scope, $http, $log) {
     $scope.show = function() {
         $scope.$broadcast('openSelectCity', {});
     };
@@ -29,6 +29,10 @@ myApp.controller('SelectCityController', ['$scope', '$http', function($scope, $h
 
     $scope.$on('setCityName', function(e, cityName) {
         //debugger;
+    });
+
+    $scope.$on('closeSelectCity', function(e, data) {
+        $log.info('123');
     });
 
 }]);

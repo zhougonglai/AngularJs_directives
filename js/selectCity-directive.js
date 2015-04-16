@@ -15,7 +15,7 @@ selectCity.directive('selectCity', ['$http', function($http) {
         },
         templateUrl: './templates/selectCity.tpl.html',
         require: ['selectCity'],
-        controller: function($scope, $element, $filter, $window) {
+        controller: function($scope, $element, $filter, $window, $location, $anchorScroll) {
             var self = this,
                 $cityContainer = $element,
                 $letterList = $cityContainer.children().eq(2),
@@ -40,6 +40,16 @@ selectCity.directive('selectCity', ['$http', function($http) {
                 self.initHistorySelected();
             });
 
+            /**
+             * @description 根据用户传递的城市数据url地址，和项目类型，请求对应项目的城市，或者省份，或者国家的数据
+             *              数据类型(type):1. 'train' 火车票项目城市数据
+             *                            2. 'flight' 飞机票项目城市数据
+             *                            3. 'visa-province' 签证项目省份数据
+             *                            4. 'visa-country' 签证项目国家数据
+             *
+             *              根据不同的类型，进入不同的分支，每个分支为一个单例对象。
+             *
+             */
             self.requestData = function() {
                 $http({
                     method: 'POST',
@@ -70,8 +80,9 @@ selectCity.directive('selectCity', ['$http', function($http) {
 
             /**
              * @description 页面初始化。
-             *              1.初始化页面样式；
-             *              2.初始化页面锚点；
+             *              1.初始化页面样式——根据不同手机屏幕视口高度，动态设置快速索引的高度和整体位置
+             *              2.初始化页面锚点
+             *              3.初始化城市等的历史选择
              */
             self.init = function() {
                 self.initLetterListHeight();
@@ -79,12 +90,17 @@ selectCity.directive('selectCity', ['$http', function($http) {
                 self.initHistorySelected();
             };
 
+            /**
+             * @description 历史选择城市等信息，存放在localStorage缓存中，打开该指令视图，从localStorage中取得用户历史选择，
+             *              更新视图历史选择。
+             */
             self.initHistorySelected = function() {
                 self.historySelectedList = angular.fromJson(localStorage.getItem('historySelectedList'));
             };
 
             /**
-             * @description 初始化字母列表样式，设置字母列表高度及"padding-top"。
+             * @description 初始化快速索引列表样式，设置快速索引列表高度，位置及"padding-top"
+             *              对于"签证"项目，根据设计图，需要在计算出的"padding-top"上加一个修正值。
              */
             self.initLetterListHeight = function () {
                 var items = $letterList.children(),
@@ -103,21 +119,25 @@ selectCity.directive('selectCity', ['$http', function($http) {
 
             /**
              * @description 设置锚点
-             * @param {String} word href，字母，字母数组
+             * @param {String} word 1.由快速索引传过来的与锚点id值相同的字符串
+             *                      2.形如['A','B']的数组
              * @param {Boolean} isLocation 是否跳转到锚点
+             * @return {Array} anchorList 当word值是第2个时，返回形如['#A','#B']的数组
              */
             self.setAnchor = function(word, isLocation) {
                 if(!word) return;
                 var hash = '',
                     isJump = isLocation || false;
                 if(angular.isString(word)) {
-                    if(word.indexOf('#') !== -1) {
+                    if(word.indexOf('#') === -1) {
                         hash = word;
                     } else {
-                        hash = '#' + word;
+                        hash = word.replace('#', '');
                     }
                     if(isJump) {
-                        location.hash = hash;
+                        //location.hash = hash;
+                        $location.hash(hash);
+                        $anchorScroll();
                         self.fixAnchorStyle(hash);
                     }
                 }
@@ -137,15 +157,22 @@ selectCity.directive('selectCity', ['$http', function($http) {
                 }
             };
 
-            self.fixAnchorStyle = function(hash) {
+            /**
+             * @description 修正锚点定位后上部的border和header的border重合的样式
+             * @param id 锚点id
+             */
+            self.fixAnchorStyle = function(id) {
 
             };
 
             /**
              * @description 关闭城市选择面板
+             *              向父级作用域发送'closeSelectCity'事件
+             *              父级作用域监听该事件，在城市选择面板隐藏后执行一些操作。
              */
             self.close = function() {
                 self.open = !self.open;
+                $scope.$emit('closeSelectCity', {});
             };
 
 
@@ -161,6 +188,10 @@ selectCity.directive('selectCity', ['$http', function($http) {
                     cityList: null,
                     historySelectedList: [],
 
+                    /**
+                     * @description 取得请求回来的城市数据中的城市拼音首字母，去除重复的首字母，用于设置锚点。
+                     * @returns {train} 使该单例对象可以链式调用方法
+                     */
                     getCityFirstLetter: function() {
                         if(!angular.isArray(this.cityList)) return;
                         var i = 0,
@@ -183,17 +214,31 @@ selectCity.directive('selectCity', ['$http', function($http) {
                         return this;
                     },
 
+                    /**
+                     * @description 火车票项目除了字母索引，还有"当前"，"历史", "热门"3个中文索引
+                     * @returns {train} 链式调用
+                     */
                     getAnchorWord: function() {
                         this.anchorWord = this.otherLetters.concat(this.letterList);
                         this.anchorWord.splice(0, 1);
                         return this;
                     },
 
+                    /**
+                     * @description 取得城市列表数据
+                     * @param requestData
+                     * @returns {train}
+                     */
                     getCityList: function(requestData) {
                         this.cityList = requestData.data;
                         return this;
                     },
 
+                    /**
+                     * @description 为指令$scope绑定将要在指令模版中渲染的数据
+                     * @param SCController 指令Controller
+                     * @returns {train} 链式调用
+                     */
                     bindControllerData: function(SCController) {
 
                         SCController.cityList =  this.cityList;
@@ -206,6 +251,14 @@ selectCity.directive('selectCity', ['$http', function($http) {
                         return this;
                     },
 
+                    /**
+                     * @description 更新用户选择的历史城市、省份信息
+                     *              重复选择的城市，将不会历史选择数组中
+                     *
+                     * @param cityName 用户选择的城市名
+                     * @param SCController 指令Controller
+                     * @returns {train} 链式调用
+                     */
                     updateHistorySelected: function(cityName,SCController) {
                         this.historySelectedList.unshift({name: cityName});
                         if(this.historySelectedList.length > 6) {
@@ -219,6 +272,12 @@ selectCity.directive('selectCity', ['$http', function($http) {
                         return this;
                     },
 
+                    /**
+                     * @description 首先进行火车票数据初始化,调用内部的方法，构造城市列表数据，首字母数据，快速索引数据，最后为指令模版绑定数据
+                     *              火车票数据初始化完毕后，调用指令controller的初始化方法，完成视图初始化。
+                     * @param SCController 指令controller
+                     * @param requestData 请求回来的城市数据
+                     */
                     init: function(SCController, requestData) {
                         this.getCityList(requestData)
                             .getCityFirstLetter()
@@ -231,7 +290,7 @@ selectCity.directive('selectCity', ['$http', function($http) {
             }($window, angular);
 
             /**
-             * @description 签证省份单例对象
+             * @description 签证省份单例对象，各方法与其他单例对象类似
              */
             visaProvince = function($window, angular){
                 var storage = $window.localStorage;
@@ -362,7 +421,7 @@ selectCity.directive('selectCity', ['$http', function($http) {
                 $letterList.on('touchstart', function(e) {
                     var target = e.target;
                     if(target.nodeName.toLocaleUpperCase() === 'A') {
-                        self.setAnchor(target.hash, true);
+                        self.setAnchor(target.name, true);
                     }
                     $cityContainer.off();
                     $cityContainer.on('touchmove', function(e) {
@@ -375,9 +434,14 @@ selectCity.directive('selectCity', ['$http', function($http) {
                     var iH = self.itemHeight,
                         iPt = self.itemPt,
                         tcYFixed = 10,
-                        tcY = e.changedTouches[0].clientY - tcYFixed,
+                        tcY,
                         hdH = headerClientHeight,
                         i = 0;
+                    if(e.originalEvent) {
+                        tcY = e.originalEvent.changedTouches[0].clientY - tcYFixed;
+                    } else if(e.changedTouches) {
+                        tcY = e.changedTouches[0].clientY - tcYFixed;
+                    }
 
                     for(; i < awLen; i++) {
                         if(i === 0) {
