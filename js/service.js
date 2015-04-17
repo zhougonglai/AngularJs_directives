@@ -15,7 +15,7 @@ serviceModule.factory('dataManager', ['$log', function($log) {
         },
         getData: function(dataName) {
             if(angular.isString(dataName)) {
-                return dataCache[dataName];
+                return dataCache[dataName] || {};
             }
         },
         removeData: function(dataName) {
@@ -26,8 +26,17 @@ serviceModule.factory('dataManager', ['$log', function($log) {
     }
 }]);
 
-serviceModule.factory('Ajax', ['$log', function($log) {
+serviceModule.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) {
     return {
-        
+        post: function(options) {
+            var deferred = $q.defer();
+            var url = options.url;
+            $http.post(url).success(function(data, status, headers) {
+                deferred.resolve(data);
+            }).error(function(data, status, headers) {
+                deferred.reject(data);
+            });
+            return deferred.promise;
+        }
     }
 }]);

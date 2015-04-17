@@ -5,7 +5,7 @@
 var selectCity = angular.module('selectCityDirective', []);
 
 
-selectCity.directive('selectCity', ['$http', 'dataManager', function($http, dataManager) {
+selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($http, dataManager, Ajax) {
     return {
         restrict: 'EA',
         replace: true,
@@ -51,10 +51,10 @@ selectCity.directive('selectCity', ['$http', 'dataManager', function($http, data
              *
              */
             self.requestData = function() {
-                $http({
-                    method: 'POST',
+                var promise = Ajax.post({
                     url: requestUrl
-                }).success(function(data, status, headers) {
+                });
+                promise.then(function(data) {
                     if(data) {
                         switch (type) {
                             case 'visa-province':
@@ -73,7 +73,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', function($http, data
                                 break;
                         }
                     }
-                }).error(function(data, status, headers) {
+                });
+                promise.then(function(data) {
 
                 });
             };
@@ -365,6 +366,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', function($http, data
                             cnLetterObj[cnFirstLetter] = elem['pinyin'].substr(0, 1);
                         });
                         dataManager.setData('cnLetterObj', cnLetterObj);
+                        debugger;
                         return this;
                     },
 
