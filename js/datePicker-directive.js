@@ -32,13 +32,14 @@ datePickerDirective
         self.renderMonthCount = 6;
         self.datePickerConfig = $scope.dateConfig;
         var getVisaGroupDateUrl = self.datePickerConfig.url,
-            postData = self.datePickerConfig.postData;
+            postData = self.datePickerConfig.postData,
+            nextStepCallback = self.datePickerConfig.nextStepCallBack;
 
 
         self.init = function() {
             //测试系统时间
             self.show = true;
-            $scope.count = 1;
+            self.count = $scope.count = 1;
             self.startDateArr = self.getDateArr(serverDate);
             self.visaDateArr = self.getDateArr(visaDate);
             self.setDatePickerData();
@@ -52,7 +53,7 @@ datePickerDirective
                 alert('请选择游玩日期');
                 return ;
             }
-            var nextStepCallback = self.datePickerConfig.nextStepCallBack;
+            self.emitEvent();
             if(angular.isFunction(nextStepCallback)) {
                 nextStepCallback();
             }
@@ -96,9 +97,7 @@ datePickerDirective
                         self.init();
                     }
                 });
-            })
-
-
+            });
         };
 
         /**
@@ -374,6 +373,17 @@ datePickerDirective
         };
 
         /**
+         * @description 构造向父级作用域发送的数据，数据包含用户选择的日期和份数
+         */
+        self.emitEvent = function() {
+            var emitData = {
+                dateArr: self.dateArr,
+                count: $scope.count
+            };
+            $scope.$emit('onSelectDate', emitData);
+        };
+
+        /**
          * @description 用户选择日期事件，向指令父作用域发送'onSelectDate'事件，并传送选择的日期数组
          * @param dateInfo 用户点击的日期对象
          */
@@ -389,11 +399,6 @@ datePickerDirective
                 }
             }
             self.dateArr = dateInfo.date;
-            var emitData = {
-                dateArr: self.dateArr,
-                count: $scope.count
-            };
-            $scope.$emit('onSelectDate', emitData);
         };
         /**
          * @description 获取日期对应星期几，每个月的1号在视图中开始渲染的位置
