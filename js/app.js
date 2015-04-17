@@ -45,7 +45,7 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
         $scope.dateData = data;
     });
     $scope.datePickerConfig = {
-        url: './jsonData/date.json',
+        url: 'http://m.lvmama.com/api/router/rest.do?method=api.com.visa.product.getVisaGroupDate&productId=310308&version=1.0.0',
         postData: 123123123123,
         version: null,
         nextStepCallBack: function() {

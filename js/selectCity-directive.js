@@ -321,7 +321,6 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                             }
                             this.letterList.sort();
                         }
-                        debugger;
                         return this;
                     },
 
