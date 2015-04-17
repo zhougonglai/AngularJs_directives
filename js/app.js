@@ -24,8 +24,8 @@ myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($s
     };
 
     $scope.selectCityConfig = {
-        url: './jsonData/visaProvince.json',
-        type: 'visa-province'
+        url: './jsonData/flightCity.json',
+        type: 'flight'
     };
 
     $scope.$on('setCityName', function(e, cityName) {
@@ -45,6 +45,9 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
         console.log(data);
     });
     $scope.datePickerConfig = {
+        url: './jsonData/date.json',
+        postData: 123123123123,
+        version: null,
         nextStepCallBack: function() {
             alert('用户自定义下一步请求回调')
         }

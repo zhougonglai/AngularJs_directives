@@ -61,7 +61,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                                 visaProvince.init(self, data);
                                 break;
                             case 'flight':
-                                flightCityList = data.data;
+                                flightCityList.init(self, data);
                                 break;
                             case 'train':
                                 train.init(self, data);
@@ -290,6 +290,85 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                 }
             }($window, angular);
 
+
+            flightCityList = function($window, angular) {
+                var storage = $window.localStorage;
+
+                return {
+                    letterList: [],
+                    anchorWord: ['pt', 'CURRENT', 'HISTORY', 'HOT'],
+                    cityList: null,
+                    currentCity: null,
+                    historySelectedList: [],
+
+                    getCityFirstLetter: function() {
+                        var cityList = this.cityList;
+                        if(angular.isArray(cityList)) {
+                            var len = cityList.length,
+                                i = 0,
+                                letterList = [];
+                            if(!len) return;
+                            for(; i < len; i++) {
+                                letterList.push(cityList[i]['firstLetter']);
+                            }
+
+                            var l = letterList.length,
+                                j = 0;
+                            for(; j < l; j ++) {
+                                if(j === 0 || letterList[j - 1] !== letterList[j]) {
+                                    this.letterList.push(letterList[j]);
+                                }
+                            }
+                            this.letterList.sort();
+                        }
+                        debugger;
+                        return this;
+                    },
+
+                    getCityList: function(requestData) {
+                        this.cityList = requestData.data.allCitys;
+                        return this;
+                    },
+
+                    getCurrentCity: function(requestData) {
+                        this.currentCity = requestData.data.currentCity;
+                        return this;
+                    },
+
+                    getAnchorWord: function() {
+                        this.anchorWord = this.anchorWord.concat(this.letterList);
+                        this.anchorWord.splice(0, 1);
+                        return this;
+                    },
+
+                    bindControllerData: function(SCController) {
+                        SCController.letterList = this.letterList;
+                        SCController.anchorWord = this.anchorWord;
+                        SCController.cityList = this.cityList;
+                        SCController.currentCity =  this.currentCity;
+                        SCController.inputPlaceholder = '输入城市名或拼音';
+                        SCController.curPosition = '当前定位城市区域';
+                        SCController.historyOptions = '历史选择城市';
+                        return this;
+                    },
+
+                    updateHistorySelected: function() {
+                        return this;
+                    },
+
+                    init: function(SCController, requestData) {
+                        this.getCityList(requestData)
+                            .getCurrentCity(requestData)
+                            .getCityFirstLetter()
+                            .getAnchorWord()
+                            .bindControllerData(SCController);
+
+                        SCController.init();
+                        SCController.bindIndexEvent(this.anchorWord);
+                    }
+                }
+            }($window, angular);
+
             /**
              * @description 签证省份单例对象，各方法与其他单例对象类似
              */
@@ -366,7 +445,6 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                             cnLetterObj[cnFirstLetter] = elem['pinyin'].substr(0, 1);
                         });
                         dataManager.setData('cnLetterObj', cnLetterObj);
-                        debugger;
                         return this;
                     },
 

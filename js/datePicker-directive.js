@@ -19,7 +19,7 @@ datePickerDirective
             controllerAs: 'DPController'
         }
     })
-    .controller('DatePickerController', ['$scope', '$element', '$http', '$location','$log', function($scope, $element, $http, $location, $log) {
+    .controller('DatePickerController', ['$scope', '$element', '$http', '$location','$log', 'Ajax', function($scope, $element, $http, $location, $log, Ajax) {
 
         var self = this,
             serverDate = '',
@@ -31,6 +31,9 @@ datePickerDirective
         self.dateList = [];
         self.renderMonthCount = 6;
         self.datePickerConfig = $scope.dateConfig;
+        var getVisaGroupDateUrl = self.datePickerConfig.url,
+            postData = self.datePickerConfig.postData;
+
 
         self.init = function() {
             //测试系统时间
@@ -75,27 +78,25 @@ datePickerDirective
          * @description 获取服务器当前日期，用于日期控件初始化
          */
         self.getServerDate = function() {
-            var getDateUrl = $location.absUrl(),
-                getVisaGroupDate = './jsonData/date.json';
-            var serverDatePromise = $http({
-                method:'GET',
+            var getDateUrl = $location.absUrl();
+            var serverDatePromise = Ajax.get({
                 url: getDateUrl
             });
-            var datePromise = $http({
-                method: 'POST',
-                url: getVisaGroupDate
+            var datePromise = Ajax.post({
+                url: getVisaGroupDateUrl,
+                data: postData
             });
 
-            serverDatePromise.success(function(data, status, headers) {
-                serverDate = headers('date');
-                datePromise.success(function(data) {
-                    if(data) {
-                        visaDateStr = data.data.list[0]['specDate'];
+            serverDatePromise.then(function(obj) {
+                serverDate = obj.headers('date');
+                datePromise.then(function(obj) {
+                    if(obj) {
+                        visaDateStr = obj.data.data.list[0]['specDate'];
                         visaDate = self.rebuildServerDate(visaDateStr);
                         self.init();
                     }
                 });
-            });
+            })
 
 
         };

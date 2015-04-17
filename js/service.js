@@ -30,9 +30,29 @@ serviceModule.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) 
     return {
         post: function(options) {
             var deferred = $q.defer();
+            var url = options.url,
+                data = options.data;
+            $http.post(url, data).success(function(data, status, headers) {
+                deferred.resolve({
+                    data: data,
+                    status: status,
+                    headers: headers
+                });
+            }).error(function(data, status, headers) {
+                deferred.reject(data);
+            });
+            return deferred.promise;
+        },
+
+        get: function(options) {
+            var deferred = $q.defer();
             var url = options.url;
-            $http.post(url).success(function(data, status, headers) {
-                deferred.resolve(data);
+            $http.get(url).success(function(data, status, headers) {
+                deferred.resolve({
+                    data: data,
+                    status: status,
+                    headers: headers
+                });
             }).error(function(data, status, headers) {
                 deferred.reject(data);
             });
@@ -40,3 +60,4 @@ serviceModule.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) 
         }
     }
 }]);
+
