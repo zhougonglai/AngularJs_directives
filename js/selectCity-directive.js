@@ -5,7 +5,7 @@
 var selectCity = angular.module('selectCityDirective', []);
 
 
-selectCity.directive('selectCity', ['$http', function($http) {
+selectCity.directive('selectCity', ['$http', 'dataManager', function($http, dataManager) {
     return {
         restrict: 'EA',
         replace: true,
@@ -353,6 +353,21 @@ selectCity.directive('selectCity', ['$http', function($http) {
                         return this;
                     },
 
+                    /**
+                     * @description 构造中文搜索需要的数据对象
+                     */
+                    setSearchData: function() {
+                        var provinceList = this.provinceList,
+                            cnLetterObj = {},
+                            cnFirstLetter = '';
+                        angular.forEach(provinceList, function(elem, index) {
+                            cnFirstLetter = elem['station_name'].substr(0, 1);
+                            cnLetterObj[cnFirstLetter] = elem['pinyin'].substr(0, 1);
+                        });
+                        dataManager.setData('cnLetterObj', cnLetterObj);
+                        return this;
+                    },
+
                     updateHistorySelected: function(cityName, SCController) {
                         if(cityName) {
                             var historyList = angular.fromJson(storage.getItem('historySelectedList'));
@@ -382,6 +397,7 @@ selectCity.directive('selectCity', ['$http', function($http) {
 
                     init: function(SCController, requestData) {
                         this.getProvinceList(requestData)
+                            .setSearchData()
                             .getProvinceFirstLetter()
                             .getAnchorWord()
                             .bindControllerData(SCController);
@@ -469,14 +485,16 @@ selectCity.directive('selectCity', ['$http', function($http) {
         },
         controllerAs: 'SelectCityController'
     }
-}]).filter('searchLetterFilter', ['$filter', function($filter) {
-    var enLetterReg= /[a-zA-Z]/;
+}]).filter('searchLetterFilter', ['$filter', 'dataManager', function($filter, dataManager) {
+    var enLetterReg= /[a-zA-Z]/,
+        cnLetterObj = dataManager.getData('cnLetterObj');
     return function(letterStr, searchText) {
         if(angular.isString(searchText) && searchText.length > 0) {
             if(enLetterReg.test(searchText[0])) {
                 return $filter('uppercase')(searchText[0]);
             } else {
                 return $filter('uppercase')(letterStr);
+                //return $filter('uppercase')(cnLetterObj[searchText[0]]);
             }
         } else {
             return $filter('uppercase')(letterStr);

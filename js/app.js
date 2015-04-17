@@ -6,7 +6,8 @@ var myApp = angular.module('myApp', [
     'selectCityDirective',
     'rollerPickerDirective',
     'datePickerDirective',
-    'ngTouch'
+    'ngTouch',
+    'services'
 ]);
 
 myApp.controller('TestController', ['$scope', function($scope) {
