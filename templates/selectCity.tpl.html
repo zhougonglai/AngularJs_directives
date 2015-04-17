@@ -30,16 +30,18 @@
                     </div>
                 </div>
             </li>
-            <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList | filter: search[0]" >
+            <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList | searchLetterFilter: search" >
                 <h4>{{letter}}</h4>
                 <ul class="m-city-list">
                     <li ng-if="SelectCityController.type === 'train'"
                         ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
-                        ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}
+                        ng-click="SelectCityController.selectCity(city.cityname)">
+                        {{city.cityname}}
                     </li>
                     <li ng-if="SelectCityController.type === 'visa-province'"
-                        ng-repeat="province in SelectCityController.provinceList | filter: {firstletter: letter, pinyin: search}"
-                        ng-click="SelectCityController.selectCity(province.station_name)">{{province.station_name}}
+                        ng-repeat="province in SelectCityController.provinceList | searchCityList: search : letter"
+                        ng-click="SelectCityController.selectCity(province.station_name)">
+                        {{province.station_name}}
                     </li>
                 </ul>
             </li>
