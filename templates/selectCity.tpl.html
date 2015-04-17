@@ -39,7 +39,7 @@
                         {{city.cityname}}
                     </li>
                     <li ng-if="SelectCityController.type === 'visa-province'"
-                        ng-repeat="province in SelectCityController.provinceList | searchCityList: search : letter"
+                        ng-repeat="province in SelectCityController.provinceList | searchCityListFilter: search : letter"
                         ng-click="SelectCityController.selectCity(province.station_name)">
                         {{province.station_name}}
                     </li>

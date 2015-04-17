@@ -470,21 +470,28 @@ selectCity.directive('selectCity', ['$http', function($http) {
         controllerAs: 'SelectCityController'
     }
 }]).filter('searchLetterFilter', ['$filter', function($filter) {
+    var enLetterReg= /[a-zA-Z]/;
     return function(letterStr, searchText) {
         if(angular.isString(searchText) && searchText.length > 0) {
-            return $filter('uppercase')(searchText[0]);
+            if(enLetterReg.test(searchText[0])) {
+                return $filter('uppercase')(searchText[0]);
+            } else {
+                return $filter('uppercase')(letterStr);
+            }
         } else {
             return $filter('uppercase')(letterStr);
         }
     }
-}]).filter('searchCityList', ['$filter', function($filter) {
+}]).filter('searchCityListFilter', ['$filter', function($filter) {
     return function(cityList, searchText, letter) {
         var cityListFiltered = [];
         if(angular.isArray(cityList) && cityList.length > 0) {
             angular.forEach(cityList, function(elem, index) {
                 if(elem['firstletter'] === $filter('uppercase')(letter)) {
                     if(angular.isString(searchText) && searchText.length > 0) {
-                        if(elem['pinyin'].indexOf(searchText) !== -1) {
+                        if(elem['pinyin'].indexOf(searchText) !== -1 || elem['station_name'].indexOf(searchText) !== -1) {
+                            cityListFiltered.push(elem);
+                        } else {
                             cityListFiltered.push(elem);
                         }
                     } else {
