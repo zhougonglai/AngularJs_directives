@@ -5,7 +5,7 @@
 var selectCity = angular.module('selectCityDirective', []);
 
 
-selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($http, dataManager, Ajax) {
+selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($http, dataManager, Ajax) {
     return {
         restrict: 'EA',
         replace: true,
@@ -15,7 +15,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
         },
         templateUrl: './templates/selectCity.tpl.html',
         require: ['selectCity'],
-        controller: function($scope, $element, $filter, $window, $location, $anchorScroll) {
+        controller: function ($scope, $element, $filter, $window, $location, $anchorScroll) {
             var self = this,
                 $cityContainer = $element,
                 $letterList = $cityContainer.children().eq(2),
@@ -35,7 +35,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                 train = train || {};
 
             self.open = false;
-            $scope.$on('openSelectCity', function(e, data) {
+            $scope.$on('openSelectCity', function (e, data) {
                 self.open = !self.open;
                 self.initHistorySelected();
             });
@@ -50,31 +50,31 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              *              根据不同的类型，进入不同的分支，每个分支为一个单例对象。
              *
              */
-            self.requestData = function() {
+            self.requestData = function () {
                 var promise = Ajax.post({
                     url: requestUrl
                 });
-                promise.then(function(data) {
-                    if(data) {
+                promise.then(function (obj) {
+                    if (obj.data) {
                         switch (type) {
                             case 'visa-province':
-                                visaProvince.init(self, data);
+                                visaProvince.init(self, obj.data);
                                 break;
                             case 'flight':
-                                flightCityList.init(self, data);
+                                flightCityList.init(self, obj.data);
                                 break;
                             case 'train':
-                                train.init(self, data);
+                                train.init(self, obj.data);
                                 break;
                             case 'visa-country':
-                                visaCountryList = data.data;
+                                visaCountryList = obj.data;
                                 break;
                             default:
                                 break;
                         }
                     }
                 });
-                promise.then(function(data) {
+                promise.then(function (obj) {
 
                 });
             };
@@ -85,7 +85,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              *              2.初始化页面锚点
              *              3.初始化城市等的历史选择
              */
-            self.init = function() {
+            self.init = function () {
                 self.initLetterListHeight();
                 self.setAnchor('#', true);
                 self.initHistorySelected();
@@ -95,7 +95,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              * @description 历史选择城市等信息，存放在localStorage缓存中，打开该指令视图，从localStorage中取得用户历史选择，
              *              更新视图历史选择。
              */
-            self.initHistorySelected = function() {
+            self.initHistorySelected = function () {
                 self.historySelectedList = angular.fromJson(localStorage.getItem('historySelectedList'));
             };
 
@@ -110,7 +110,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                 items.css({
                     height: self.itemHeight + 'px'
                 });
-                if(type === 'visa-province' || type === 'visa-country') {
+                if (type === 'visa-province' || type === 'visa-country') {
                     self.itemPt = itemPt + 50;
                 } else {
                     self.itemPt = itemPt;
@@ -125,30 +125,30 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              * @param {Boolean} isLocation 是否跳转到锚点
              * @return {Array} anchorList 当word值是第2个时，返回形如['#A','#B']的数组
              */
-            self.setAnchor = function(word, isLocation) {
-                if(!word) return;
+            self.setAnchor = function (word, isLocation) {
+                if (!word) return;
                 var hash = '',
                     isJump = isLocation || false;
-                if(angular.isString(word)) {
-                    if(word.indexOf('#') === -1) {
+                if (angular.isString(word)) {
+                    if (word.indexOf('#') === -1) {
                         hash = word;
                     } else {
                         hash = word.replace('#', '');
                     }
-                    if(isJump) {
+                    if (isJump) {
                         //location.hash = hash;
                         $location.hash(hash);
                         $anchorScroll();
                         self.fixAnchorStyle(hash);
                     }
                 }
-                if(angular.isArray(word)) {
+                if (angular.isArray(word)) {
                     var i = 0,
                         len = word.length,
                         anchorList = [],
                         anchor = '';
-                    for(; i < len; i++) {
-                        if(i === 0) {
+                    for (; i < len; i++) {
+                        if (i === 0) {
                             continue;
                         }
                         anchor = '#' + word[i];
@@ -162,7 +162,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              * @description 修正锚点定位后上部的border和header的border重合的样式
              * @param id 锚点id
              */
-            self.fixAnchorStyle = function(id) {
+            self.fixAnchorStyle = function (id) {
 
             };
 
@@ -171,7 +171,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              *              向父级作用域发送'closeSelectCity'事件
              *              父级作用域监听该事件，在城市选择面板隐藏后执行一些操作。
              */
-            self.close = function() {
+            self.close = function () {
                 self.open = !self.open;
                 $scope.$emit('closeSelectCity', {});
             };
@@ -180,7 +180,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
             /**
              * @description 火车票城市选择单例对象
              */
-            train = function($window, angular) {
+            train = function ($window, angular) {
                 var storage = $window.localStorage;
                 return {
                     letterList: [],
@@ -193,18 +193,18 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @description 取得请求回来的城市数据中的城市拼音首字母，去除重复的首字母，用于设置锚点。
                      * @returns {train} 使该单例对象可以链式调用方法
                      */
-                    getCityFirstLetter: function() {
-                        if(!angular.isArray(this.cityList)) return;
+                    getCityFirstLetter: function () {
+                        if (!angular.isArray(this.cityList)) return;
                         var i = 0,
                             cityList = this.cityList,
                             len = cityList.length;
-                        if(!len) return;
-                        for(; i < len; i++) {
-                            for(var k in cityList[i]) {
-                                if(k !== 'firstletter') {
+                        if (!len) return;
+                        for (; i < len; i++) {
+                            for (var k in cityList[i]) {
+                                if (k !== 'firstletter') {
                                     continue;
                                 }
-                                if(i === 0 || cityList[i - 1][k] !== cityList[i][k]) {
+                                if (i === 0 || cityList[i - 1][k] !== cityList[i][k]) {
                                     var lowercaseLetter = cityList[i][k],
                                         uppercaseLetter = $filter('uppercase')(lowercaseLetter);
                                     this.letterList.push(uppercaseLetter);
@@ -219,7 +219,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @description 火车票项目除了字母索引，还有"当前"，"历史", "热门"3个中文索引
                      * @returns {train} 链式调用
                      */
-                    getAnchorWord: function() {
+                    getAnchorWord: function () {
                         this.anchorWord = this.otherLetters.concat(this.letterList);
                         this.anchorWord.splice(0, 1);
                         return this;
@@ -230,7 +230,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @param requestData
                      * @returns {train}
                      */
-                    getCityList: function(requestData) {
+                    getCityList: function (requestData) {
                         this.cityList = requestData.data;
                         return this;
                     },
@@ -240,9 +240,9 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @param SCController 指令Controller
                      * @returns {train} 链式调用
                      */
-                    bindControllerData: function(SCController) {
+                    bindControllerData: function (SCController) {
 
-                        SCController.cityList =  this.cityList;
+                        SCController.cityList = this.cityList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.inputPlaceholder = '输入城市名或拼音';
@@ -260,14 +260,14 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @param SCController 指令Controller
                      * @returns {train} 链式调用
                      */
-                    updateHistorySelected: function(cityName,SCController) {
+                    updateHistorySelected: function (cityName, SCController) {
                         this.historySelectedList.unshift({name: cityName});
-                        if(this.historySelectedList.length > 6) {
+                        if (this.historySelectedList.length > 6) {
                             this.historySelectedList.length = 6;
                         }
-                        storage.setItem('historySelectedList',angular.toJson(this.historySelectedList));
+                        storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
                         var historySelectedList = storage.getItem('historySelectedList');
-                        if(historySelectedList && historySelectedList.length > 0) {
+                        if (historySelectedList && historySelectedList.length > 0) {
                             SCController.historySelectedList = historySelectedList;
                         }
                         return this;
@@ -279,19 +279,19 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                      * @param SCController 指令controller
                      * @param requestData 请求回来的城市数据
                      */
-                    init: function(SCController, requestData) {
+                    init: function (SCController, requestData) {
                         this.getCityList(requestData)
                             .getCityFirstLetter()
                             .getAnchorWord()
                             .bindControllerData(SCController);
                         SCController.init();
-                        SCController.bindIndexEvent(train.anchorWord);
+                        SCController.bindIndexEvent(this.anchorWord);
                     }
                 }
             }($window, angular);
 
 
-            flightCityList = function($window, angular) {
+            flightCityList = function ($window, angular) {
                 var storage = $window.localStorage;
 
                 return {
@@ -301,21 +301,21 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                     currentCity: null,
                     historySelectedList: [],
 
-                    getCityFirstLetter: function() {
+                    getCityFirstLetter: function () {
                         var cityList = this.cityList;
-                        if(angular.isArray(cityList)) {
+                        if (angular.isArray(cityList)) {
                             var len = cityList.length,
                                 i = 0,
                                 letterList = [];
-                            if(!len) return;
-                            for(; i < len; i++) {
+                            if (!len) return;
+                            for (; i < len; i++) {
                                 letterList.push(cityList[i]['firstLetter']);
                             }
 
                             var l = letterList.length,
                                 j = 0;
-                            for(; j < l; j ++) {
-                                if(j === 0 || letterList[j - 1] !== letterList[j]) {
+                            for (; j < l; j++) {
+                                if (j === 0 || letterList[j - 1] !== letterList[j]) {
                                     this.letterList.push(letterList[j]);
                                 }
                             }
@@ -324,38 +324,38 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                         return this;
                     },
 
-                    getCityList: function(requestData) {
+                    getCityList: function (requestData) {
                         this.cityList = requestData.data.allCitys;
                         return this;
                     },
 
-                    getCurrentCity: function(requestData) {
+                    getCurrentCity: function (requestData) {
                         this.currentCity = requestData.data.currentCity;
                         return this;
                     },
 
-                    getAnchorWord: function() {
+                    getAnchorWord: function () {
                         this.anchorWord = this.anchorWord.concat(this.letterList);
                         this.anchorWord.splice(0, 1);
                         return this;
                     },
 
-                    bindControllerData: function(SCController) {
+                    bindControllerData: function (SCController) {
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.cityList = this.cityList;
-                        SCController.currentCity =  this.currentCity;
+                        SCController.currentCity = this.currentCity;
                         SCController.inputPlaceholder = '输入城市名或拼音';
                         SCController.curPosition = '当前定位城市区域';
                         SCController.historyOptions = '历史选择城市';
                         return this;
                     },
 
-                    updateHistorySelected: function() {
+                    updateHistorySelected: function () {
                         return this;
                     },
 
-                    init: function(SCController, requestData) {
+                    init: function (SCController, requestData) {
                         this.getCityList(requestData)
                             .getCurrentCity(requestData)
                             .getCityFirstLetter()
@@ -371,7 +371,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
             /**
              * @description 签证省份单例对象，各方法与其他单例对象类似
              */
-            visaProvince = function($window, angular){
+            visaProvince = function ($window, angular) {
                 var storage = $window.localStorage;
                 return {
                     letterList: [],
@@ -379,8 +379,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                     provinceList: null,
                     historySelectedList: [],
 
-                    getProvinceFirstLetter: function() {
-                        if(!angular.isArray(this.provinceList)) return;
+                    getProvinceFirstLetter: function () {
+                        if (!angular.isArray(this.provinceList)) return;
                         var provinceList = this.provinceList,
                             len = provinceList.length,
                             provinceObj,
@@ -388,16 +388,16 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                             uppercaseLetter,
                             letterArr = [],
                             i = 0;
-                        for(; i < len; i++) {
-                            provinceObj =  provinceList[i];
+                        for (; i < len; i++) {
+                            provinceObj = provinceList[i];
                             pinyin = provinceObj['pinyin'];
                             letterArr.push(pinyin[0]);
                         }
                         var l = letterArr.length,
                             j = 0;
 
-                        for(; j < l; j++) {
-                            if(j === 0 || letterArr[j - 1] !== letterArr[j]) {
+                        for (; j < l; j++) {
+                            if (j === 0 || letterArr[j - 1] !== letterArr[j]) {
                                 uppercaseLetter = $filter('uppercase')(letterArr[j]);
                                 this.letterList.push(uppercaseLetter);
                             }
@@ -408,25 +408,25 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                         return this;
                     },
 
-                    getProvinceList: function(requestData) {
+                    getProvinceList: function (requestData) {
                         this.provinceList = requestData.data;
                         return this;
                     },
 
-                    getAnchorWord: function() {
+                    getAnchorWord: function () {
                         this.anchorWord = this.letterList;
                         return this;
                     },
 
-                    bindControllerData: function(SCController) {
+                    bindControllerData: function (SCController) {
                         var historySelectedList = storage.getItem('historySelectedList');
-                        SCController.provinceList =  this.provinceList;
+                        SCController.provinceList = this.provinceList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.inputPlaceholder = '输入省份或自治区，直辖市';
                         SCController.curPosition = '当前定位区域';
                         SCController.historyOptions = '历史选择';
-                        if(historySelectedList && historySelectedList.length > 0) {
+                        if (historySelectedList && historySelectedList.length > 0) {
                             SCController.historySelectedList = historySelectedList;
                         }
                         return this;
@@ -435,11 +435,11 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                     /**
                      * @description 构造中文搜索需要的数据对象
                      */
-                    setSearchData: function() {
+                    setSearchData: function () {
                         var provinceList = this.provinceList,
                             cnLetterObj = {},
                             cnFirstLetter = '';
-                        angular.forEach(provinceList, function(elem, index) {
+                        angular.forEach(provinceList, function (elem, index) {
                             cnFirstLetter = elem['station_name'].substr(0, 1);
                             cnLetterObj[cnFirstLetter] = elem['pinyin'].substr(0, 1);
                         });
@@ -447,34 +447,34 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
                         return this;
                     },
 
-                    updateHistorySelected: function(cityName, SCController) {
-                        if(cityName) {
+                    updateHistorySelected: function (cityName, SCController) {
+                        if (cityName) {
                             var historyList = angular.fromJson(storage.getItem('historySelectedList'));
-                            if(historyList && historyList.length > 0) {
+                            if (historyList && historyList.length > 0) {
                                 var len = historyList.length,
                                     i = 0;
-                                for(; i < len; i++) {
+                                for (; i < len; i++) {
                                     var historyObj = historyList[i];
-                                    if(historyObj['name'] === cityName) {
-                                        return ;
+                                    if (historyObj['name'] === cityName) {
+                                        return;
                                     }
                                 }
                             }
                             this.historySelectedList.unshift({name: cityName});
-                            if(this.historySelectedList.length > 6) {
+                            if (this.historySelectedList.length > 6) {
                                 this.historySelectedList.length = 6;
                             }
                             storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
                         }
 
                         var historySelectedList = this.historySelectedList;
-                        if(historySelectedList && historySelectedList.length > 0) {
+                        if (historySelectedList && historySelectedList.length > 0) {
                             SCController.historySelectedList = historySelectedList;
                         }
                         return this;
                     },
 
-                    init: function(SCController, requestData) {
+                    init: function (SCController, requestData) {
                         this.getProvinceList(requestData)
                             .setSearchData()
                             .getProvinceFirstLetter()
@@ -490,7 +490,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              * @description 选择城市事件处理
              * @param {String} cityName 城市名
              */
-            self.selectCity = function(cityName) {
+            self.selectCity = function (cityName) {
                 switch (type) {
                     case 'visa-province':
                         visaProvince.updateHistorySelected(cityName, self);
@@ -510,51 +510,51 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
              * @description 绑定字母索引触摸事件
              * @param anchorWord
              */
-            self.bindIndexEvent = function(anchorWord) {
+            self.bindIndexEvent = function (anchorWord) {
                 var awLen = anchorWord.length,
                     whichAnchor = {};
-                $letterList.on('touchstart', function(e) {
+                $letterList.on('touchstart', function (e) {
                     var target = e.target;
-                    if(target.nodeName.toLocaleUpperCase() === 'A') {
+                    if (target.nodeName.toLocaleUpperCase() === 'A') {
                         self.setAnchor(target.name, true);
                     }
                     $cityContainer.off();
-                    $cityContainer.on('touchmove', function(e) {
+                    $cityContainer.on('touchmove', function (e) {
                         e.preventDefault();
                         return false;
                     });
                 });
 
-                $letterList.on('touchmove', function(e) {
+                $letterList.on('touchmove', function (e) {
                     var iH = self.itemHeight,
                         iPt = self.itemPt,
                         tcYFixed = 10,
                         tcY,
                         hdH = headerClientHeight,
                         i = 0;
-                    if(e.originalEvent) {
+                    if (e.originalEvent) {
                         tcY = e.originalEvent.changedTouches[0].clientY - tcYFixed;
-                    } else if(e.changedTouches) {
+                    } else if (e.changedTouches) {
                         tcY = e.changedTouches[0].clientY - tcYFixed;
                     }
 
-                    for(; i < awLen; i++) {
-                        if(i === 0) {
+                    for (; i < awLen; i++) {
+                        if (i === 0) {
                             whichAnchor[anchorWord[i]] = (tcY <= i * iH + iPt + hdH);
                             continue;
                         }
-                        whichAnchor[anchorWord[i]] = (tcY > (iPt + hdH + (i-1) * iH) && tcY <= (i * iH + iPt + hdH));
+                        whichAnchor[anchorWord[i]] = (tcY > (iPt + hdH + (i - 1) * iH) && tcY <= (i * iH + iPt + hdH));
                     }
 
-                    for(var k in whichAnchor) {
-                        if(whichAnchor[k]) {
+                    for (var k in whichAnchor) {
+                        if (whichAnchor[k]) {
                             self.setAnchor(k, true);
                             break;
                         }
                     }
                 });
 
-                $letterList.on('touchend', function(e) {
+                $letterList.on('touchend', function (e) {
                     $cityContainer.off();
                 })
             };
@@ -564,12 +564,12 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
         },
         controllerAs: 'SelectCityController'
     }
-}]).filter('searchLetterFilter', ['$filter', 'dataManager', function($filter, dataManager) {
-    var enLetterReg= /[a-zA-Z]/,
+}]).filter('searchLetterFilter', ['$filter', 'dataManager', function ($filter, dataManager) {
+    var enLetterReg = /[a-zA-Z]/,
         cnLetterObj = dataManager.getData('cnLetterObj');
-    return function(letterStr, searchText) {
-        if(angular.isString(searchText) && searchText.length > 0) {
-            if(enLetterReg.test(searchText[0])) {
+    return function (letterStr, searchText) {
+        if (angular.isString(searchText) && searchText.length > 0) {
+            if (enLetterReg.test(searchText[0])) {
                 return $filter('uppercase')(searchText[0]);
             } else {
                 return $filter('uppercase')(letterStr);
@@ -579,14 +579,14 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function($ht
             return $filter('uppercase')(letterStr);
         }
     }
-}]).filter('searchCityListFilter', ['$filter', function($filter) {
-    return function(cityList, searchText, letter) {
+}]).filter('searchCityListFilter', ['$filter', function ($filter) {
+    return function (cityList, searchText, letter) {
         var cityListFiltered = [];
-        if(angular.isArray(cityList) && cityList.length > 0) {
-            angular.forEach(cityList, function(elem, index) {
-                if(elem['firstletter'] === $filter('uppercase')(letter)) {
-                    if(angular.isString(searchText) && searchText.length > 0) {
-                        if(elem['pinyin'].indexOf(searchText) !== -1 || elem['station_name'].indexOf(searchText) !== -1) {
+        if (angular.isArray(cityList) && cityList.length > 0) {
+            angular.forEach(cityList, function (elem, index) {
+                if (elem['firstletter'] === $filter('uppercase')(letter)) {
+                    if (angular.isString(searchText) && searchText.length > 0) {
+                        if (elem['pinyin'].indexOf(searchText) !== -1 || elem['station_name'].indexOf(searchText) !== -1) {
                             cityListFiltered.push(elem);
                         } else {
                             cityListFiltered.push(elem);
