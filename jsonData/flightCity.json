@@ -1,0 +1,90 @@
+{
+  "code": "1",
+  "data": {
+    "currentCity": {
+      "name": "上海"
+    },
+    "hotCitys": [
+      {
+        "id": 2662,
+        "name": "天津市",
+        "code": "1100",
+        "pinYin": "tianjin",
+        "firstLetter": "T",
+        "hot": 200
+      },
+      {
+        "name": "北京",
+        "id": 2663,
+        "code": "1100",
+        "pinYin": "tianjin",
+        "firstLetter": "b",
+        "hot": 300
+      },
+      {
+        "name": "南京",
+        "id": 2664,
+        "code": "1100",
+        "pinYin": "tianjin",
+        "firstLetter": "n",
+        "hot": 400
+      },
+      {
+        "name": "杭州",
+        "id": 2665,
+        "code": "1100",
+        "pinYin": "tianjin",
+        "firstLetter": "h",
+        "hot": 500
+      }
+    ],
+    "allCitys": [
+      {
+        "id": 2662,
+        "name": "天津市",
+        "code": "1100",
+        "pinYin": "tianjin",
+        "firstLetter": "t",
+        "hot": 200
+      },
+      {
+        "id": 2674,
+        "name": "台安县",
+        "code": "2231",
+        "pinYin": "taianxian",
+        "firstLetter": "t"
+      },
+      {
+        "id": 2663,
+        "name": "沈阳市",
+        "code": "2210",
+        "pinYin": "shenyang",
+        "firstLetter": "s"
+      },
+      {
+        "id": 2672,
+        "name": "长海县",
+        "code": "2225",
+        "pinYin": "changhaixian",
+        "firstLetter": "s"
+      },
+      {
+        "id": 2686,
+        "name": "东港市",
+        "code": "2263",
+        "pinYin": "donggan",
+        "firstLetter": "s"
+      },
+      {
+        "id": 2687,
+        "name": "宽甸县",
+        "code": "2264",
+        "pinYin": "kuandianxian",
+        "firstLetter": "s"
+      }
+    ]
+  },
+  "errorMessage": "",
+  "message": "",
+  "version": "6ca2e9a6726ff1719ed1b44bfe2b821a"
+}
