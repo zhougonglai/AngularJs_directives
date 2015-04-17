@@ -261,12 +261,34 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                      * @returns {train} 链式调用
                      */
                     updateHistorySelected: function (cityName, SCController) {
-                        this.historySelectedList.unshift({name: cityName});
-                        if (this.historySelectedList.length > 6) {
-                            this.historySelectedList.length = 6;
+                        if (cityName) {
+                            var historyList = angular.fromJson(storage.getItem('historySelectedList'));
+                            if (historyList && historyList.length > 0) {
+                                var len = historyList.length,
+                                    i = 0;
+                                for (; i < len; i++) {
+                                    var historyObj = historyList[i];
+                                    if (historyObj['name'] === cityName) {
+                                        if(len < 6) {
+                                            return;
+                                        } else if(len === 6){
+                                            var temp = historyList[0];
+                                            historyList[0] = historyObj;
+                                            historyList[i] = temp;
+                                            storage.setItem('historySelectedList', angular.toJson(historyList));
+                                            return ;
+                                        }
+                                    }
+                                }
+                            }
+                            this.historySelectedList.unshift({name: cityName});
+                            if (this.historySelectedList.length > 6) {
+                                this.historySelectedList.length = 6;
+                            }
+                            storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
                         }
-                        storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
-                        var historySelectedList = storage.getItem('historySelectedList');
+
+                        var historySelectedList = this.historySelectedList;
                         if (historySelectedList && historySelectedList.length > 0) {
                             SCController.historySelectedList = historySelectedList;
                         }
@@ -351,7 +373,30 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         return this;
                     },
 
-                    updateHistorySelected: function () {
+                    updateHistorySelected: function (cityName, SCController) {
+                        if (cityName) {
+                            var historyList = angular.fromJson(storage.getItem('historySelectedList'));
+                            if (historyList && historyList.length > 0) {
+                                var len = historyList.length,
+                                    i = 0;
+                                for (; i < len; i++) {
+                                    var historyObj = historyList[i];
+                                    if (historyObj['name'] === cityName) {
+                                        return;
+                                    }
+                                }
+                            }
+                            this.historySelectedList.unshift({name: cityName});
+                            if (this.historySelectedList.length > 6) {
+                                this.historySelectedList.length = 6;
+                            }
+                            storage.setItem('historySelectedList', angular.toJson(this.historySelectedList));
+                        }
+
+                        var historySelectedList = this.historySelectedList;
+                        if (historySelectedList && historySelectedList.length > 0) {
+                            SCController.historySelectedList = historySelectedList;
+                        }
                         return this;
                     },
 
@@ -502,7 +547,6 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         break;
                 }
                 $scope.$emit('setCityName', cityName);
-
                 self.close();
             };
 

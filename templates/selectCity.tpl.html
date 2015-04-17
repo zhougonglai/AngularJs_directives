@@ -27,7 +27,7 @@
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
                     <div ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
-                        <a>{{city.cityname}}</a>
+                        <a ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}</a>
                     </div>
                 </div>
             </li>

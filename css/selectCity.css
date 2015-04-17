@@ -88,6 +88,13 @@ ul{
     line-height: 40px;
     border: 1px solid #ddd;
 }
+.m-city-scr-cur>div:first-child>a {
+    border: 1px solid #D30775;
+    color: #D30775;
+}
+.m-city-scr-hty>div:first-child>a{
+    color: #009DDA;
+}
 
 .u-city-srh{
     width: 80%;

@@ -33,7 +33,7 @@ myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($s
     });
 
     $scope.$on('closeSelectCity', function(e, data) {
-        $log.info('123');
+        //$log.info('123');
     });
 
 }]);
@@ -49,7 +49,7 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
         postData: 123123123123,
         version: null,
         nextStepCallBack: function() {
-            console.log($scope.dateData);
+            //console.log($scope.dateData);
             alert('用户自定义下一步请求回调')
         }
     }
