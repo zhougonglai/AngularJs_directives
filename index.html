@@ -6,9 +6,9 @@
     <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel="stylesheet" href="./css/datePicke.css"/>
+    <!--<link rel="stylesheet" href="./css/datePicke.css"/>-->
     <!--<link rel="stylesheet" type="text/css" href="css/modalDialog.css">-->
-    <!--<link rel="stylesheet" href="css/selectCity.css"/>-->
+    <link rel="stylesheet" href="css/selectCity.css"/>
     <!--<link rel="stylesheet" href="css/rollerPicker.css"/>-->
     <script src="libs/angular.js"></script>
     <script src="libs/angular-touch.js"></script>
@@ -25,16 +25,16 @@
         <!--使用angularjs自定义指令来做模态框-->
     <!--</modal-dialog>-->
 <!--</div>-->
-<!--<div ng-controller="SelectCityController">-->
-    <!--<button ng-click="show()">123</button>-->
-    <!--<select-city city-config="selectCityConfig"></select-city>-->
-<!--</div>-->
+<div ng-controller="SelectCityController">
+    <button ng-click="show()">123</button>
+    <select-city city-config="selectCityConfig"></select-city>
+</div>
 
 <div class="roller-container" ng-controller="RPParentController">
     <!--<roller-picker ng-city="cityData"></roller-picker>-->
     <!--<input type="text" roller-picker ng-model="val"/>-->
 
-    <date-picker date-config="datePickerConfig"></date-picker>
+    <!--<date-picker date-config="datePickerConfig"></date-picker>-->
 </div>
 </body>
 </html>

@@ -187,7 +187,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     anchorWord: null,
                     cityList: null,
                     historySelectedList: [],
-                    currentCity: localStorage.getItem('currentCity') || '上海',
+                    currentCity: '上海',
 
                     /**
                      * @description 取得请求回来的城市数据中的城市拼音首字母，去除重复的首字母，用于设置锚点。
@@ -257,14 +257,13 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                      * @description 更新用户选择的历史城市、省份信息
                      *              重复选择的城市，将不会历史选择数组中
                      *
-                     * @param cityName 用户选择的城市名
+                     * @param cityObj 用户选择的城市对象
                      * @param SCController 指令Controller
                      * @returns {train} 链式调用
                      */
-                    updateHistorySelected: function (cityName, SCController) {
-                        SCController.updateHistorySelected(cityName, this);
-                        SCController.currentCity = this.currentCity = cityName;
-                        localStorage.setItem('currentCity', cityName);
+                    updateHistorySelected: function (cityObj, SCController) {
+                        SCController.updateHistorySelected(cityObj, this);
+                        localStorage.setItem('currentCity', this.currentCity);
                         return this;
                     },
 
@@ -325,7 +324,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     },
 
                     getCurrentCity: function (requestData) {
-                        this.currentCity = localStorage.getItem('currentCity') || requestData.data.currentCity.name;
+                        this.currentCity = requestData.data.currentCity.name;
                         return this;
                     },
 
@@ -353,10 +352,9 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         return this;
                     },
 
-                    updateHistorySelected: function (cityName, SCController) {
-                        SCController.updateHistorySelected(cityName, this);
-                        SCController.currentCity = this.currentCity = cityName;
-                        localStorage.setItem('currentCity', cityName);
+                    updateHistorySelected: function (cityObj, SCController) {
+                        SCController.updateHistorySelected(cityObj, this);
+                        localStorage.setItem('currentCity', this.currentCity);
                         return this;
                     },
 
@@ -383,7 +381,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     anchorWord: null,
                     provinceList: null,
                     historySelectedList: [],
-                    currentCity: localStorage.getItem('currentCity') || '上海',
+                    currentCity: '上海',
 
                     getProvinceFirstLetter: function () {
                         if (!angular.isArray(this.provinceList)) return;
@@ -454,10 +452,9 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         return this;
                     },
 
-                    updateHistorySelected: function (cityName, SCController) {
-                        SCController.updateHistorySelected(cityName, this);
-                        SCController.currentCity = this.currentCity = cityName;
-                        localStorage.setItem('currentCity', cityName);
+                    updateHistorySelected: function (cityObj, SCController) {
+                        SCController.updateHistorySelected(cityObj, this);
+                        localStorage.setItem('currentCity', this.currentCity);
                         return this;
                     },
 
@@ -476,11 +473,11 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
             /**
              * @description 更新历史选择localStorage，如果新选择的城市名已经在localStorage中存在，则交换两者的位置。
-             * @param cityName 选择的城市名
+             * @param cityObj 选择的城市对象
              * @param singleObj 火车，飞机，签证单例对象
              */
-            self.updateHistorySelected = function(cityName, singleObj) {
-                if (cityName) {
+            self.updateHistorySelected = function(cityObj, singleObj) {
+                if (angular.isObject(cityObj)) {
                     var storage = $window.localStorage;
                     var historyList = angular.fromJson(storage.getItem('historySelectedList'));
                     if (historyList && historyList.length > 0) {
@@ -488,7 +485,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                             i = 0;
                         for (; i < len; i++) {
                             var historyObj = historyList[i];
-                            if (historyObj['name'] === cityName) {
+                            if (angular.equals(historyObj ,cityObj)) {
                                 var temp = historyList[0];
                                 historyList[0] = historyObj;
                                 historyList[i] = temp;
@@ -497,7 +494,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                             }
                         }
                     }
-                    singleObj.historySelectedList.unshift({name: cityName});
+                    singleObj.historySelectedList.unshift(cityObj);
                     if (singleObj.historySelectedList.length > 6) {
                         singleObj.historySelectedList.length = 6;
                     }
@@ -515,19 +512,15 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
              * @param {Object} cityObj 用户选择的城市对象
              */
             self.selectCity = function (cityObj) {
-                var cityName = null;
                 switch (type) {
                     case 'visa-province':
-                        cityName = cityObj.station_name;
-                        visaProvince.updateHistorySelected(cityName, self);
+                        visaProvince.updateHistorySelected(cityObj, self);
                         break;
                     case 'train':
-                        cityName = cityObj.cityname;
-                        train.updateHistorySelected(cityName, self);
+                        train.updateHistorySelected(cityObj, self);
                         break;
                     case 'flight':
-                        cityName = cityObj.name;
-                        flight.updateHistorySelected(cityName, self);
+                        flight.updateHistorySelected(cityObj, self);
                         break;
                     default:
                         break;

@@ -18,7 +18,9 @@
                 <h4 class="u-city-sct-hty-hd">{{SelectCityController.historyOptions}}</h4>
                 <div class="m-city-scr-hty">
                     <div ng-repeat="item in SelectCityController.historySelectedList">
-                        <a ng-click="SelectCityController.selectCity(item.name)">{{item.name}}</a>
+                        <a ng-click="SelectCityController.selectCity(item)" ng-if="SelectCityController.type === 'train'">{{item.cityname}}</a>
+                        <a ng-click="SelectCityController.selectCity(item)" ng-if="SelectCityController.type === 'flight'">{{item.name}}</a>
+                        <a ng-click="SelectCityController.selectCity(item)" ng-if="SelectCityController.type === 'visa-province'">{{item.station_name}}</a>
                     </div>
                 </div>
             </li>
