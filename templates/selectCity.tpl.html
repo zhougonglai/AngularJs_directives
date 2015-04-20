@@ -6,7 +6,7 @@
     </div>
     <div class="g-city-sct-bd">
         <ul class="city-list">
-            <li id="CURRENT">
+            <li id="CURRENT" ng-if="!search">
                 <h4 class="u-city-sct-cur-hd">{{SelectCityController.curPosition}}</h4>
                 <div class="m-city-scr-cur">
                     <div>
@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </li>
-            <li id="HISTORY" ng-if="SelectCityController.historySelectedList">
+            <li id="HISTORY" ng-if="SelectCityController.historySelectedList && !search">
                 <h4 class="u-city-sct-hty-hd">{{SelectCityController.historyOptions}}</h4>
                 <div class="m-city-scr-hty">
                     <div ng-repeat="item in SelectCityController.historySelectedList">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </li>
-            <li id="HOT" ng-if="SelectCityController.type === 'train' || SelectCityController.type === 'flight'">
+            <li id="HOT" ng-if="(SelectCityController.type === 'train' || SelectCityController.type === 'flight') && !search">
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
                     <div ng-if="SelectCityController.type === 'train'"
