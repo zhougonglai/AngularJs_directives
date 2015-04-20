@@ -1,90 +1,134 @@
 {
   "code": "1",
+  "message": "",
+  "errorMessage": "",
   "data": {
     "currentCity": {
-      "name": "上海"
+      "name": "天津",
+      "code": "TIJ"
     },
     "hotCitys": [
       {
-        "id": 2662,
-        "name": "天津市",
-        "code": "1100",
+        "id": 2661,
+        "name": "天津",
+        "code": "TIJ",
         "pinYin": "tianjin",
         "firstLetter": "T",
         "hot": 200
       },
       {
+        "id": 2662,
         "name": "北京",
-        "id": 2663,
-        "code": "1100",
-        "pinYin": "tianjin",
-        "firstLetter": "b",
+        "code": "BJX",
+        "pinYin": "beijing",
+        "firstLetter": "B",
         "hot": 300
       },
       {
-        "name": "南京",
-        "id": 2664,
-        "code": "1100",
-        "pinYin": "tianjin",
-        "firstLetter": "n",
-        "hot": 400
+        "id": 2663,
+        "name": "上海",
+        "code": "SHX",
+        "pinYin": "shanghai",
+        "firstLetter": "S",
+        "hot": 301
       },
       {
-        "name": "杭州",
+        "id": 2664,
+        "name": "郑州",
+        "code": "ZZX",
+        "pinYin": "zhengzhou",
+        "firstLetter": "Z",
+        "hot": 199
+      },
+      {
         "id": 2665,
-        "code": "1100",
-        "pinYin": "tianjin",
-        "firstLetter": "h",
-        "hot": 500
+        "name": "杭州",
+        "code": "HZS",
+        "pinYin": "hangzhou",
+        "firstLetter": "H",
+        "hot": 198
       }
     ],
     "allCitys": [
       {
-        "id": 2662,
-        "name": "天津市",
-        "code": "1100",
+        "name": "安阳",
+        "code": "AYX",
+        "pinYin": "anyang",
+        "firstLetter": "A"
+      },
+      {
+        "name": "长葛",
+        "code": "CGX",
+        "pinYin": "changge",
+        "firstLetter": "C"
+      },
+      {
+        "name": "长春",
+        "code": "CX",
+        "pinYin": "changchun",
+        "firstLetter": "C"
+      },
+      {
+        "name": "哈尔滨",
+        "code": "HEB",
+        "pinYin": "haerbin",
+        "firstLetter": "H"
+      },
+      {
+        "name": "厦门",
+        "code": "XM",
+        "pinYin": "xiamen",
+        "firstLetter": "X"
+      },
+      {
+        "name": "南阳",
+        "code": "NYX",
+        "pinYin": "nanyang",
+        "firstLetter": "N"
+      },
+      {
+        "name": "海南",
+        "code": "HN",
+        "pinYin": "hainan",
+        "firstLetter": "H"
+      },
+      {
+        "name": "天津",
+        "code": "TIJ",
         "pinYin": "tianjin",
-        "firstLetter": "t",
-        "hot": 200
+        "firstLetter": "T"
       },
       {
-        "id": 2674,
-        "name": "台安县",
-        "code": "2231",
-        "pinYin": "taianxian",
-        "firstLetter": "t"
+        "name": "北京",
+        "code": "BJX",
+        "pinYin": "beijing",
+        "firstLetter": "B"
       },
       {
-        "id": 2663,
-        "name": "沈阳市",
-        "code": "2210",
-        "pinYin": "shenyang",
-        "firstLetter": "s"
+        "name": "上海",
+        "code": "SHX",
+        "pinYin": "shanghai",
+        "firstLetter": "S"
       },
       {
-        "id": 2672,
-        "name": "长海县",
-        "code": "2225",
-        "pinYin": "changhaixian",
-        "firstLetter": "s"
+        "name": "南阳",
+        "code": "NY",
+        "pinYin": "南阳",
+        "firstLetter": "N"
       },
       {
-        "id": 2686,
-        "name": "东港市",
-        "code": "2263",
-        "pinYin": "donggan",
-        "firstLetter": "s"
+        "name": "郑州",
+        "code": "ZZX",
+        "pinYin": "zhengzhou",
+        "firstLetter": "Z"
       },
       {
-        "id": 2687,
-        "name": "宽甸县",
-        "code": "2264",
-        "pinYin": "kuandianxian",
-        "firstLetter": "s"
+        "name": "杭州",
+        "code": "HZS",
+        "pinYin": "hangzhou",
+        "firstLetter": "H"
       }
     ]
   },
-  "errorMessage": "",
-  "message": "",
-  "version": "6ca2e9a6726ff1719ed1b44bfe2b821a"
+  "ok": true
 }

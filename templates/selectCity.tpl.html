@@ -23,21 +23,31 @@
                     </div>
                 </div>
             </li>
-            <li id="HOT" ng-if="SelectCityController.type === 'train' || SelectCityController.type === 'flight'">
+            <li id="HOT">
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
-                    <div ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
+                    <div ng-if="SelectCityController.type === 'train'"
+                         ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
                         <a ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}</a>
+                    </div>
+                    <div ng-if="SelectCityController.type === 'flight'"
+                         ng-repeat="city in SelectCityController.hotCitys">
+                        <a ng-click="SelectCityController.selectCity(city.name)">{{city.name}}</a>
                     </div>
                 </div>
             </li>
             <li id="{{letter}}" ng-repeat="letter in SelectCityController.letterList | searchLetterFilter: search" >
                 <h4>{{letter}}</h4>
                 <ul class="m-city-list">
-                    <li ng-if="SelectCityController.type === 'train' || SelectCityController.type === 'flight'"
+                    <li ng-if="SelectCityController.type === 'train'"
                         ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
                         ng-click="SelectCityController.selectCity(city.cityname)">
                         {{city.cityname}}
+                    </li>
+                    <li ng-if="SelectCityController.type === 'flight'"
+                        ng-repeat="city in SelectCityController.cityList | filter:  {firstLetter: letter, pinYin: search} "
+                        ng-click="SelectCityController.selectCity(city.name)">
+                        {{city.name}}
                     </li>
                     <li ng-if="SelectCityController.type === 'visa-province'"
                         ng-repeat="province in SelectCityController.provinceList | searchCityListFilter: search : letter"
@@ -49,6 +59,16 @@
         </ul>
     </div>
     <ul class="g-letter-list">
-        <li><a name="{{anchor}}" ng-repeat="anchor in SelectCityController.anchorWord">{{anchor}}</a></li>
+        <li name="{{anchor}}"
+            ng-if="SelectCityController.hasOtherAnchor"
+            ng-repeat="anchor in SelectCityController.anchorWord track by $index">
+            <a ng-if="anchor === 'CURRENT'">当前</a>
+            <a ng-if="anchor === 'HISTORY'">历史</a>
+            <a ng-if="anchor === 'HOT'">热门</a>
+            <a ng-if="$index > 2">{{anchor}}</a>
+        </li>
+        <li name="{{anchor}}"
+            ng-if="!SelectCityController.hasOtherAnchor"
+            ng-repeat="anchor in SelectCityController.anchorWord">{{anchor}}</li>
     </ul>
 </div>
