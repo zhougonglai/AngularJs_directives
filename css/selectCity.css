@@ -38,6 +38,10 @@ ul{
     color: #666;
     background-color: #F8F8F8;
     overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .g-city-sct-hd{
@@ -78,6 +82,7 @@ ul{
     max-width: 120px;
     margin: 5px 1.5%;
     text-align: center;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .m-city-scr-cur>div>a,
@@ -87,6 +92,7 @@ ul{
     height: 40px;
     line-height: 40px;
     border: 1px solid #ddd;
+    -webkit-tap-highlight-color: #ddd;
 }
 .m-city-scr-cur>div:first-child>a {
     border: 1px solid #D30775;
@@ -107,7 +113,7 @@ ul{
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: #ddd;
 }
 .u-back-btn{
     float: left;
@@ -145,7 +151,7 @@ ul{
     height: 100%;
     text-decoration: none;
     color: #D5137B;
-    font-size: 10px;
+    font-size: 11px;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -161,6 +167,7 @@ ul{
     line-height: 40px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
+    -webkit-tap-highlight-color: transparent;
 }
 .m-city-list > li:last-child{
     border-bottom: none;

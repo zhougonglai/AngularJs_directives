@@ -59,7 +59,7 @@
         </ul>
     </div>
     <ul class="g-letter-list">
-        <li name="{{anchor}}"
+        <li data-name="{{anchor}}"
             ng-if="SelectCityController.hasOtherAnchor"
             ng-repeat="anchor in SelectCityController.anchorWord track by $index">
             <a ng-if="anchor === 'CURRENT'">当前</a>
@@ -67,7 +67,7 @@
             <a ng-if="anchor === 'HOT'">热门</a>
             <a ng-if="$index > 2">{{anchor}}</a>
         </li>
-        <li name="{{anchor}}"
+        <li data-name="{{anchor}}"
             ng-if="!SelectCityController.hasOtherAnchor"
             ng-repeat="anchor in SelectCityController.anchorWord">{{anchor}}</li>
     </ul>

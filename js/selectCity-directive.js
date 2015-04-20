@@ -532,10 +532,16 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     whichAnchor = {};
                 $letterList.on('touchstart', function (e) {
                     var target = e.target;
-                    if (target.nodeName.toLocaleUpperCase() === 'LI') {
-                        self.setAnchor(target.name, true);
+                    if (target.nodeName.toLocaleUpperCase() === 'A') {
+                        var li = target.parentNode,
+                            anchor = li.dataset.name;
+                        self.setAnchor(anchor, true);
                     }
                     $cityContainer.off();
+                    $cityContainer.on('touchstart', function (e) {
+                        e.preventDefault();
+                        return false;
+                    });
                     $cityContainer.on('touchmove', function (e) {
                         e.preventDefault();
                         return false;
@@ -570,11 +576,11 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         }
                     }
                 });
-
-                $letterList.on('touchend', function (e) {
-                    $cityContainer.off();
-                })
             };
+
+            $letterList.on('touchend', function (e) {
+                $cityContainer.off();
+            });
 
             self.requestData();
 

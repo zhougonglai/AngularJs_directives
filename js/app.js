@@ -24,8 +24,8 @@ myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($s
     };
 
     $scope.selectCityConfig = {
-        url: './jsonData/flightCity.json',
-        type: 'flight'
+        url: './jsonData/trainCity.json',
+        type: 'train'
     };
 
     $scope.$on('setCityName', function(e, cityName) {
