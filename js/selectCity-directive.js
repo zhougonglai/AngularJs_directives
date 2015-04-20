@@ -187,6 +187,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     anchorWord: null,
                     cityList: null,
                     historySelectedList: [],
+                    currentCity: localStorage.getItem('currentCity') || '上海',
 
                     /**
                      * @description 取得请求回来的城市数据中的城市拼音首字母，去除重复的首字母，用于设置锚点。
@@ -245,10 +246,10 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
                         SCController.hasOtherAnchor = this.hasOtherAnchor;
+                        SCController.currentCity = this.currentCity;
                         SCController.inputPlaceholder = '输入城市名或拼音';
                         SCController.curPosition = '当前定位城市区域';
                         SCController.historyOptions = '历史选择城市';
-
                         return this;
                     },
 
@@ -262,6 +263,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                      */
                     updateHistorySelected: function (cityName, SCController) {
                         SCController.updateHistorySelected(cityName, this);
+                        SCController.currentCity = this.currentCity = cityName;
+                        localStorage.setItem('currentCity', cityName);
                         return this;
                     },
 
@@ -322,7 +325,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     },
 
                     getCurrentCity: function (requestData) {
-                        this.currentCity = requestData.data.currentCity;
+                        this.currentCity = localStorage.getItem('currentCity') || requestData.data.currentCity.name;
                         return this;
                     },
 
@@ -352,6 +355,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
                     updateHistorySelected: function (cityName, SCController) {
                         SCController.updateHistorySelected(cityName, this);
+                        SCController.currentCity = this.currentCity = cityName;
+                        localStorage.setItem('currentCity', cityName);
                         return this;
                     },
 
@@ -378,6 +383,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     anchorWord: null,
                     provinceList: null,
                     historySelectedList: [],
+                    currentCity: localStorage.getItem('currentCity') || '上海',
 
                     getProvinceFirstLetter: function () {
                         if (!angular.isArray(this.provinceList)) return;
@@ -419,10 +425,11 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     },
 
                     bindControllerData: function (SCController) {
-                        var historySelectedList = storage.getItem('historySelectedList');
+                        var historySelectedList = localStorage.getItem('historySelectedList');
                         SCController.provinceList = this.provinceList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
+                        SCController.currentCity = this.currentCity;
                         SCController.inputPlaceholder = '输入省份或自治区，直辖市';
                         SCController.curPosition = '当前定位区域';
                         SCController.historyOptions = '历史选择';
@@ -449,6 +456,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
                     updateHistorySelected: function (cityName, SCController) {
                         SCController.updateHistorySelected(cityName, this);
+                        SCController.currentCity = this.currentCity = cityName;
+                        localStorage.setItem('currentCity', cityName);
                         return this;
                     },
 
@@ -609,9 +618,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
             angular.forEach(cityList, function (elem, index) {
                 if (elem['firstletter'] === $filter('uppercase')(letter)) {
                     if (angular.isString(searchText) && searchText.length > 0) {
-                        if (elem['pinyin'].indexOf(searchText) !== -1 || elem['station_name'].indexOf(searchText) !== -1) {
-                            cityListFiltered.push(elem);
-                        } else {
+                        if (elem['pinyin'].indexOf(searchText) !== -1) {
                             cityListFiltered.push(elem);
                         }
                     } else {

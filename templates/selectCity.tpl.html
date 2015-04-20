@@ -10,8 +10,7 @@
                 <h4 class="u-city-sct-cur-hd">{{SelectCityController.curPosition}}</h4>
                 <div class="m-city-scr-cur">
                     <div>
-                        <a ng-if="SelectCityController.curCity">{{SelectCityController.curCity}}</a>
-                        <a ng-if="!SelectCityController.curCity">上海</a>
+                        <a>{{SelectCityController.currentCity}}</a>
                     </div>
                 </div>
             </li>
@@ -19,11 +18,11 @@
                 <h4 class="u-city-sct-hty-hd">{{SelectCityController.historyOptions}}</h4>
                 <div class="m-city-scr-hty">
                     <div ng-repeat="item in SelectCityController.historySelectedList">
-                        <a ng-click="">{{item.name}}</a>
+                        <a ng-click="SelectCityController.selectCity(item.name)">{{item.name}}</a>
                     </div>
                 </div>
             </li>
-            <li id="HOT">
+            <li id="HOT" ng-if="SelectCityController.type === 'train' || SelectCityController.type === 'flight'">
                 <h4 class="u-city-sct-hot-hd">热门城市</h4>
                 <div class="m-city-scr-hot">
                     <div ng-if="SelectCityController.type === 'train'"
@@ -69,6 +68,8 @@
         </li>
         <li data-name="{{anchor}}"
             ng-if="!SelectCityController.hasOtherAnchor"
-            ng-repeat="anchor in SelectCityController.anchorWord">{{anchor}}</li>
+            ng-repeat="anchor in SelectCityController.anchorWord">
+            <a>{{anchor}}</a>
+        </li>
     </ul>
 </div>
