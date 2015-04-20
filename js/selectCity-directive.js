@@ -512,23 +512,27 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
             /**
              * @description 选择城市事件处理
-             * @param {String} cityName 城市名
+             * @param {Object} cityObj 用户选择的城市对象
              */
-            self.selectCity = function (cityName) {
+            self.selectCity = function (cityObj) {
+                var cityName = null;
                 switch (type) {
                     case 'visa-province':
+                        cityName = cityObj.station_name;
                         visaProvince.updateHistorySelected(cityName, self);
                         break;
                     case 'train':
+                        cityName = cityObj.cityname;
                         train.updateHistorySelected(cityName, self);
                         break;
                     case 'flight':
+                        cityName = cityObj.name;
                         flight.updateHistorySelected(cityName, self);
                         break;
                     default:
                         break;
                 }
-                $scope.$emit('setCityName', cityName);
+                $scope.$emit('setCityName', cityObj);
                 self.close();
             };
 

@@ -27,11 +27,11 @@
                 <div class="m-city-scr-hot">
                     <div ng-if="SelectCityController.type === 'train'"
                          ng-repeat="city in SelectCityController.cityList | filter: {ishot: 'Y'}">
-                        <a ng-click="SelectCityController.selectCity(city.cityname)">{{city.cityname}}</a>
+                        <a ng-click="SelectCityController.selectCity(city)">{{city.cityname}}</a>
                     </div>
                     <div ng-if="SelectCityController.type === 'flight'"
                          ng-repeat="city in SelectCityController.hotCitys">
-                        <a ng-click="SelectCityController.selectCity(city.name)">{{city.name}}</a>
+                        <a ng-click="SelectCityController.selectCity(city)">{{city.name}}</a>
                     </div>
                 </div>
             </li>
@@ -40,17 +40,17 @@
                 <ul class="m-city-list">
                     <li ng-if="SelectCityController.type === 'train'"
                         ng-repeat="city in SelectCityController.cityList | filter: {firstletter: letter}"
-                        ng-click="SelectCityController.selectCity(city.cityname)">
+                        ng-click="SelectCityController.selectCity(city)">
                         {{city.cityname}}
                     </li>
                     <li ng-if="SelectCityController.type === 'flight'"
                         ng-repeat="city in SelectCityController.cityList | filter:  {firstLetter: letter, pinYin: search} "
-                        ng-click="SelectCityController.selectCity(city.name)">
+                        ng-click="SelectCityController.selectCity(city)">
                         {{city.name}}
                     </li>
                     <li ng-if="SelectCityController.type === 'visa-province'"
                         ng-repeat="province in SelectCityController.provinceList | searchCityListFilter: search : letter"
-                        ng-click="SelectCityController.selectCity(province.station_name)">
+                        ng-click="SelectCityController.selectCity(province)">
                         {{province.station_name}}
                     </li>
                 </ul>

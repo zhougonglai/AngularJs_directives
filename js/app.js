@@ -28,12 +28,12 @@ myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($s
         type: 'visa-province'
     };
 
-    $scope.$on('setCityName', function(e, cityName) {
-        //debugger;
+    $scope.$on('setCityName', function(e, cityObj) {
+        $log.info(cityObj);
     });
 
     $scope.$on('closeSelectCity', function(e, data) {
-        //$log.info('123');
+        $log.info('隐藏城市选择');
     });
 
 }]);
