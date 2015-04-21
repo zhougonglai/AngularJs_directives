@@ -17,10 +17,11 @@
             <p>{{date.year}}年{{date.month}}月</p>
             <div>
                 <span ng-click="DPController.selectDate(dateInfo, $event)"
-                      ng-class="{usable: dateInfo.isUsable, highLight: dateInfo.isHighLight, selected: dateInfo.isSelected}"
+                      ng-class="{usable: dateInfo.isUsable, highLight: dateInfo.isHighLight, selected: dateInfo.isSelected, hasPrice: dateInfo.isHasPrice}"
                       ng-repeat="dateInfo in date.dateObj">
                     {{dateInfo.renderDate}}
-                    <i ng-if="">&#165</i>
+
+                    <i ng-if="dateInfo.isHasPrice && dateInfo.isUsable">&#165{{dateInfo.price}}</i>
                 </span>
             </div>
         </section>

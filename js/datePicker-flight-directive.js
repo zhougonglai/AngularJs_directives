@@ -57,6 +57,10 @@ datePickerFlight
         };
 
 
+        /**
+         * @description 访问价格日期接口，取得价格日期数据
+         * @returns {*}
+         */
         self.requestData = function () {
             var promise = $http({
                 method: 'POST',
@@ -221,7 +225,12 @@ datePickerFlight
                 isSelected,
                 goTripDateArr,
                 backTripDateArr,
-                isUsable = false;
+                isUsable = false,
+                priceList = angular.copy(datePriceList),
+                priceListLen = priceList.length,
+                priceObj,
+                price,
+                isHasPrice = false;
 
             goTripDateArr = self.goTripDateArr || beginDateArr;
             backTripDateArr = self.backTripDateArr || self.getBackDateInfo();
@@ -259,6 +268,19 @@ datePickerFlight
                         if(eachYear === beginDateArr[0] && eachMonth === beginDateArr[1] && numberDate === beginDateArr[2]) {
                             isToday = 1;
                             isUsable = true;
+                            isHasPrice = true;
+                            var t = 0;
+                        }
+
+                        if(isHasPrice) {
+                            self.setDatePrice();
+                            priceObj = priceList[t];
+                            if(priceObj && priceObj.parPrice) {
+                                price = priceObj.parPrice;
+                            } else {
+                                isHasPrice = false;
+                            }
+                            t++;
                         }
 
                         if(self.isSelectBackTrip()) {
@@ -299,7 +321,9 @@ datePickerFlight
                             cnDay: weekDay[d.getDay()],
                             dateFormat: self.getFormatDate(eachYear, eachMonth, numberDate),
                             isHighLight: isHighLight,
-                            isSelected: isSelected
+                            isSelected: isSelected,
+                            isHasPrice: isHasPrice,
+                            price: price
                         };
                         d.setDate(d.getDate() + 1);
                     }
@@ -315,6 +339,10 @@ datePickerFlight
                     }
                 }
             }
+        };
+
+        self.setDatePrice = function() {
+
         };
 
         /**
