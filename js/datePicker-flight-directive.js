@@ -27,6 +27,8 @@ datePickerFlight
             endDateStr,
             renderEndDateArr,
             renderMonthCount = 12,
+            datePriceList,
+            serverTime,
             requestUrl = $scope.dpConfig.url;
 
         self.dateArray = [];
@@ -34,20 +36,24 @@ datePickerFlight
         self.backTripDateArr = null;
 
         self.init = function () {
+            $log.info('step 1');
             //默认隐藏日期控件
             self.open = true;
             //请求服务器数据,得到90天日期价格
-            self.requestData();
-            //当前日期
-            beginDateArr = self.getBeginDate();
-            beginDateStr = self.getFormatDate(beginDateArr);
-            //当前日期+90天=结束日期
-            endDateArr = self.getEndDate();
-            endDateStr = self.getFormatDate(endDateArr);
-            //渲染的结束日期(渲染12个月的日期)
-            renderEndDateArr = self.getRenderEndDate();
-            //渲染日期
-            self.renderDate();
+            var promise = self.requestData();
+            promise.success(function() {
+                $log.info('step 3');
+                //当前日期
+                beginDateArr = self.getBeginDate();
+                beginDateStr = self.getFormatDate(beginDateArr);
+                //当前日期+90天=结束日期
+                endDateArr = self.getEndDate();
+                endDateStr = self.getFormatDate(endDateArr);
+                //渲染的结束日期(渲染12个月的日期)
+                renderEndDateArr = self.getRenderEndDate();
+                //渲染日期
+                self.renderDate();
+            });
         };
 
 
@@ -61,11 +67,14 @@ datePickerFlight
                 }
             });
             promise.success(function(data, status, headers) {
-
+                datePriceList = data.data;
+                serverTime = headers('date');
+                $log.info('step 2');
             });
             promise.error(function(data, status, headers){
 
             });
+            return promise;
         };
 
         $scope.$on('openGoTripDatePicker', function(e, data) {
@@ -117,7 +126,7 @@ datePickerFlight
          * @returns {*} 返回起始日期加若干年或月或日以后的日期
          */
         self.getDate = function (dateObj) {
-            var newDate = new Date(),
+            var newDate = new Date(serverTime),
                 year,
                 month,
                 date,
