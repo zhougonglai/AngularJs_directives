@@ -59,7 +59,26 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
 
 
 myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
+    $scope.openGoTripDatePicker = function() {
+        $scope.$broadcast('openGoTripDatePicker', {
+            dateType: 'goTrip'
+        });
+    };
+
+    $scope.openBackTripDatePicker = function() {
+        $scope.$broadcast('openBackTripDatePicker', {
+            dateType: 'backTrip'
+        });
+    };
+
+    $scope.dpConfig = {
+        url: './jsonData/date-flight.json'
+    };
+
     $scope.$on('onSelectDate', function(e, data) {
-        $log.info(data);
+        $log.info(data.goDateInfo, data.backDateInfo);
+
+        $scope.goTripDate = data.goDateInfo.dateFormat;
+        $scope.backTripDate = data.backDateInfo.dateFormat;
     });
 }]);

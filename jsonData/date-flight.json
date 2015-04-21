@@ -1,0 +1,38 @@
+{
+  "code": "1",
+  "data": [
+    {
+      "deptDate": "2015-03-20",
+      "flightNO": "HM127",
+      "seatCode": "0002",
+      "parPrice": 2333
+    },
+    {
+      "deptDate": "2015-03-20",
+      "flightNO": "HM127",
+      "seatCode": "0002",
+      "parPrice": 256
+    },
+    {
+      "deptDate": "2015-03-20",
+      "flightNO": "HM127",
+      "seatCode": "0002",
+      "parPrice": 454
+    },
+    {
+      "deptDate": "2015-03-20",
+      "flightNO": "HM127",
+      "seatCode": "0002",
+      "parPrice": 343
+    },
+    {
+      "deptDate": "2015-03-20",
+      "flightNO": "HM127",
+      "seatCode": "0002",
+      "parPrice": 2323
+    }
+  ],
+  "errorMessage": "",
+  "message": "",
+  "version": "6ca2e9a6726ff1719ed1b44bfe2b821a"
+}
