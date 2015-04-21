@@ -41,7 +41,6 @@ datePickerFlight
             //当前日期
             beginDateArr = self.getBeginDate();
             beginDateStr = self.getFormatDate(beginDateArr);
-            debugger;
             //当前日期+90天=结束日期
             endDateArr = self.getEndDate();
             endDateStr = self.getFormatDate(endDateArr);
