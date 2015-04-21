@@ -7,8 +7,10 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!--<link rel="stylesheet" href="./css/datePicke.css"/>-->
-    <!--<link rel="stylesheet" type="text/css" href="css/modalDialog.css">-->
-    <link rel="stylesheet" href="css/selectCity.css"/>
+    <!--<link rel="stylesheet" href="./css/datePicker-base.css"/>-->
+    <link rel="stylesheet" href="./css/datePicker-flight.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="css/modalDialog.css"> -->
+    <!-- <link rel="stylesheet" href="css/selectCity.css"/> -->
     <!--<link rel="stylesheet" href="css/rollerPicker.css"/>-->
     <script src="libs/angular.js"></script>
     <script src="libs/angular-touch.js"></script>
@@ -16,7 +18,9 @@
     <script src="js/modalDialog-directive.js"></script>
     <script src="js/selectCity-directive.js"></script>
     <script src="js/rollerPicker-directive.js"></script>
-    <script src="js/datePicker-directive.js"></script>
+    <!--<script src="js/datePicker-directive.js"></script>-->
+    <!--<script src="js/datePicker-base-directive.js"></script>-->
+    <script src="js/datePicker-flight-directive.js"></script>
     <script src="js/service.js"></script>
 </head>
 <body>
@@ -26,8 +30,8 @@
     <!--</modal-dialog>-->
 <!--</div>-->
 <div ng-controller="SelectCityController">
-    <button ng-click="show()">123</button>
-    <select-city city-config="selectCityConfig"></select-city>
+    <!-- <button ng-click="show()">123</button>
+    <select-city city-config="selectCityConfig"></select-city> -->
 </div>
 
 <div class="roller-container" ng-controller="RPParentController">
@@ -36,6 +40,12 @@
 
     <!--<date-picker date-config="datePickerConfig"></date-picker>-->
 </div>
+
+
+<div ng-controller="DPBaseController">
+    <date-picker dp-config="dpConfig"></date-picker>
+</div>
+
 </body>
 </html>
 

@@ -5,7 +5,9 @@ var myApp = angular.module('myApp', [
     'modalDialogDirective',
     'selectCityDirective',
     'rollerPickerDirective',
-    'datePickerDirective',
+    //'datePickerDirective',
+    //'datePicker.base',
+    'datePicker.flight',
     'ngTouch',
     'services'
 ]);
@@ -53,4 +55,11 @@ myApp.controller('RPParentController', ['$scope','$http', function($scope, $http
             alert('用户自定义下一步请求回调')
         }
     }
+}]);
+
+
+myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
+    $scope.$on('onSelectDate', function(e, data) {
+        $log.info(data);
+    });
 }]);
