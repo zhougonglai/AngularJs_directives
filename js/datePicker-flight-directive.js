@@ -466,7 +466,8 @@ datePickerFlight
                 dateFormat = self.getFormatDate(dateArr[0], dateArr[1], dateArr[2]);
                 goDateObj = {
                     dateArr: dateArr,
-                    dateFormat: dateFormat
+                    dateFormat: dateFormat,
+                    cnDay: weekDay[dateArr[3]]
                 };
                 backDateObj = dateObj;
             } else {
@@ -479,7 +480,8 @@ datePickerFlight
                 dateFormat = self.getFormatDate(dateArr[0], dateArr[1], dateArr[2]);
                 backDateObj = {
                     dateArr: dateArr,
-                    dateFormat: dateFormat
+                    dateFormat: dateFormat,
+                    cnDay: weekDay[dateArr[3]]
                 }
             }
             var data = {

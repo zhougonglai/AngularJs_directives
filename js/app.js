@@ -79,6 +79,8 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
         $log.info(data.goDateInfo, data.backDateInfo);
 
         $scope.goTripDate = data.goDateInfo.dateFormat;
+        $scope.goTripDay = ' ' + data.goDateInfo.cnDay;
         $scope.backTripDate = data.backDateInfo.dateFormat;
+        $scope.backTripDay = ' ' + data.backDateInfo.cnDay;
     });
 }]);

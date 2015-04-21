@@ -46,11 +46,11 @@
 <div ng-controller="DPBaseController">
     <label style="display: block;">
         <i>去程日期:</i>
-        <input type="text" ng-click="openGoTripDatePicker()" value="{{goTripDate}}"/>
+        <input type="text" ng-click="openGoTripDatePicker()" value="{{goTripDate}}{{goTripDay}}"/>
     </label>
     <label style="display: block;">
         <i>返程日期:</i>
-        <input type="text" ng-click="openBackTripDatePicker()" value="{{backTripDate}}"/>
+        <input type="text" ng-click="openBackTripDatePicker()" value="{{backTripDate}}{{backTripDay}}"/>
     </label>
     <date-picker dp-config="dpConfig"></date-picker>
 </div>
