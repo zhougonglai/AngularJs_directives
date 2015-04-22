@@ -53,10 +53,13 @@
         <input type="text" ng-click="openBackTripDatePicker()" value="{{backTripDate}}{{backTripDay}}"/>
     </label>
     <label style="display: block;">
-        <i>低价日历:</i>
-        <input type="text" ng-click="openDatePricePicker()" value=""/>
+        <i>低价日历(去程):</i>
+        <input type="text" ng-click="openGoDatePricePicker()" value=""/>
     </label>
-
+    <label style="display: block;">
+        <i>低价日历(返程):</i>
+        <input type="text" ng-click="openBackDatePricePicker()" value=""/>
+    </label>
     <date-picker dp-config="dpConfig"></date-picker>
 </div>
 

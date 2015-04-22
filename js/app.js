@@ -71,21 +71,35 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
         });
     };
 
-    $scope.openDatePricePicker = function() {
-        //去程低价日历
+    //去程低价日历
+    $scope.openGoDatePricePicker = function() {
         $scope.$broadcast('openGoDatePricePicker', {
             dateType: 'goTrip',
             renderType: 'goDatePrice'
         });
-        //返程低价日历
+    };
+
+    //返程低价日历
+    $scope.openBackDatePricePicker = function() {
         $scope.$broadcast('openBackDatePricePicker', {
             dateType: 'backTrip',
             renderType: 'backDatePrice'
         });
     };
 
+    //前一天
+    $scope.prevDay = function() {
+        $scope.$broadcast('prevDay', {});
+    };
+
+    //后一天
+    $scope.nextDay = function() {
+        $scope.$broadcast('nextDay', {});
+    };
+
     $scope.dpConfig = {
-        url: ''
+        url: '',
+        requestData: {}
     };
 
     $scope.$on('onSelectDate', function(e, data) {
