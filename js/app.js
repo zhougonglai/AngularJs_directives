@@ -71,6 +71,12 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
         });
     };
 
+    $scope.openDatePricePicker = function() {
+        $scope.$broadcast('openDatePricePicker', {
+            dateType: 'datePrice'
+        });
+    };
+
     $scope.dpConfig = {
         url: './jsonData/date-flight.json'
     };
@@ -83,4 +89,5 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
         $scope.backTripDate = data.backDateInfo.dateFormat;
         $scope.backTripDay = ' ' + data.backDateInfo.cnDay;
     });
+
 }]);

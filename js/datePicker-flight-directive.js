@@ -31,6 +31,24 @@ datePickerFlight
             serverTime,
             requestUrl = $scope.dpConfig.url;
 
+
+        if(Mock.Random) {
+            var dataTemplate = {
+                'code|1-10': 1,
+                'data|30': [
+                    {
+                        'deptDate': '@DATE',
+                        'flightNO': 'MH370',
+                        'seatCode|4': '1',
+                        'parPrice|100-2000': 100
+                    }
+                ]
+            };
+
+            var MockData = Mock.mock(dataTemplate);
+        }
+
+
         self.dateArray = [];
         self.goTripDateArr = null;
         self.backTripDateArr = null;
@@ -71,7 +89,12 @@ datePickerFlight
                 }
             });
             promise.success(function(data, status, headers) {
-                datePriceList = data.data;
+                if(MockData) {
+                    datePriceList = MockData.data;
+                } else {
+                    datePriceList = data.data;
+                }
+
                 serverTime = headers('date');
                 $log.info('step 2');
             });
@@ -86,6 +109,10 @@ datePickerFlight
         });
 
         $scope.$on('openBackTripDatePicker', function(e, data) {
+            self.openDatePicker(e, data);
+        });
+
+        $scope.$on('openDatePricePicker', function(e, data){
             self.openDatePicker(e, data);
         });
 
@@ -219,6 +246,7 @@ datePickerFlight
                 isToday = 0,
                 renderDateCount,
                 renderDate,
+                renderDateArr,
                 numberDate,
                 eachMonthLastDateIndex,
                 isHighLight,
@@ -227,7 +255,6 @@ datePickerFlight
                 backTripDateArr,
                 isUsable = false,
                 priceList = angular.copy(datePriceList),
-                priceListLen = priceList.length,
                 priceObj,
                 price,
                 isHasPrice = false;
@@ -265,7 +292,8 @@ datePickerFlight
                         }
                     } else {
                         renderDate = numberDate = d.getDate();
-                        if(eachYear === beginDateArr[0] && eachMonth === beginDateArr[1] && numberDate === beginDateArr[2]) {
+                        renderDateArr = [eachYear, eachMonth, numberDate];
+                        if(!self.dateCompare(renderDateArr, beginDateArr)) {
                             isToday = 1;
                             isUsable = true;
                             isHasPrice = true;
@@ -284,11 +312,11 @@ datePickerFlight
                         }
 
                         if(self.isSelectBackTrip()) {
-                            var result = self.dateCompare([eachYear, eachMonth, numberDate], goTripDateArr);
+                            var result = self.dateCompare(renderDateArr, goTripDateArr);
                             isUsable = result === -1;
-                            isSelected = eachYear === backTripDateArr[0] && eachMonth === backTripDateArr[1] && numberDate === backTripDateArr[2];
+                            isSelected = !self.dateCompare(renderDateArr, backTripDateArr);
                         } else if(self.hasGoTripDateInfo()){
-                            isSelected = eachYear === goTripDateArr[0] && eachMonth === goTripDateArr[1] && numberDate === goTripDateArr[2];
+                            isSelected = !self.dateCompare(renderDateArr, goTripDateArr);
                         }
 
                         switch (isToday) {
@@ -317,9 +345,9 @@ datePickerFlight
                         self.dateArray[i].dateObj[j] = {
                             isUsable: isUsable,
                             renderDate: renderDate,
-                            dateArr: [eachYear, eachMonth, numberDate, d.getDay()],
+                            dateArr: renderDateArr.push(d.getDay()),
                             cnDay: weekDay[d.getDay()],
-                            dateFormat: self.getFormatDate(eachYear, eachMonth, numberDate),
+                            dateFormat: self.getFormatDate(renderDateArr),
                             isHighLight: isHighLight,
                             isSelected: isSelected,
                             isHasPrice: isHasPrice,
