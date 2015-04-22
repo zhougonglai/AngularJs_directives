@@ -72,8 +72,15 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
     };
 
     $scope.openDatePricePicker = function() {
-        $scope.$broadcast('openDatePricePicker', {
-            dateType: 'datePrice'
+        //去程低价日历
+        $scope.$broadcast('openGoDatePricePicker', {
+            dateType: 'goTrip',
+            renderType: 'goDatePrice'
+        });
+        //返程低价日历
+        $scope.$broadcast('openBackDatePricePicker', {
+            dateType: 'backTrip',
+            renderType: 'backDatePrice'
         });
     };
 

@@ -52,6 +52,8 @@ datePickerFlight
         self.dateArray = [];
         self.goTripDateArr = null;
         self.backTripDateArr = null;
+        self.dateType = null;
+        self.renderType = null;
 
         self.init = function () {
             $log.info('step 1');
@@ -112,7 +114,11 @@ datePickerFlight
             self.openDatePicker(e, data);
         });
 
-        $scope.$on('openDatePricePicker', function (e, data) {
+        $scope.$on('openGoDatePricePicker', function (e, data) {
+            self.openDatePicker(e, data);
+        });
+
+        $scope.$on('openBackDatePricePicker', function (e, data) {
             self.openDatePicker(e, data);
         });
 
@@ -123,8 +129,13 @@ datePickerFlight
          */
         self.openDatePicker = function (e, data) {
             self.open = !self.open;
-            if (data) {
-                self.dateType = data.dateType;
+            if(angular.isObject(data)){
+                if (angular.isString(data.dateType)) {
+                    self.dateType = data.dateType;
+                }
+                if(angular.isString(data.renderType)) {
+                    self.renderType = data.renderType;
+                }
             }
             self.init();
         };
@@ -303,7 +314,6 @@ datePickerFlight
                         }
 
                         if (isHasPrice) {
-                            self.setDatePrice();
                             priceObj = priceList[t];
                             if (priceObj && priceObj.parPrice) {
                                 price = priceObj.parPrice;
