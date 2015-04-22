@@ -89,7 +89,9 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
 
     //前一天
     $scope.prevDay = function() {
-        $scope.$broadcast('prevDay', {});
+        $scope.$broadcast('prevDay', {
+            dateType: ''
+        });
     };
 
     //后一天

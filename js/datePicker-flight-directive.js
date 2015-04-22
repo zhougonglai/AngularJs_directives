@@ -25,16 +25,26 @@ datePickerFlight
             endDateArr,
             beginDateStr,
             endDateStr,
+            initDateArr,
             renderEndDateArr,
             renderMonthCount,
             datePriceList,
             serverTime,
+            isInit = true,
             requestUrl = $scope.dpConfig.url;
+
+        var cnText = {
+            goTripTitle: '去程日期选择',
+            backTripTitle: '返程日期选择',
+            goDatePriceTitle: '低价日历（去程）',
+            backDatePriceTitle: '低价日历（返程）'
+        };
 
         self.goTripDateArr = null;
         self.backTripDateArr = null;
         self.dateType = null;
         self.renderType = null;
+        self.title = '';
 
         if (Mock.Random) {
             var dataTemplate = {
@@ -52,29 +62,87 @@ datePickerFlight
             var MockData = Mock.mock(dataTemplate);
         }
 
+
         self.init = function () {
-            $log.info('step 1');
             self.dateArray = [];
-            //默认隐藏日期控件
-            self.open = true;
+
             //请求服务器数据,得到90天日期价格
             var promise = self.requestData();
             promise.success(function () {
-                $log.info('step 3');
                 //当前日期
                 beginDateArr = self.getBeginDate();
                 beginDateStr = self.getFormatDate(beginDateArr);
                 //当前日期+90天=结束日期
                 endDateArr = self.getEndDate();
                 endDateStr = self.getFormatDate(endDateArr);
+                //初始化页面显示的日期（明天）
                 renderMonthCount = self.getRenderMonthCount();
                 //渲染的结束日期(渲染12个月的日期)
                 renderEndDateArr = self.getRenderEndDate();
+                //设置日期控件头部文字
+                self.setTitle();
                 //渲染日期
                 self.renderDate();
+                if(isInit) {
+                    self.initDate();
+                } else {
+                    self.open = true;
+                }
             });
         };
 
+        /**
+         * @description 初始化页面日期，始终为明天，刷新页面才执行，以后再进入日期控件，不在执行
+         */
+        self.initDate = function() {
+            $log.info('初始化日期');
+            initDateArr = self.getInitDate();
+            self.emitSelectDateEvent({
+                dateArr: initDateArr,
+                dateFormat: self.getFormatDate(initDateArr),
+                cnDay: weekDay[initDateArr[3]]
+            });
+            //默认隐藏日期控件
+            self.open = false;
+        };
+
+        /**
+         * @description 获取页面初始化日期,始终为明天
+         * @returns {number|*}
+         */
+        self.getInitDate = function() {
+            return self.getDate({
+                dateArr: beginDateArr,
+                addNum: 1
+            });
+        };
+
+        /**
+         * @description 设置日期控件头部文字
+         */
+        self.setTitle = function() {
+            var dateType = self.dateType,
+                renderType = self.renderType;
+            if(!renderType) {
+                if(dateType === 'goTrip') {
+                    self.title = cnText.goTripTitle;
+                }
+                if(dateType === 'backTrip') {
+                    self.title = cnText.backTripTitle;
+                }
+            } else if(renderType === 'goDatePrice') {
+                self.title = cnText.goDatePriceTitle;
+            } else if(renderType === 'backDatePrice') {
+                self.title=  cnText.backDatePriceTitle;
+            }
+        };
+
+        /**
+         * @description 根据dateType和renderType来设置日期控件要渲染的月份数量
+         *              如果用户打开的是“去程日期”或者“返程日期”，则渲染12个月
+         *              如果用户打开的是“低价日历”，则渲染有价格的天数所在的月份
+         * @returns {*} 渲染的月份数量
+         */
         self.getRenderMonthCount = function() {
             var dateType = self.dateType,
                 renderType = self.renderType;
@@ -110,7 +178,6 @@ datePickerFlight
                 }
 
                 serverTime = headers('date');
-                $log.info('step 2');
             });
             promise.error(function (data, status, headers) {
 
@@ -137,11 +204,12 @@ datePickerFlight
         });
 
         $scope.$on('prevDay', function(e, data) {
+            $log.info('前一天');
 
         });
 
         $scope.$on('nextDay', function(e, data) {
-
+            $log.info('后一天');
         });
 
         /**
@@ -167,6 +235,7 @@ datePickerFlight
          */
         self.closeDatePicker = function () {
             self.open = !self.open;
+            isInit = false;
             $scope.$emit('closeDatePicker', {});
         };
 
@@ -646,5 +715,9 @@ datePickerFlight
         self.getDaysInMonth = function (year, month) {
             return (month === 2 && (year % 4 === 0 && year % 100 === 0)) || year % 400 === 0 ? 28 : monthDay[month];
         };
+
+        if(isInit) {
+            self.init();
+        }
 
     }]);
