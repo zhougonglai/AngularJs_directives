@@ -236,7 +236,9 @@ datePickerFlight
         };
 
         /**
-         * @description 渲染日期控件
+         * @description 渲染日期控件，机票价格
+         *              通过dateType判断，即可以渲染去程日期视图，也可以渲染返程日期视图，并做相应的样式调整。
+         *
          */
         self.renderDate = function() {
             var eachYear = beginDateArr[0],
@@ -370,10 +372,6 @@ datePickerFlight
             }
         };
 
-        self.setDatePrice = function() {
-
-        };
-
         /**
          * @description 日期比较，通过转换为毫秒数来进行日期比较
          *              相等： 返回0
@@ -398,6 +396,11 @@ datePickerFlight
             return dateMs < anotherDateMs ? 1 : -1;
         };
 
+        /**
+         * @description 将日期转换为毫秒
+         * @param dateArr 日期数组[2015, 4, 21]
+         * @returns {number} 毫秒
+         */
         self.dateArrToMs = function(dateArr) {
             var date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
             return date.getTime();
@@ -482,7 +485,18 @@ datePickerFlight
         };
 
         /**
-         * @description 将选中的日期对象发送到父级作用域
+         * @description 将选中的日期对象发送到父级作用域，判断用户当前打开的是去程日期选择，还是返程日期选择
+         *
+         *              1.如果是返程日期选择self.isSelectedBackTrip()返回true,返程日期backDateObj为dateObj，
+         *              若去程日期没有选择过，则去程日期为初始日期beginDateArr
+         *              若去程日期选择过，则去程日期为缓存的去程日期self.goTripDateArr
+         *
+         *              2.如果是去程日期选择，去程日期对象goDateObj为用户选择的日期对象dateObj;
+         *              若去程日期超过返程日期，返程日期为去程日期+2天self.getBackDateInfo(goDateObj.dateArr).dateArr;
+         *              若去程日期没有超过返程日期，并且返程日期选择过，则返程日期为缓存的返程日期self.backTripDateArr
+         *              若去程日期没有超过返程日期，并且返程日期没有选择过，则返程日期为初始日期+2天self.getBackDateInfo().dateArr;
+         *
+         *
          * @param dateObj 选中的日期对象
          */
         self.emitSelectDateEvent = function(dateObj) {
@@ -523,12 +537,21 @@ datePickerFlight
             $scope.$emit('onSelectDate', data);
         };
 
+        /**
+         * @description 缓存用户选择的返程日期
+         * @param backDateObj 返程日期对象
+         */
         self.saveBackTripDateInfo = function(backDateObj) {
             self.backTripDateArr = backDateObj.dateArr;
         };
 
-        self.isGoDateOverBack = function(dateObj) {
-            var goDateArr = dateObj.dateArr,
+        /**
+         * @description 用户选择的去程日期是否超过了当前已存在的返程日期，如果超过，则设置返程日期为去程日期+ 2天
+         * @param goDateObj 用户选择的去程日期对象
+         * @returns {boolean} 若去程日期超过返程日期，返回true，否则为false
+         */
+        self.isGoDateOverBack = function(goDateObj) {
+            var goDateArr = goDateObj.dateArr,
                 backDateArr = self.backTripDateArr || self.getBackDateInfo();
 
             var result = self.dateCompare(goDateArr, backDateArr);

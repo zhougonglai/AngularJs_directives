@@ -78,7 +78,7 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
     };
 
     $scope.dpConfig = {
-        url: './jsonData/date-flight.json'
+        url: ''
     };
 
     $scope.$on('onSelectDate', function(e, data) {
