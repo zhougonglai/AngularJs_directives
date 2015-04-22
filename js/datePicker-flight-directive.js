@@ -345,7 +345,7 @@ datePickerFlight
                         self.dateArray[i].dateObj[j] = {
                             isUsable: isUsable,
                             renderDate: renderDate,
-                            dateArr: renderDateArr.push(d.getDay()),
+                            dateArr: renderDateArr.concat([d.getDay()]),
                             cnDay: weekDay[d.getDay()],
                             dateFormat: self.getFormatDate(renderDateArr),
                             isHighLight: isHighLight,
@@ -354,6 +354,7 @@ datePickerFlight
                             price: price
                         };
                         d.setDate(d.getDate() + 1);
+                        renderDateArr = null;
                     }
 
                 }
@@ -491,7 +492,7 @@ datePickerFlight
                 dateFormat = null;
             if (self.isSelectBackTrip()) {
                 dateArr = self.goTripDateArr || beginDateArr;
-                dateFormat = self.getFormatDate(dateArr[0], dateArr[1], dateArr[2]);
+                dateFormat = self.getFormatDate(dateArr);
                 goDateObj = {
                     dateArr: dateArr,
                     dateFormat: dateFormat,
@@ -505,7 +506,7 @@ datePickerFlight
                 } else {
                     dateArr = self.backTripDateArr || self.getBackDateInfo().dateArr;
                 }
-                dateFormat = self.getFormatDate(dateArr[0], dateArr[1], dateArr[2]);
+                dateFormat = self.getFormatDate(dateArr);
                 backDateObj = {
                     dateArr: dateArr,
                     dateFormat: dateFormat,
