@@ -25,12 +25,13 @@ datePickerFlight
             endDateArr,
             beginDateStr,
             endDateStr,
-            initDateArr,
             renderEndDateArr,
             renderMonthCount,
             datePriceList,
             serverTime,
             isInit = true,
+            backDateStep = 2,
+            dateObjList = [],
             requestUrl = $scope.dpConfig.url;
 
         var cnText = {
@@ -45,6 +46,7 @@ datePickerFlight
         self.dateType = null;
         self.renderType = null;
         self.title = '';
+        self.initDateObj = null;
 
         if (Mock.Random) {
             var dataTemplate = {
@@ -83,7 +85,7 @@ datePickerFlight
                 self.setTitle();
                 //渲染日期
                 self.renderDate();
-                if(isInit) {
+                if (isInit) {
                     self.initDate();
                 } else {
                     self.open = true;
@@ -94,46 +96,30 @@ datePickerFlight
         /**
          * @description 初始化页面日期，始终为明天，刷新页面才执行，以后再进入日期控件，不在执行
          */
-        self.initDate = function() {
+        self.initDate = function () {
             $log.info('初始化日期');
-            initDateArr = self.getInitDate();
-            self.emitSelectDateEvent({
-                dateArr: initDateArr,
-                dateFormat: self.getFormatDate(initDateArr),
-                cnDay: weekDay[initDateArr[3]]
-            });
+            self.emitSelectDateEvent(self.initDateObj);
             //默认隐藏日期控件
             self.open = false;
         };
 
         /**
-         * @description 获取页面初始化日期,始终为明天
-         * @returns {number|*}
-         */
-        self.getInitDate = function() {
-            return self.getDate({
-                dateArr: beginDateArr,
-                addNum: 1
-            });
-        };
-
-        /**
          * @description 设置日期控件头部文字
          */
-        self.setTitle = function() {
+        self.setTitle = function () {
             var dateType = self.dateType,
                 renderType = self.renderType;
-            if(!renderType) {
-                if(dateType === 'goTrip') {
+            if (!renderType) {
+                if (dateType === 'goTrip') {
                     self.title = cnText.goTripTitle;
                 }
-                if(dateType === 'backTrip') {
+                if (dateType === 'backTrip') {
                     self.title = cnText.backTripTitle;
                 }
-            } else if(renderType === 'goDatePrice') {
+            } else if (renderType === 'goDatePrice') {
                 self.title = cnText.goDatePriceTitle;
-            } else if(renderType === 'backDatePrice') {
-                self.title=  cnText.backDatePriceTitle;
+            } else if (renderType === 'backDatePrice') {
+                self.title = cnText.backDatePriceTitle;
             }
         };
 
@@ -143,14 +129,14 @@ datePickerFlight
          *              如果用户打开的是“低价日历”，则渲染有价格的天数所在的月份
          * @returns {*} 渲染的月份数量
          */
-        self.getRenderMonthCount = function() {
+        self.getRenderMonthCount = function () {
             var dateType = self.dateType,
                 renderType = self.renderType;
 
-            if((dateType === 'goTrip' || dateType === 'backTrip') && !renderType) {
+            if (isInit || ((dateType === 'goTrip' || dateType === 'backTrip') && !renderType)) {
                 renderMonthCount = 12;
             }
-            if(renderType) {
+            if (renderType) {
                 renderMonthCount = (endDateArr[0] - beginDateArr[0]) * 12 + (endDateArr[1] - beginDateArr[1]) + 1;
             }
             return renderMonthCount;
@@ -203,12 +189,12 @@ datePickerFlight
             self.openDatePicker(e, data);
         });
 
-        $scope.$on('prevDay', function(e, data) {
+        $scope.$on('prevDay', function (e, data) {
             $log.info('前一天');
 
         });
 
-        $scope.$on('nextDay', function(e, data) {
+        $scope.$on('nextDay', function (e, data) {
             $log.info('后一天');
         });
 
@@ -219,11 +205,11 @@ datePickerFlight
          */
         self.openDatePicker = function (e, data) {
             self.open = !self.open;
-            if(angular.isObject(data)){
+            if (angular.isObject(data)) {
                 if (angular.isString(data.dateType)) {
                     self.dateType = data.dateType;
                 }
-                if(angular.isString(data.renderType)) {
+                if (angular.isString(data.renderType)) {
                     self.renderType = data.renderType;
                 }
             }
@@ -268,7 +254,7 @@ datePickerFlight
                 year = newDate.getFullYear();
                 month = newDate.getMonth() + 1;
                 date = newDate.getDate();
-                day = weekDay[newDate.getDay()];
+                day = newDate.getDay();
                 return [year, month, date, day];
             }
             if (angular.isObject(dateObj)) {
@@ -361,11 +347,25 @@ datePickerFlight
                 priceList = angular.copy(datePriceList),
                 priceObj,
                 price,
+                cnDay,
+                index = 0,
+                isTomorrow = false,
                 renderType = self.renderType,
                 isHasPrice = false;
 
-            goTripDateArr = self.goTripDateArr || beginDateArr;
-            backTripDateArr = self.backTripDateArr || self.getBackDateInfo();
+            if (!isInit) {
+                if (self.hasGoTripDateInfo()) {
+                    goTripDateArr = self.goTripDateObj.dateArr;
+                } else {
+                    goTripDateArr = self.initDateObj.dateArr;
+                }
+                if (self.hasBackTripDateInfo()) {
+                    backTripDateArr = self.backTripDateObj.dateArr
+                } else {
+                    backTripDateArr = self.getBackDateInfo().dateArr;
+                }
+            }
+
             for (var i = 0; i < renderMonthCount; i++) {
                 if (eachMonth > 12) {
                     eachMonth = 1;
@@ -396,6 +396,7 @@ datePickerFlight
                         }
                     } else {
                         renderDate = numberDate = d.getDate();
+                        cnDay = weekDay[d.getDay()];
                         renderDateArr = [eachYear, eachMonth, numberDate];
                         if (!self.dateCompare(renderDateArr, beginDateArr)) {
                             isToday = 1;
@@ -411,7 +412,7 @@ datePickerFlight
                                 price = priceObj.parPrice;
                             } else {
                                 isHasPrice = false;
-                                if(renderType) {
+                                if (renderType) {
                                     isUsable = false;
                                 }
                             }
@@ -419,14 +420,14 @@ datePickerFlight
                         }
 
                         /*
-                            如果用户打开的是返程日期选择，若当前渲染的日期比去程日期大，则该日期可用；
-                            如果当前渲染的日期等于去程日期，则该日期为选中状态;
+                         如果用户打开的是返程日期选择，若当前渲染的日期比去程日期大，则该日期可用；
+                         如果当前渲染的日期等于去程日期，则该日期为选中状态;
 
-                            如果用户打开的是去程日期，并且用户选择过去程日期，若当前渲染日期等于去程日期，则该日期为选中状态
+                         如果用户打开的是去程日期，并且用户选择过去程日期，若当前渲染日期等于去程日期，则该日期为选中状态
                          */
                         if (self.isSelectBackTrip()) {
                             var result = self.dateCompare(renderDateArr, goTripDateArr) === -1;
-                            if(renderType) {
+                            if (renderType) {
                                 isUsable = result && isHasPrice;
                             } else {
                                 isUsable = result;
@@ -437,22 +438,24 @@ datePickerFlight
                             isSelected = !self.dateCompare(renderDateArr, goTripDateArr);
                         }
 
+
                         switch (isToday) {
                             case 1:
-                                renderDate = '今天';
+                                cnDay = renderDate = '今天';
                                 isToday++;
                                 isHighLight = true;
                                 break;
                             case 2:
-                                renderDate = '明天';
+                                cnDay = renderDate = '明天';
                                 isToday++;
                                 isHighLight = true;
                                 if (!self.hasGoTripDateInfo()) {
                                     isSelected = true;
                                 }
+                                isTomorrow = true;
                                 break;
                             case 3:
-                                renderDate = '后天';
+                                cnDay = renderDate = '后天';
                                 isToday++;
                                 isHighLight = true;
                                 break;
@@ -464,15 +467,22 @@ datePickerFlight
                             isUsable: isUsable,
                             renderDate: renderDate,
                             dateArr: renderDateArr.concat([d.getDay()]),
-                            cnDay: weekDay[d.getDay()],
+                            cnDay: cnDay,
                             dateFormat: self.getFormatDate(renderDateArr),
                             isHighLight: isHighLight,
                             isSelected: isSelected,
                             isHasPrice: isHasPrice,
-                            price: price
+                            price: price,
+                            dateArrIndex: i,
+                            index: index++
                         };
+                        dateObjList.push(self.dateArray[i].dateObj[j]);
                         d.setDate(d.getDate() + 1);
                         renderDateArr = null;
+                        if (isTomorrow) {
+                            self.initDateObj = self.dateArray[i].dateObj[j];
+                            isTomorrow = null;
+                        }
                     }
 
                 }
@@ -529,7 +539,11 @@ datePickerFlight
          * @returns {boolean|*}
          */
         self.hasGoTripDateInfo = function () {
-            return angular.isArray(self.goTripDateArr);
+            return angular.isObject(self.goTripDateObj);
+        };
+
+        self.hasBackTripDateInfo = function () {
+            return angular.isObject(self.backTripDateObj);
         };
 
         /**
@@ -592,13 +606,6 @@ datePickerFlight
             self.emitSelectDateEvent(dateObj);
         };
 
-        /**
-         * @description 存储用户选择的去程日期，再打开返程日期时，去程日期之前的不可用状态
-         * @param goDateObj 去程日期对象
-         */
-        self.saveGoTripDateInfo = function (goDateObj) {
-            self.goTripDateArr = goDateObj.dateArr;
-        };
 
         /**
          * @description 将选中的日期对象发送到父级作用域，判断用户当前打开的是去程日期选择，还是返程日期选择
@@ -617,48 +624,34 @@ datePickerFlight
          */
         self.emitSelectDateEvent = function (dateObj) {
             var goDateObj,
-                backDateObj,
-                dateArr = null,
-                dateFormat = null;
+                backDateObj;
             if (self.isSelectBackTrip()) {
-                dateArr = self.goTripDateArr || beginDateArr;
-                dateFormat = self.getFormatDate(dateArr);
-                goDateObj = {
-                    dateArr: dateArr,
-                    dateFormat: dateFormat,
-                    cnDay: weekDay[dateArr[3]]
-                };
+                goDateObj = self.goTripDateObj || self.initDateObj;
                 backDateObj = dateObj;
             } else {
                 goDateObj = dateObj;
                 if (self.isGoDateOverBack(goDateObj)) {
-                    dateArr = self.getBackDateInfo(goDateObj.dateArr).dateArr;
+                    backDateObj = self.getBackDateInfo(goDateObj);
                 } else {
-                    dateArr = self.backTripDateArr || self.getBackDateInfo().dateArr;
-                }
-                dateFormat = self.getFormatDate(dateArr);
-                backDateObj = {
-                    dateArr: dateArr,
-                    dateFormat: dateFormat,
-                    cnDay: weekDay[dateArr[3]]
+                    backDateObj = self.backTripDateObj || self.getBackDateInfo();
                 }
             }
-            var data = {
+            self.saveTripDateInfo(goDateObj, backDateObj);
+            self.closeDatePicker();
+            $scope.$emit('onSelectDate', {
                 goDateInfo: goDateObj,
                 backDateInfo: backDateObj
-            };
-            self.saveGoTripDateInfo(goDateObj);
-            self.saveBackTripDateInfo(backDateObj);
-            self.closeDatePicker();
-            $scope.$emit('onSelectDate', data);
+            });
         };
 
         /**
-         * @description 缓存用户选择的返程日期
+         * @description 存储用户选择的去程日期，再打开返程日期时，去程日期之前的不可用状态
+         * @param goDateObj 去程日期对象
          * @param backDateObj 返程日期对象
          */
-        self.saveBackTripDateInfo = function (backDateObj) {
-            self.backTripDateArr = backDateObj.dateArr;
+        self.saveTripDateInfo = function (goDateObj, backDateObj) {
+            self.goTripDateObj = goDateObj;
+            self.backTripDateObj = backDateObj;
         };
 
         /**
@@ -667,27 +660,44 @@ datePickerFlight
          * @returns {boolean} 若去程日期超过返程日期，返回true，否则为false
          */
         self.isGoDateOverBack = function (goDateObj) {
-            var goDateArr = goDateObj.dateArr,
-                backDateArr = self.backTripDateArr || self.getBackDateInfo();
+            var goDateIndex = goDateObj.index,
+                backDateObj,
+                backDateIndex;
+            if (self.hasBackTripDateInfo()) {
+                backDateIndex = self.backTripDateObj.index
+            } else {
+                backDateObj = self.getBackDateInfo();
+                backDateIndex = backDateObj.index;
+            }
 
-            var result = self.dateCompare(goDateArr, backDateArr);
-            return result === -1 || result === 0;
+            if (goDateIndex >= backDateIndex) {
+                return true;
+            }
         };
-
 
         /**
          * @description 根据去程日期，获取默认的返程日期，默认返程日期=去程日期+2天
-         * @param goDateArr 去程日期数组
+         * @param goDateObj 去程日期对象
          * @returns {{}} 返程日期对象
          */
-        self.getBackDateInfo = function (goDateArr) {
-            var backDate = {};
-            backDate.dateArr = self.getDate({
-                dateArr: goDateArr || beginDateArr,
-                addNum: 2
-            });
-            backDate.dateFormat = self.getFormatDate(backDate.dateArr[0], backDate.dateArr[1], backDate.dateArr[2]);
-            return backDate;
+        self.getBackDateInfo = function (goDateObj) {
+            var dateObj = goDateObj || self.initDateObj,
+                goDateIndex = dateObj.index,
+                backDateIndex = goDateIndex + backDateStep,
+                backDateObj,
+                len = dateObjList.length,
+                dateElement,
+                queryIndex,
+                i = 0;
+
+            for(; i < len; i++) {
+                dateElement = dateObjList[i];
+                queryIndex = dateElement.index;
+                if(angular.isNumber(queryIndex) && (backDateIndex === queryIndex)) {
+                    backDateObj = dateElement;
+                }
+            }
+            return backDateObj;
         };
 
         /**
@@ -716,7 +726,7 @@ datePickerFlight
             return (month === 2 && (year % 4 === 0 && year % 100 === 0)) || year % 400 === 0 ? 28 : monthDay[month];
         };
 
-        if(isInit) {
+        if (isInit) {
             self.init();
         }
 

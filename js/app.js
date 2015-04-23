@@ -26,8 +26,8 @@ myApp.controller('SelectCityController', ['$scope', '$http', '$log', function($s
     };
 
     $scope.selectCityConfig = {
-        url: './jsonData/trainCity.json',
-        type: 'train'
+        url: './jsonData/visaProvince.json',
+        type: 'visa-province'
     };
 
     $scope.$on('setCityName', function(e, cityObj) {
@@ -105,7 +105,7 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
     };
 
     $scope.$on('onSelectDate', function(e, data) {
-        $log.info(data.goDateInfo, data.backDateInfo);
+        $log.info(data);
 
         $scope.goTripDate = data.goDateInfo.dateFormat;
         $scope.goTripDay = ' ' + data.goDateInfo.cnDay;
