@@ -65,7 +65,7 @@ datePickerFlight
         }
 
 
-        self.init = function () {
+        self.init = function (isOpen) {
             self.dateArray = [];
 
             //请求服务器数据,得到90天日期价格
@@ -88,7 +88,7 @@ datePickerFlight
                 if (isInit) {
                     self.initDate();
                 } else {
-                    self.open = true;
+                    self.open = isOpen;
                 }
             });
         };
@@ -172,39 +172,90 @@ datePickerFlight
         };
 
         $scope.$on('openGoTripDatePicker', function (e, data) {
-            self.openDatePicker(e, data);
+            self.openDatePicker(e, data, true);
             self.renderType = null;
         });
 
         $scope.$on('openBackTripDatePicker', function (e, data) {
-            self.openDatePicker(e, data);
+            self.openDatePicker(e, data, true);
             self.renderType = null;
         });
 
         $scope.$on('openGoDatePricePicker', function (e, data) {
-            self.openDatePicker(e, data);
+            self.openDatePicker(e, data, true);
         });
 
         $scope.$on('openBackDatePricePicker', function (e, data) {
-            self.openDatePicker(e, data);
+            self.openDatePicker(e, data, true);
         });
 
         $scope.$on('prevDay', function (e, data) {
             $log.info('前一天');
+            self.openDatePicker(e, data, false);
+            if (self.dateType === 'goTrip') {
+                self.goTripPrevDay();
+            }
+            if (self.dateType === 'backTrip') {
+                self.backTripPrevDay();
+            }
 
         });
 
         $scope.$on('nextDay', function (e, data) {
             $log.info('后一天');
+            self.openDatePicker(e, data, false);
+            if (self.dateType === 'goTrip') {
+                self.goTripNextDay();
+            }
+            if (self.dateType === 'backTrip') {
+                self.backTripNextDay();
+            }
         });
+
+        //去程-前一天
+        self.goTripPrevDay = function () {
+            var goDateInfo = self.getStorageGoDateInfo(),
+                goDateObj = goDateInfo.curDateObj,
+                preDateObj;
+            preDateObj = self.getPrevDateObj(goDateObj);
+            self.emitSelectDateEvent(preDateObj);
+        };
+
+        //去程-后一天
+        self.goTripNextDay = function () {
+            var goDateInfo = self.getStorageGoDateInfo(),
+                goDateObj = goDateInfo.curDateObj,
+                nextDateObj;
+            nextDateObj = self.getNextDateObj(goDateObj);
+            self.emitSelectDateEvent(nextDateObj);
+        };
+
+        //返程-前一天
+        self.backTripPrevDay = function () {
+            var backDateInfo = self.getStorageBackDateInfo(),
+                backDateObj = backDateInfo.curDateObj,
+                preDateObj;
+            preDateObj = self.getPrevDateObj(backDateObj);
+            self.emitSelectDateEvent(preDateObj);
+        };
+
+        //返程-后一天
+        self.backTripNextDay = function () {
+            var backDateInfo = self.getStorageBackDateInfo(),
+                backDateObj = backDateInfo.curDateObj,
+                nextDateObj;
+            nextDateObj = self.getPrevDateObj(backDateObj);
+            self.emitSelectDateEvent(nextDateObj);
+        };
 
         /**
          * @description 打开去程，返程日期控件公共函数
          * @param e
          * @param data 由父级controller传递过来的数据
+         * @param isOpen 是否打开，前一天，后一天的事件不打开日期控件
          */
-        self.openDatePicker = function (e, data) {
-            self.open = !self.open;
+        self.openDatePicker = function (e, data, isOpen) {
+            self.open = isOpen;
             if (angular.isObject(data)) {
                 if (angular.isString(data.dateType)) {
                     self.dateType = data.dateType;
@@ -213,14 +264,14 @@ datePickerFlight
                     self.renderType = data.renderType;
                 }
             }
-            self.init();
+            self.init(isOpen);
         };
 
         /**
          * @description 隐藏日期控件
          */
         self.closeDatePicker = function () {
-            self.open = !self.open;
+            self.open = false;
             isInit = false;
             $scope.$emit('closeDatePicker', {});
         };
@@ -354,16 +405,8 @@ datePickerFlight
                 isHasPrice = false;
 
             if (!isInit) {
-                if (self.hasGoTripDateInfo()) {
-                    goTripDateArr = self.goTripDateObj.dateArr;
-                } else {
-                    goTripDateArr = self.initDateObj.dateArr;
-                }
-                if (self.hasBackTripDateInfo()) {
-                    backTripDateArr = self.backTripDateObj.dateArr
-                } else {
-                    backTripDateArr = self.getBackDateInfo().dateArr;
-                }
+                goTripDateArr = self.initDateObj.dateArr;
+                backTripDateArr = self.getStorageBackDateInfo().curDateObj.dateArr;
             }
 
             for (var i = 0; i < renderMonthCount; i++) {
@@ -432,9 +475,8 @@ datePickerFlight
                             } else {
                                 isUsable = result;
                             }
-
                             isSelected = !self.dateCompare(renderDateArr, backTripDateArr);
-                        } else if (self.hasGoTripDateInfo()) {
+                        } else {
                             isSelected = !self.dateCompare(renderDateArr, goTripDateArr);
                         }
 
@@ -449,9 +491,6 @@ datePickerFlight
                                 cnDay = renderDate = '明天';
                                 isToday++;
                                 isHighLight = true;
-                                if (!self.hasGoTripDateInfo()) {
-                                    isSelected = true;
-                                }
                                 isTomorrow = true;
                                 break;
                             case 3:
@@ -479,10 +518,12 @@ datePickerFlight
                         dateObjList.push(self.dateArray[i].dateObj[j]);
                         d.setDate(d.getDate() + 1);
                         renderDateArr = null;
-                        if (isTomorrow) {
-                            self.initDateObj = self.dateArray[i].dateObj[j];
+                        if (isInit && isTomorrow) {
+                            var goDateInfo = self.getStorageGoDateInfo();
+                            self.initDateObj = goDateInfo ? goDateInfo.curDateObj : self.dateArray[i].dateObj[j];
                             isTomorrow = null;
                         }
+
                     }
 
                 }
@@ -533,17 +574,59 @@ datePickerFlight
         };
 
         /**
-         * @description 用户是否选择了去程日期，默认值不算选择
-         *              默认日期为明天，第一次打开日期控件将会设置明天为选中状态，
-         *              如果用户选择了去程日期，以后再打开日期控件，则将用户选择的去程日期设为选中状态
+         * @description 检查是否已经有去程日期缓存数据
          * @returns {boolean|*}
          */
-        self.hasGoTripDateInfo = function () {
-            return angular.isObject(self.goTripDateObj);
+        self.hasGoTripDateObj = function () {
+            var goDateInfo = self.getStorageGoDateInfo(),
+                goDateObj;
+            if (angular.isObject(goDateInfo)) {
+                goDateObj = goDateInfo.curDateObj;
+                return angular.isObject(goDateObj);
+            }
         };
 
-        self.hasBackTripDateInfo = function () {
-            return angular.isObject(self.backTripDateObj);
+        /**
+         * @description 检查是否已经有返程日期缓存数据
+         * @returns {boolean|*}
+         */
+        self.hasBackTripDateObj = function () {
+            var backDateInfo = self.getStorageBackDateInfo(),
+                backDateObj;
+            if (angular.isObject(backDateInfo)) {
+                backDateObj = backDateInfo.curDateObj;
+            }
+            return angular.isObject(backDateObj);
+        };
+
+        /**
+         * @description 获取缓存中的去程日期信息（包含3天的日期对象）
+         * @returns {*}
+         */
+        self.getStorageGoDateInfo = function () {
+            var datePickerData = angular.fromJson(localStorage.getItem('datePickerData')),
+                goDateInfo;
+            if (angular.isObject(datePickerData)) {
+                goDateInfo = datePickerData.goDateInfo;
+                if (angular.isObject(goDateInfo)) {
+                    return goDateInfo;
+                }
+            }
+        };
+
+        /**
+         * @description 获取缓存中的返程日期信息（包含3天的日期对象）
+         * @returns {*}
+         */
+        self.getStorageBackDateInfo = function () {
+            var datePickerData = angular.fromJson(localStorage.getItem('datePickerData')),
+                backDateInfo;
+            if (angular.isObject(datePickerData)) {
+                backDateInfo = datePickerData.backDateInfo;
+                if (angular.isObject(backDateInfo)) {
+                    return backDateInfo;
+                }
+            }
         };
 
         /**
@@ -615,43 +698,121 @@ datePickerFlight
          *              若去程日期选择过，则去程日期为缓存的去程日期self.goTripDateArr
          *
          *              2.如果是去程日期选择，去程日期对象goDateObj为用户选择的日期对象dateObj;
-         *              若去程日期超过返程日期，返程日期为去程日期+2天self.getBackDateInfo(goDateObj.dateArr).dateArr;
+         *              若去程日期超过返程日期，返程日期为去程日期+2天self.getBackDateObj(goDateObj.dateArr).dateArr;
          *              若去程日期没有超过返程日期，并且返程日期选择过，则返程日期为缓存的返程日期self.backTripDateArr
-         *              若去程日期没有超过返程日期，并且返程日期没有选择过，则返程日期为初始日期+2天self.getBackDateInfo().dateArr;
+         *              若去程日期没有超过返程日期，并且返程日期没有选择过，则返程日期为初始日期+2天self.getBackDateObj().dateArr;
          *
          *
          * @param dateObj 选中的日期对象
          */
         self.emitSelectDateEvent = function (dateObj) {
             var goDateObj,
-                backDateObj;
+                emitData,
+                backDateObj,
+                goDateInfo,
+                backDateInfo;
             if (self.isSelectBackTrip()) {
-                goDateObj = self.goTripDateObj || self.initDateObj;
+                goDateInfo = self.getStorageGoDateInfo();
+                if (angular.isObject(goDateInfo)) {
+                    goDateObj = goDateInfo.curDateObj
+                } else {
+                    goDateObj = self.initDateObj;
+                }
                 backDateObj = dateObj;
             } else {
                 goDateObj = dateObj;
                 if (self.isGoDateOverBack(goDateObj)) {
-                    backDateObj = self.getBackDateInfo(goDateObj);
+                    backDateObj = self.getBackDateObj(goDateObj);
                 } else {
-                    backDateObj = self.backTripDateObj || self.getBackDateInfo();
+                    backDateInfo = self.getStorageBackDateInfo();
+                    if (angular.isObject(backDateInfo)) {
+                        backDateObj = backDateInfo.curDateObj;
+                    } else {
+                        backDateObj = self.getBackDateObj();
+                    }
                 }
             }
-            self.saveTripDateInfo(goDateObj, backDateObj);
+            emitData = {
+                goDateInfo: {
+                    curDateObj: goDateObj,
+                    preDateObj: self.getPrevDateObj(goDateObj),
+                    nextDateObj: self.getNextDateObj(goDateObj)
+                },
+                backDateInfo: {
+                    curDateObj: backDateObj,
+                    preDateObj: self.getPrevDateObj(backDateObj),
+                    nextDateObj: self.getNextDateObj(backDateObj)
+                }
+            };
+
+            self.setDateObjCache(emitData);
+            if (!isInit) {
+                self.updateInitDateObj();
+            }
             self.closeDatePicker();
-            $scope.$emit('onSelectDate', {
-                goDateInfo: goDateObj,
-                backDateInfo: backDateObj
-            });
+            $scope.$emit('onSelectDate', emitData);
+        };
+
+        self.updateInitDateObj = function () {
+            var goDateInfo = self.getStorageGoDateInfo();
+            if (angular.isObject(goDateInfo)) {
+                self.initDateObj = goDateInfo.curDateObj;
+            }
         };
 
         /**
-         * @description 存储用户选择的去程日期，再打开返程日期时，去程日期之前的不可用状态
-         * @param goDateObj 去程日期对象
-         * @param backDateObj 返程日期对象
+         * @description 获取日期对象的前一个日期对象
+         * @param dateObj 日期对象
+         * @returns {*} 前一个日期对象
          */
-        self.saveTripDateInfo = function (goDateObj, backDateObj) {
-            self.goTripDateObj = goDateObj;
-            self.backTripDateObj = backDateObj;
+        self.getPrevDateObj = function (dateObj) {
+            var curDateObjIndex = dateObj.index,
+                prevDateObjIndex = curDateObjIndex - 1,
+                prevDateObj;
+            prevDateObj = self.getDateObjByIndex(prevDateObjIndex);
+            return prevDateObj;
+        };
+
+        /**
+         * @description 获取日期对象的下一个日期对象
+         * @param dateObj 日期对象
+         * @returns {*} 下一个日期对象
+         */
+        self.getNextDateObj = function (dateObj) {
+            var curDateObjIndex = dateObj.index,
+                nextDateObjIndex = curDateObjIndex + 1,
+                nextDateObj;
+            nextDateObj = self.getDateObjByIndex(nextDateObjIndex);
+            return nextDateObj;
+        };
+
+        /**
+         * @description 通过日期对象索引查找日期对象
+         * @param index 日期对象索引
+         * @returns {*} 查找到的日期对象
+         */
+        self.getDateObjByIndex = function (index) {
+            var len = dateObjList.length,
+                dateObj,
+                queryIndex,
+                i = 0;
+            for (; i < len; i++) {
+                dateObj = dateObjList[i];
+                queryIndex = dateObj.index;
+                if (angular.isNumber(queryIndex) && (index === queryIndex)) {
+                    return dateObj;
+                }
+            }
+        };
+
+        /**
+         * @description 在localStorage中和controller属性中缓存用户选择的去程日期、返程日期
+         * @param emitData 向父级作用域发送的日期对象，包含去程（前一天，当前，后一天），返程（前一天，当前，后一天）
+         */
+        self.setDateObjCache = function (emitData) {
+            self.emitData = emitData;
+
+            localStorage.setItem('datePickerData', angular.toJson(emitData));
         };
 
         /**
@@ -662,14 +823,15 @@ datePickerFlight
         self.isGoDateOverBack = function (goDateObj) {
             var goDateIndex = goDateObj.index,
                 backDateObj,
+                backDateInfo,
                 backDateIndex;
-            if (self.hasBackTripDateInfo()) {
-                backDateIndex = self.backTripDateObj.index
+            if (self.hasBackTripDateObj()) {
+                backDateInfo = self.getStorageBackDateInfo();
+                backDateIndex = backDateInfo.curDateObj.index;
             } else {
-                backDateObj = self.getBackDateInfo();
+                backDateObj = self.getBackDateObj();
                 backDateIndex = backDateObj.index;
             }
-
             if (goDateIndex >= backDateIndex) {
                 return true;
             }
@@ -680,23 +842,12 @@ datePickerFlight
          * @param goDateObj 去程日期对象
          * @returns {{}} 返程日期对象
          */
-        self.getBackDateInfo = function (goDateObj) {
+        self.getBackDateObj = function (goDateObj) {
             var dateObj = goDateObj || self.initDateObj,
                 goDateIndex = dateObj.index,
                 backDateIndex = goDateIndex + backDateStep,
-                backDateObj,
-                len = dateObjList.length,
-                dateElement,
-                queryIndex,
-                i = 0;
-
-            for(; i < len; i++) {
-                dateElement = dateObjList[i];
-                queryIndex = dateElement.index;
-                if(angular.isNumber(queryIndex) && (backDateIndex === queryIndex)) {
-                    backDateObj = dateElement;
-                }
-            }
+                backDateObj;
+            backDateObj = self.getDateObjByIndex(backDateIndex);
             return backDateObj;
         };
 
@@ -730,4 +881,5 @@ datePickerFlight
             self.init();
         }
 
-    }]);
+    }
+    ]);

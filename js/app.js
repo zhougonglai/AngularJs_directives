@@ -87,16 +87,36 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
         });
     };
 
-    //前一天
-    $scope.prevDay = function() {
-        $scope.$broadcast('prevDay', {
-            dateType: ''
-        });
+    $scope.prevDay = function(type) {
+        if(type === 'go') {
+            //前一天(去程)
+            $scope.$broadcast('prevDay', {
+                dateType: 'goTrip'
+            });
+        } else {
+            //前一天(返程)
+            $scope.$broadcast('prevDay', {
+                dateType: 'backTrip'
+            });
+        }
+
     };
 
-    //后一天
-    $scope.nextDay = function() {
-        $scope.$broadcast('nextDay', {});
+    $scope.nextDay = function(type) {
+        if(type === 'go') {
+            //后一天(去程)
+            $scope.$broadcast('nextDay', {
+                dateType: 'goTrip'
+            });
+        } else {
+            //后一天(返程)
+            $scope.$broadcast('nextDay', {
+                dateType: 'backTrip'
+            });
+        }
+
+
+
     };
 
     $scope.dpConfig = {
@@ -107,10 +127,10 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
     $scope.$on('onSelectDate', function(e, data) {
         $log.info(data);
 
-        $scope.goTripDate = data.goDateInfo.dateFormat;
-        $scope.goTripDay = ' ' + data.goDateInfo.cnDay;
-        $scope.backTripDate = data.backDateInfo.dateFormat;
-        $scope.backTripDay = ' ' + data.backDateInfo.cnDay;
+        $scope.goTripDate = data.goDateInfo.curDateObj.dateFormat;
+        $scope.goTripDay = ' ' + data.goDateInfo.curDateObj.cnDay;
+        $scope.backTripDate = data.backDateInfo.curDateObj.dateFormat;
+        $scope.backTripDay = ' ' + data.backDateInfo.curDateObj.cnDay;
     });
 
 }]);
