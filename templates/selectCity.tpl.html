@@ -10,7 +10,7 @@
                 <h4 class="u-city-sct-cur-hd">{{SelectCityController.curPosition}}</h4>
                 <div class="m-city-scr-cur">
                     <div>
-                        <a>{{SelectCityController.currentCity}}</a>
+                        <a ng-click="SelectCityController.selectCity(SelectCityController.currentCity, 'currentCity')">{{SelectCityController.currentCity}}</a>
                     </div>
                 </div>
             </li>

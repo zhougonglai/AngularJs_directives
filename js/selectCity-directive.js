@@ -354,7 +354,6 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
                     updateHistorySelected: function (cityObj, SCController) {
                         SCController.updateHistorySelected(cityObj, this);
-                        localStorage.setItem('currentCity', this.currentCity);
                         return this;
                     },
 
@@ -381,7 +380,9 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     anchorWord: null,
                     provinceList: null,
                     historySelectedList: [],
-                    currentCity: '上海',
+                    currentCity: {
+                        station_name: '上海'
+                    },
 
                     getProvinceFirstLetter: function () {
                         if (!angular.isArray(this.provinceList)) return;
@@ -427,7 +428,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                         SCController.provinceList = this.provinceList;
                         SCController.letterList = this.letterList;
                         SCController.anchorWord = this.anchorWord;
-                        SCController.currentCity = this.currentCity;
+                        SCController.currentCity = this.currentCity.station_name;
                         SCController.inputPlaceholder = '输入省份或自治区，直辖市';
                         SCController.curPosition = '当前定位区域';
                         SCController.historyOptions = '历史选择';
@@ -454,7 +455,6 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 
                     updateHistorySelected: function (cityObj, SCController) {
                         SCController.updateHistorySelected(cityObj, this);
-                        localStorage.setItem('currentCity', this.currentCity);
                         return this;
                     },
 
@@ -510,22 +510,45 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
             /**
              * @description 选择城市事件处理
              * @param {Object} cityObj 用户选择的城市对象
+             * @param {String} sctType 选择的城市类型，当前
              */
-            self.selectCity = function (cityObj) {
-                switch (type) {
-                    case 'visa-province':
-                        visaProvince.updateHistorySelected(cityObj, self);
-                        break;
-                    case 'train':
-                        train.updateHistorySelected(cityObj, self);
-                        break;
-                    case 'flight':
-                        flight.updateHistorySelected(cityObj, self);
-                        break;
-                    default:
-                        break;
-                }
-                $scope.$emit('setCityName', cityObj);
+            self.selectCity = function (cityObj, sctType) {
+                var sctCityObj;
+                    switch (type) {
+                        case 'visa-province':
+                            if(!sctType) {
+                                visaProvince.updateHistorySelected(cityObj, self);
+                                sctCityObj = cityObj;
+                            } else {
+                                sctCityObj = {
+                                    station_name: cityObj
+                                }
+                            }
+                            break;
+                        case 'train':
+                            if(!sctType) {
+                                train.updateHistorySelected(cityObj, self);
+                            } else {
+                                sctCityObj = {
+                                    cityname: cityObj
+                                }
+                            }
+                            break;
+                        case 'flight':
+                            if(!sctType) {
+                                flight.updateHistorySelected(cityObj, self);
+                            } else {
+                                sctCityObj = {
+                                    name: cityObj
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+
+                $scope.$emit('setCityName', sctCityObj);
                 self.close();
             };
 
