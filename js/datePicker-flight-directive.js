@@ -47,6 +47,7 @@ datePickerFlight
         self.renderType = null;
         self.title = '';
         self.initDateObj = null;
+        self.lastPriceDateObj = null;
 
         if (Mock.Random) {
             var dataTemplate = {
@@ -216,7 +217,13 @@ datePickerFlight
         self.goTripPrevDay = function () {
             var goDateInfo = self.getStorageGoDateInfo(),
                 goDateObj = goDateInfo.curDateObj,
+                goDateArr = goDateObj.dateArr,
+                isToday,
                 preDateObj;
+            isToday = !self.dateCompare(beginDateArr, goDateArr);
+            if(isToday) {
+                return;
+            }
             preDateObj = self.getPrevDateObj(goDateObj);
             self.emitSelectDateEvent(preDateObj);
         };
@@ -225,7 +232,14 @@ datePickerFlight
         self.goTripNextDay = function () {
             var goDateInfo = self.getStorageGoDateInfo(),
                 goDateObj = goDateInfo.curDateObj,
+                goDateArr = goDateObj.dateArr,
+                lastPriceDateObj = self.lastPriceDateObj,
+                isLastPriceDay,
                 nextDateObj;
+            isLastPriceDay = !self.dateCompare(goDateArr, lastPriceDateObj.dateArr);
+            if(isLastPriceDay) {
+                return ;
+            }
             nextDateObj = self.getNextDateObj(goDateObj);
             self.emitSelectDateEvent(nextDateObj);
         };
@@ -233,8 +247,15 @@ datePickerFlight
         //返程-前一天
         self.backTripPrevDay = function () {
             var backDateInfo = self.getStorageBackDateInfo(),
+                goDateInfo = self.getStorageGoDateInfo(),
                 backDateObj = backDateInfo.curDateObj,
+                goDateObj = goDateInfo.curDateObj,
+                isEqualGoDate,
                 preDateObj;
+            isEqualGoDate = backDateObj.index === (goDateObj.index + 1);
+            if(isEqualGoDate) {
+                return;
+            }
             preDateObj = self.getPrevDateObj(backDateObj);
             self.emitSelectDateEvent(preDateObj);
         };
@@ -243,8 +264,15 @@ datePickerFlight
         self.backTripNextDay = function () {
             var backDateInfo = self.getStorageBackDateInfo(),
                 backDateObj = backDateInfo.curDateObj,
+                isEqualLastPriceDay,
+                lastPriceDateObj = self.lastPriceDateObj,
                 nextDateObj;
-            nextDateObj = self.getPrevDateObj(backDateObj);
+            isEqualLastPriceDay = !self.dateCompare(backDateObj.dateArr, lastPriceDateObj.dateArr);
+            if(isEqualLastPriceDay) {
+                return ;
+            }
+
+            nextDateObj = self.getNextDateObj(backDateObj);
             self.emitSelectDateEvent(nextDateObj);
         };
 
@@ -455,6 +483,7 @@ datePickerFlight
                                 price = priceObj.parPrice;
                             } else {
                                 isHasPrice = false;
+                                self.lastPriceDateObj = self.dateArray[i].dateObj[j - 1];
                                 if (renderType) {
                                     isUsable = false;
                                 }
@@ -475,7 +504,7 @@ datePickerFlight
                             } else {
                                 isUsable = result;
                             }
-                            isSelected = !self.dateCompare(renderDateArr, backTripDateArr);
+                            isSelected = !self.dateCompare(renderDateArr, backTripDateArr) && isUsable;
                         } else {
                             isSelected = !self.dateCompare(renderDateArr, goTripDateArr);
                         }
