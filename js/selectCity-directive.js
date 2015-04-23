@@ -616,9 +616,9 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
         },
         controllerAs: 'SelectCityController'
     }
-}]).filter('searchLetterFilter', ['$filter', 'dataManager', function ($filter, dataManager) {
-    var enLetterReg = /[a-zA-Z]/,
-        cnLetterObj = dataManager.getData('cnLetterObj');
+}]).filter('searchLetterFilter', ['$filter', function ($filter) {
+    var enLetterReg = /[a-zA-Z]/;
+        //reg = /^[\u4E00-\u9FA5]+$/;
     return function (letterStr, searchText) {
         if (angular.isString(searchText) && searchText.length > 0) {
             if (enLetterReg.test(searchText[0])) {
@@ -634,6 +634,7 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
 }]).filter('searchCityListFilter', ['$filter', function ($filter) {
     return function (cityList, searchText, letter) {
         var cityListFiltered = [];
+            //reg = /^[\u4E00-\u9FA5]+$/;
         if (angular.isArray(cityList) && cityList.length > 0) {
             angular.forEach(cityList, function (elem, index) {
                 if (elem['firstletter'] === $filter('uppercase')(letter)) {
