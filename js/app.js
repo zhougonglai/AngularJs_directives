@@ -9,7 +9,8 @@ var myApp = angular.module('myApp', [
     //'datePicker.base',
     'datePicker.flight',
     'ngTouch',
-    'services'
+    'services',
+    'templates-main'
 ]);
 
 myApp.controller('TestController', ['$scope', function($scope) {
@@ -120,8 +121,7 @@ myApp.controller('DPBaseController', ['$scope','$log', function($scope, $log) {
     };
 
     $scope.dpConfig = {
-        url: '',
-        requestData: {}
+        url: ''
     };
 
     $scope.$on('onSelectDate', function(e, data) {
