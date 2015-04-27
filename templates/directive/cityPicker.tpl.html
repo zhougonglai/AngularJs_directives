@@ -1,0 +1,77 @@
+<div class="g-city-sct-container" ng-show="CityPickerController.open">
+    <div class="g-city-sct-hd">
+        <a class="u-back-btn" ng-click="CityPickerController.close()">取消</a>
+        <input id="j-city-srh" class="u-city-srh" type="search" placeholder="{{CityPickerController.inputPlaceholder}}"
+               ng-model="search"/>
+    </div>
+    <div class="g-city-sct-bd">
+        <ul class="city-list">
+            <li id="CURRENT" ng-if="!search">
+                <h4 class="u-city-sct-cur-hd">{{CityPickerController.curPosition}}</h4>
+                <div class="m-city-scr-cur">
+                    <div>
+                        <a ng-click="CityPickerController.selectCity(CityPickerController.currentCity, 'currentCity')">{{CityPickerController.currentCity}}</a>
+                    </div>
+                </div>
+            </li>
+            <li id="HISTORY" ng-if="CityPickerController.historySelectedList && !search">
+                <h4 class="u-city-sct-hty-hd">{{CityPickerController.historyOptions}}</h4>
+                <div class="m-city-scr-hty">
+                    <div ng-repeat="item in CityPickerController.historySelectedList">
+                        <a ng-click="CityPickerController.selectCity(item)" ng-if="CityPickerController.type === 'train'">{{item.cityname}}</a>
+                        <a ng-click="CityPickerController.selectCity(item)" ng-if="CityPickerController.type === 'flight'">{{item.name}}</a>
+                        <a ng-click="CityPickerController.selectCity(item)" ng-if="CityPickerController.type === 'visa-province'">{{item.station_name}}</a>
+                    </div>
+                </div>
+            </li>
+            <li id="HOT" ng-if="(CityPickerController.type === 'train' || CityPickerController.type === 'flight') && !search">
+                <h4 class="u-city-sct-hot-hd">热门城市</h4>
+                <div class="m-city-scr-hot">
+                    <div ng-if="CityPickerController.type === 'train'"
+                         ng-repeat="city in CityPickerController.cityList | filter: {ishot: 'Y'}">
+                        <a ng-click="CityPickerController.selectCity(city)">{{city.cityname}}</a>
+                    </div>
+                    <div ng-if="CityPickerController.type === 'flight'"
+                         ng-repeat="city in CityPickerController.hotCitys">
+                        <a ng-click="CityPickerController.selectCity(city)">{{city.name}}</a>
+                    </div>
+                </div>
+            </li>
+            <li id="{{letter}}" ng-repeat="letter in CityPickerController.letterList | searchLetterFilter: search" >
+                <h4>{{letter}}</h4>
+                <ul class="m-city-list">
+                    <li ng-if="CityPickerController.type === 'train'"
+                        ng-repeat="city in CityPickerController.cityList | filter: {firstletter: letter}"
+                        ng-click="CityPickerController.selectCity(city)">
+                        {{city.cityname}}
+                    </li>
+                    <li ng-if="CityPickerController.type === 'flight'"
+                        ng-repeat="city in CityPickerController.cityList | filter:  {firstLetter: letter, pinYin: search} "
+                        ng-click="CityPickerController.selectCity(city)">
+                        {{city.name}}
+                    </li>
+                    <li ng-if="CityPickerController.type === 'visa-province'"
+                        ng-repeat="province in CityPickerController.provinceList | searchCityListFilter: search : letter"
+                        ng-click="CityPickerController.selectCity(province)">
+                        {{province.station_name}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <ul class="g-letter-list">
+        <li data-name="{{anchor}}"
+            ng-if="CityPickerController.hasOtherAnchor"
+            ng-repeat="anchor in CityPickerController.anchorWord track by $index">
+            <a ng-if="anchor === 'CURRENT'">当前</a>
+            <a ng-if="anchor === 'HISTORY'">历史</a>
+            <a ng-if="anchor === 'HOT'">热门</a>
+            <a ng-if="$index > 2">{{anchor}}</a>
+        </li>
+        <li data-name="{{anchor}}"
+            ng-if="!CityPickerController.hasOtherAnchor"
+            ng-repeat="anchor in CityPickerController.anchorWord">
+            <a>{{anchor}}</a>
+        </li>
+    </ul>
+</div>

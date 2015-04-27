@@ -1,0 +1,27 @@
+<div ng-controller="CController">
+    <label style="display: block;">
+        <i>去程日期:</i>
+        <input type="text" ng-click="openGoTripDatePicker()" value="{{goTripDate}}{{goTripDay}}"/>
+    </label>
+    <label style="display: block;">
+        <i>返程日期:</i>
+        <input type="text" ng-click="openBackTripDatePicker()" value="{{backTripDate}}{{backTripDay}}"/>
+    </label>
+    <label style="display: block;">
+        <i>低价日历(去程):</i>
+        <input type="text" ng-click="openGoDatePricePicker()" value=""/>
+    </label>
+    <label style="display: block;">
+        <i>低价日历(返程):</i>
+        <input type="text" ng-click="openBackDatePricePicker()" value=""/>
+    </label>
+
+    <p>去程</p>
+    <button ng-click="prevDay('go')">前一天</button>
+    <button ng-click="nextDay('go')">后一天</button>
+    <p>返程</p>
+    <button ng-click="prevDay()">前一天</button>
+    <button ng-click="nextDay()">后一天</button>
+
+    <dp-flight dp-config="dpConfig"></dp-flight>
+</div>

@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         uglify: {
             build: {
                 files: {
-                    './release/js/app.min.js': ['./js/*.js']
+                    './release/js/app.min.js': ['./app/*.js']
                 }
             }
         },
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         html2js: {
             main: {
                 src: ['./templates/*.html'],
-                dest: './js/templates.js'
+                dest: './app/templates.js'
             }
         },
         watch: {
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                 tasks: ['cssmin']
             },
             js: {
-                files: ['./libs/*.js', './js/*.js'],
+                files: ['./libs/*.js', './app/*.js'],
                 tasks: ['uglify']
             }
         }

@@ -1,72 +1,58 @@
 <!doctype html>
 <html lang="en" ng-app="myApp">
 <head>
+    <title>自定义指令</title>
+    <!--<base href="/angular-directives/" />-->
     <meta charset="utf-8">
-    <title>自定义指令组件</title>
     <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!--<link rel="stylesheet" href="./css/datePicke.css"/>-->
+    <link rel="stylesheet" href="./css/home.css"/>
+    <!-- 指令模版的样式不能同时存在，会冲突，需要测试哪一个指令就把相应名称的注释去掉 -->
+    <!-- cityPicker CSS -->
+    <!--<link rel="stylesheet" href="./css/cityPicker.css"/>-->
+    <!-- datePickerBase CSS -->
     <!--<link rel="stylesheet" href="./css/datePicker-base.css"/>-->
-    <link rel="stylesheet" href="./css/datePicker-flight.css"/>
-    <!-- <link rel="stylesheet" type="text/css" href="css/modalDialog.css"> -->
-     <!--<link rel="stylesheet" href="css/selectCity.css"/>-->
-    <!--<link rel="stylesheet" href="css/rollerPicker.css"/>-->
-    <script src="libs/angular.js"></script>
-    <script src="libs/angular-touch.js"></script>
-    <script src="libs/mock.js"></script>
-    <!--<script src="release/js/app.min.js"></script>-->
-    <script src="./js/app.js"></script>
-    <script src="./js/datePicker-flight-directive.js"></script>
-    <script src="./js/service.js"></script>
+    <!-- datePickerFlight CSS -->
+    <!--<link rel="stylesheet" href="./css/datePicker-flight.css"/>-->
+    <!-- datePickerVisa CSS -->
+    <!--<link rel="stylesheet" href="./css/datePicker-visa.css"/>-->
+    <!-- rollerPicker CSS -->
+    <!--<link rel="stylesheet" href="./css/rollerPicker.css"/>-->
+    <!-- modalDialog CSS -->
+    <link rel="stylesheet" href="./css/modalDialog.css"/>
+
+    <!-- JavaScript Library -->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/mockjs/dist/mock-min.js"></script>
+    <!-- main app & common service -->
+    <script src="./app/app.js"></script>
+    <script src="./app/service.js"></script>
+    <!-- home -->
+    <script src="./app/home/controller.js"></script>
+    <!-- cityPicker -->
+    <script src="./app/cityPicker/directive.js"></script>
+    <script src="./app/cityPicker/controller.js"></script>
+    <!-- datePickerBase -->
+    <script src="./app/datePickerBase/directive.js"></script>
+    <script src="./app/datePickerBase/controller.js"></script>
+    <!-- datePickerFlight -->
+    <script src="./app/datePickerFlight/directive.js"></script>
+    <script src="./app/datePickerFlight/controller.js"></script>
+    <!-- datePickerVisa -->
+    <script src="./app/datePickerVisa/directive.js"></script>
+    <script src="./app/datePickerVisa/controller.js"></script>
+    <!-- rollerPicker -->
+    <script src="./app/rollerPicker/directive.js"></script>
+    <script src="./app/rollerPicker/controller.js"></script>
+    <!-- modalDialog -->
+    <script src="./app/modalDialog/directive.js"></script>
+    <script src="./app/modalDialog/controller.js"></script>
 </head>
 <body>
-<!--<div ng-controller="TestController">-->
-    <!--<modal-dialog dialog-config="modalDialog">-->
-        <!--使用angularjs自定义指令来做模态框-->
-    <!--</modal-dialog>-->
-<!--</div>-->
-<div ng-controller="SelectCityController">
-    <!--<button ng-click="show()">123</button>-->
-    <!--<select-city city-config="selectCityConfig"></select-city>-->
-</div>
-
-<div class="roller-container" ng-controller="RPParentController">
-    <!--<roller-picker ng-city="cityData"></roller-picker>-->
-    <!--<input type="text" roller-picker ng-model="val"/>-->
-
-    <!--<date-picker date-config="datePickerConfig"></date-picker>-->
-</div>
-
-
-<div ng-controller="DPBaseController">
-    <label style="display: block;">
-        <i>去程日期:</i>
-        <input type="text" ng-click="openGoTripDatePicker()" value="{{goTripDate}}{{goTripDay}}"/>
-    </label>
-    <label style="display: block;">
-        <i>返程日期:</i>
-        <input type="text" ng-click="openBackTripDatePicker()" value="{{backTripDate}}{{backTripDay}}"/>
-    </label>
-    <label style="display: block;">
-        <i>低价日历(去程):</i>
-        <input type="text" ng-click="openGoDatePricePicker()" value=""/>
-    </label>
-    <label style="display: block;">
-        <i>低价日历(返程):</i>
-        <input type="text" ng-click="openBackDatePricePicker()" value=""/>
-    </label>
-
-    <p>去程</p>
-    <button ng-click="prevDay('go')">前一天</button>
-    <button ng-click="nextDay('go')">后一天</button>
-    <p>返程</p>
-    <button ng-click="prevDay()">前一天</button>
-    <button ng-click="nextDay()">后一天</button>
-
-    <date-picker dp-config="dpConfig"></date-picker>
-</div>
-
+    <div ng-view></div>
 </body>
 </html>
 
