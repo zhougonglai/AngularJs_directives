@@ -641,6 +641,8 @@ selectCity.directive('selectCity', ['$http', 'dataManager', 'Ajax', function ($h
                     if (angular.isString(searchText) && searchText.length > 0) {
                         if (elem['pinyin'].indexOf(searchText) !== -1) {
                             cityListFiltered.push(elem);
+                        } else {
+                            cityListFiltered.push(elem);
                         }
                     } else {
                         cityListFiltered.push(elem);

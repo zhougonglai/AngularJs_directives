@@ -16,7 +16,7 @@ datePickerFlight
             controller: 'DatePickerController',
             controllerAs: 'DPController'
         }
-    }).controller('DatePickerController', ['$scope', '$element', '$http', '$log', function ($scope, $element, $http, $log) {
+    }).controller('DatePickerController', ['$scope', '$element', '$http', '$log', '$cacheFactory', function ($scope, $element, $http, $log, $cacheFactory) {
 
         var self = this,
             weekDay = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
@@ -70,28 +70,36 @@ datePickerFlight
             self.dateArray = [];
 
             //请求服务器数据,得到90天日期价格
-            var promise = self.requestData();
-            promise.success(function () {
-                //当前日期
-                beginDateArr = self.getBeginDate();
-                beginDateStr = self.getFormatDate(beginDateArr);
-                //当前日期+90天=结束日期
-                endDateArr = self.getEndDate();
-                endDateStr = self.getFormatDate(endDateArr);
-                //初始化页面显示的日期（明天）
-                renderMonthCount = self.getRenderMonthCount();
-                //渲染的结束日期(渲染12个月的日期)
-                renderEndDateArr = self.getRenderEndDate();
-                //设置日期控件头部文字
-                self.setTitle();
-                //渲染日期
-                self.renderDate();
-                if (isInit) {
-                    self.initDate();
-                } else {
-                    self.open = isOpen;
-                }
-            });
+            if(isInit) {
+                var promise = self.requestData();
+                promise.success(function () {
+                    self.initialize(isOpen);
+                });
+            } else {
+                self.initialize(isOpen);
+            }
+        };
+
+        self.initialize = function(isOpen) {
+            //当前日期
+            beginDateArr = self.getBeginDate();
+            beginDateStr = self.getFormatDate(beginDateArr);
+            //当前日期+90天=结束日期
+            endDateArr = self.getEndDate();
+            endDateStr = self.getFormatDate(endDateArr);
+            //初始化页面显示的日期（明天）
+            renderMonthCount = self.getRenderMonthCount();
+            //渲染的结束日期(渲染12个月的日期)
+            renderEndDateArr = self.getRenderEndDate();
+            //设置日期控件头部文字
+            self.setTitle();
+            //渲染日期
+            self.renderDate();
+            if (isInit) {
+                self.initDate();
+            } else {
+                self.open = isOpen;
+            }
         };
 
         /**
@@ -155,13 +163,14 @@ datePickerFlight
                 params: {
                     startDate: beginDateStr,
                     endDate: endDateStr
-                }
+                },
+                cache: true
             });
             promise.success(function (data, status, headers) {
-                if (MockData) {
-                    datePriceList = MockData.data;
-                } else {
+                if (data.data) {
                     datePriceList = data.data;
+                } else if (MockData) {
+                    datePriceList = MockData.data;
                 }
 
                 serverTime = headers('date');
@@ -221,7 +230,7 @@ datePickerFlight
                 isToday,
                 preDateObj;
             isToday = !self.dateCompare(beginDateArr, goDateArr);
-            if(isToday) {
+            if (isToday) {
                 return;
             }
             preDateObj = self.getPrevDateObj(goDateObj);
@@ -237,8 +246,8 @@ datePickerFlight
                 isLastPriceDay,
                 nextDateObj;
             isLastPriceDay = !self.dateCompare(goDateArr, lastPriceDateObj.dateArr);
-            if(isLastPriceDay) {
-                return ;
+            if (isLastPriceDay) {
+                return;
             }
             nextDateObj = self.getNextDateObj(goDateObj);
             self.emitSelectDateEvent(nextDateObj);
@@ -253,7 +262,7 @@ datePickerFlight
                 isEqualGoDate,
                 preDateObj;
             isEqualGoDate = backDateObj.index === (goDateObj.index + 1);
-            if(isEqualGoDate) {
+            if (isEqualGoDate) {
                 return;
             }
             preDateObj = self.getPrevDateObj(backDateObj);
@@ -268,8 +277,8 @@ datePickerFlight
                 lastPriceDateObj = self.lastPriceDateObj,
                 nextDateObj;
             isEqualLastPriceDay = !self.dateCompare(backDateObj.dateArr, lastPriceDateObj.dateArr);
-            if(isEqualLastPriceDay) {
-                return ;
+            if (isEqualLastPriceDay) {
+                return;
             }
 
             nextDateObj = self.getNextDateObj(backDateObj);
@@ -911,4 +920,5 @@ datePickerFlight
         }
 
     }
-    ]);
+    ])
+;

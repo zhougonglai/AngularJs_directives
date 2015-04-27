@@ -2,15 +2,15 @@
 
 /* App Module */
 var myApp = angular.module('myApp', [
-    'modalDialogDirective',
-    'selectCityDirective',
-    'rollerPickerDirective',
+    //'modalDialogDirective',
+    //'selectCityDirective',
+    //'rollerPickerDirective',
     //'datePickerDirective',
     //'datePicker.base',
     'datePicker.flight',
     'ngTouch',
-    'services',
-    'templates-main'
+    'services'
+    //'templates-main'
 ]);
 
 myApp.controller('TestController', ['$scope', function($scope) {
