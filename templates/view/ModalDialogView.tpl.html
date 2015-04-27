@@ -1,5 +1,6 @@
 <div ng-controller="AController">
+    <button ng-click="showModalDialog()">显示模态框</button>
     <modal-dialog dialog-config="modalDialog">
-        使用angularjs自定义指令来做模态框
+        {{modalDialogContent}}
     </modal-dialog>
 </div>

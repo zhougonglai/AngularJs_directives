@@ -3,162 +3,130 @@ myAppDirectives
         width: '300px',
         marginTop: '90px',
         marginBottom: '90px',
-        footerButton: [{
-            buttonText: '确定',
-            callBack: function (e) {
-
-            }
-        }, {
-            buttonText: '取消',
-            callBack: function (e) {
-
-            }
-        }],
+        footerButtonList: null,
         show: false,
         title: '模态框'
     })
-    .directive('modalDialog', ['$timeout', 'modalDialogConfig', function ($timeout, modalDialogConfig) {
-        return {
-            restrict: 'EA',
-            replace: true,
-            transclude: true,
-            scope: {
-                dialogConfig: '=dialogConfig'
-            },
-            template: '<div id="myDialog" class="modal-layer" ng-show="ModalDialogController.show" ng-click="ModalDialogController.close($event)">' +
-            '<div class="modal-dialog">' +
-            '<div class="modal-content" ng-switch on="dialogConfig.footerButton">' +
-            '<div class="modal-header">' +
-            '<a class="modal-close" ng-click="ModalDialogController.close($event)">X</a>' +
-            '<h4>{{ModalDialogController.title}}</h4>' +
-            '</div>' +
-            '<div class="modal-body" ng-transclude>' +
+    .directive('modalDialog', ['$timeout', 'modalDialogConfig', '$log',
+        function ($timeout, modalDialogConfig, $log) {
+            return {
+                restrict: 'EA',
+                replace: true,
+                transclude: true,
+                scope: {
+                    dialogConfig: '='
+                },
+                templateUrl: './templates/directive/modalDialog.tpl.html',
+                link: function (scope, element, attrs) {
 
-            '</div>' +
-            '<div class="modal-footer">' +
-            '<button></button>' +
-            '<button></button>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>',
-            require: ['modalDialog'],
-            controller: ['$scope', '$element', function ($scope, $element, $attrs) {
+                    var $modalDialog = element.children(),
+                        $modalContent = $modalDialog.children(),
+                        userConfig = scope.dialogConfig,
+                        options = angular.extend(modalDialogConfig, userConfig);
 
-                var ModalDialogController = this,
-                    d = document;
+                    scope.buttonArr = [];
 
-                var $modalDialog = $element.children(),
-                    $modalContent = $modalDialog.children();
+                    /**
+                     * @description 初始化modal dialog
+                     */
+                    scope.init = function () {
+                        scope.title = options.title;
+                        scope.show = options.show;
+                        scope.setModalStyle();
+                        scope.setModalComponents();
+                    };
 
-                var options = angular.extend(modalDialogConfig, $scope.dialogConfig);
-                ModalDialogController.show = options.show;
-                ModalDialogController.title = options.title;
-                /**
-                 * @description 初始化modal dialog
-                 */
-                ModalDialogController.init = function () {
-                    ModalDialogController.setModalStyle();
-                    //ModalDialogController.setTitle();
-                    if (angular.isArray(modalDialogConfig.footerButton) && modalDialogConfig.footerButton.length > 0) {
-                        //ModalDialogController.setFooter();
-                    }
-                };
-
-                /**
-                 * @description 初始化modal dialog样式
-                 */
-                ModalDialogController.setModalStyle = function () {
-                    var modalDialogWidth = modalDialogConfig.width,
-                        modalDialogMarginTop = modalDialogConfig.marginTop,
-                        modalDialogMarginBottom = modalDialogConfig.marginBottom;
-
-                    $modalDialog.css({
-                        width: modalDialogWidth,
-                        marginTop: modalDialogMarginTop,
-                        marginBottom: modalDialogMarginBottom
-                    });
-                };
-
-                /**
-                 * @description 打开modal dialog
-                 */
-                ModalDialogController.open = function () {
-                    ModalDialogController.show = true;
-                };
-
-                /**
-                 * @description 关闭modal dialog
-                 */
-                ModalDialogController.close = function ($event) {
-                    $event.stopPropagation();
-                    var target = $event.target,
-                        className = target.getAttribute('class');
-                    if (className) {
-                        if (className.indexOf('modal-layer') !== -1 || className.indexOf('modal-close') !== -1) {
-                            ModalDialogController.show = !ModalDialogController.show;
+                    /**
+                     * @description 取消按钮点击事件
+                     */
+                    scope.cancel = function() {
+                        var cancelButtonObj = scope.buttonArr[1],
+                            cancelButtonCallback = cancelButtonObj['callback'];
+                        if(angular.isFunction(cancelButtonCallback)) {
+                            cancelButtonCallback();
                         }
-                    }
-                };
+                    };
 
-                ModalDialogController.setFooter = function () {
-                    var i = 0,
-                        footerButton = modalDialogConfig.footerButton,
-                        len = footerButton.length,
-                        buttonText = '',
-                        callback = null,
-                        btn = '';
+                    /**
+                     * @description 确认按钮点击事件
+                     */
+                    scope.confirm = function() {
+                        var confirmButtonObj = scope.buttonArr[0],
+                            confirmButtonCallback = confirmButtonObj['callback'];
+                        if(angular.isFunction(confirmButtonCallback)) {
+                            confirmButtonCallback();
+                        }
+                    };
 
-                    var footer = '<div class="modal-footer"></div>';
-                    $modalContent.append(footer);
-                    var $modalFooter = jq.$('.modal-footer');
+                    /**
+                     * @description 根据用户传参，设置footer是否有button，有几个
+                     */
+                    scope.setModalComponents = function () {
+                        var footerButtonList = options.footerButtonList,
+                            len,
+                            i = 0,
+                            buttonObj;
 
-                    switch (len) {
-                        case 1:
-                            if (angular.isObject(footerButton[i])) {
-                                buttonText = footerButton[i].buttonText;
-                                callback = footerButton[i].callBack;
-                                btn = '<button id="modal-btn" class="modal-btn">' + buttonText + '</button>';
-                                $modalFooter.append();
-
-                                break;
-                            } else {
-                                throw new Error(footerButton[i] + 'must be a Object');
-                            }
-                            break;
-                        case 2:
-
-                            for (; i < len; i++) {
-                                if (angular.isObject(footerButton[i])) {
-                                    callback = footerButton[i].callBack;
-                                    btn = '<button id="modal-btn' + [i] + '">' + footerButton[i].buttonText + '</button>';
-                                    $modalFooter.append(btn);
-                                    if (angular.isFunction(callback)) {
-                                        btn.on('click', callback);
-                                    }
-                                } else {
-                                    throw new Error(footerButton[i] + 'must be a Object');
+                        if (angular.isArray(footerButtonList)) {
+                            len = footerButtonList.length;
+                            scope.footerButtonCount = len;
+                            for(; i < len; i++) {
+                                buttonObj = footerButtonList[i];
+                                scope.buttonArr[i] = {};
+                                scope.buttonArr[i] = {
+                                    buttonText: buttonObj['buttonText'],
+                                    callback: buttonObj['callBack'],
+                                    position: buttonObj['position']
                                 }
                             }
-                    }
-                };
+                        }
+                    };
 
-                var jq = jq || {};
-                jq.$ = function (selector) {
-                    var $ = d.querySelectorAll.bind(d),
-                        dom = $(selector);
-                    return angular.element(dom);
+                    /**
+                     * @description 监听父级作用域向子级广播的“打开模态框事件”
+                     */
+                    scope.$on('showModalDialog', function (e, data) {
+                        scope.open();
+                    });
+
+                    /**
+                     * @description 初始化modal dialog样式
+                     */
+                    scope.setModalStyle = function () {
+                        var modalDialogWidth = modalDialogConfig.width,
+                            modalDialogMarginTop = modalDialogConfig.marginTop,
+                            modalDialogMarginBottom = modalDialogConfig.marginBottom;
+
+                        $modalDialog.css({
+                            width: modalDialogWidth,
+                            marginTop: modalDialogMarginTop,
+                            marginBottom: modalDialogMarginBottom
+                        });
+                    };
+
+                    /**
+                     * @description 打开modal dialog
+                     */
+                    scope.open = function () {
+                        scope.show = true;
+                    };
+
+                    /**
+                     * @description 关闭modal dialog
+                     */
+                    scope.close = function ($event) {
+                        $event.stopPropagation();
+                        var target = $event.target,
+                            className = target.getAttribute('class');
+                        if (className) {
+                            if (className.indexOf('modal-layer') !== -1 || className.indexOf('modal-close') !== -1) {
+                                scope.show = false;
+                            }
+                        }
+                    };
+
+                    scope.init();
                 }
-
-            }],
-
-            controllerAs: 'ModalDialogController',
-            link: function (scope, element, attrs, ctrls) {
-                var ModalDialogController = ctrls[0],
-                    NgModelController = ctrls[1];
-                ModalDialogController.init();
-                ModalDialogController.open();
             }
-        }
-    }]);
+        }]);
 

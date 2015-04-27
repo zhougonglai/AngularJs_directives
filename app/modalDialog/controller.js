@@ -9,9 +9,14 @@ myAppControllers
     .controller('AController', ['$scope', '$log', function ($scope, $log) {
 
         $scope.modalDialog = {
-            title: '模态框',
-            show: true,
-            footerButton: 2
+            title: '自定义模态框',
+            show: false
+        };
+        $scope.modalDialogContent = Mock.Random.paragraph();
+        $scope.showModalDialog = function() {
+
+            $scope.$broadcast('showModalDialog', {});
+            $scope.modalDialogContent = Mock.Random.paragraph();
         };
 
     }]);

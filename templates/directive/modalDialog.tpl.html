@@ -1,0 +1,28 @@
+<div id="myDialog" class="modal-layer" ng-show="show"
+     ng-click="close($event)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="modal-close" ng-click="close($event)">X</a>
+                <h4>{{title}}</h4>
+            </div>
+            <div class="modal-body" ng-transclude>
+                <!-- 父级视图可以在指令标签中添加元素并自定义模态框内容样式，最终被transclude到这里 -->
+            </div>
+            <div class="modal-footer" ng-if="footerButtonCount > 0">
+                <div ng-if="footerButtonCount === 2">
+                    <button id="modal-cancel-btn" ng-click="cancel()">{{buttonArr[1].buttonText}}</button>
+                </div>
+                <div ng-class="{oneButton: footerButtonCount === 1}"
+                     ng-if="footerButtonCount >= 1">
+                    <button ng-class="{right: buttonArr[0].position === 'right',
+                                left: buttonArr[0].position === 'left',
+                                center: buttonArr[0].position === 'center'}"
+                            id="modal-confirm-btn"
+                            ng-click="confirm()">{{buttonArr[0].buttonText}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
