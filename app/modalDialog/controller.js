@@ -10,15 +10,17 @@ myAppControllers
 
         $scope.modalDialog = {
             title: '自定义模态框',
-            show: false
+            show: false,
+            isClickHide: false
             //autoHide: true,
             //delay: 3000
-            //footButtonList: [
+            //footerButtonList: [
             //    {
             //        buttonText: '确定',
             //        callBack: function() {
             //            $log.info('确定');
-            //        }
+            //        },
+            //        position: 'right'
             //    },
             //    {
             //        buttonText: '取消',

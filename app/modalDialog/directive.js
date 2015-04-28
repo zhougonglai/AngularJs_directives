@@ -131,7 +131,11 @@ myAppDirectives
                         $event.stopPropagation();
                         var target = $event.target,
                             className = target.getAttribute('class');
+
                         if (className) {
+                            if(!userConfig.isClickHide && className.indexOf('modal-layer') !== -1) {
+                                return;
+                            }
                             if (className.indexOf('modal-layer') !== -1 || className.indexOf('modal-close') !== -1) {
                                 scope.hide();
                             }
