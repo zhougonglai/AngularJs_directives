@@ -1,0 +1,36 @@
+<div class="g-swiper-list">
+    <ul class="m-swiper-list">
+        <li class="fade-in" data-item-id="{{item.id}}"
+            ng-repeat="item in dataList"
+            ng-swipe-left="item.showAction = true"
+            ng-swipe-right="item.showAction = false">
+
+            <div class="g-item-bd" ng-class="{swiperLeft: item.showAction}">
+                <h4 class="u-item-tt">{{item.title}}</h4>
+                <div class="u-item-userInfo">
+                    <span>{{item.cnName}}</span>
+                    <span>{{item.email}}</span>
+                </div>
+                <p class="u-item-ct">{{item.sentence}}</p>
+                <p ng-if="item.isTop" class="u-item-top-tip"><strong>[置顶]</strong></p>
+            </div>
+
+            <div class="g-item-ctrl"
+                 ng-class="{swiperLeft: item.showAction}">
+                <div ng-if="!item.isTop" class="m-top-ctrl" ng-click="ctrlButtonHandler($event, 'top', item.isTop)">
+                    <a class="u-top-btn">置顶</a>
+                </div>
+                <div ng-if="item.isTop" class="m-top-ctrl" ng-click="ctrlButtonHandler($event, 'top', item.isTop)">
+                    <a class="u-top-btn">取消置顶</a>
+                </div>
+                <div class="m-del-ctrl" ng-click="ctrlButtonHandler($event, 'del')">
+                    <a class="u-del-btn">删除</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <p style="margin-top: 50px;">
+        <i>tip:</i>
+        <strong>鼠标放在条目上向左滑动</strong>
+    </p>
+</div>

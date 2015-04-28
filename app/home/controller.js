@@ -26,6 +26,9 @@ myAppControllers
                     case 'j-roller-picker':
                         $location.path('/rollerPicker');
                         break;
+                    case 'j-swiper-list':
+                        $location.path('/swiperList');
+                        break;
                     default:
                         break;
                 }

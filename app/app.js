@@ -4,6 +4,7 @@
 var myApp = angular.module('myApp', [
     'ngRoute',
     'ngTouch',
+    'ngAnimate',
     'myApp.services',
     'myApp.controllers',
     'myApp.directives'
@@ -48,6 +49,10 @@ myApp.config(['$routeProvider','$locationProvider', function($routeProvider, $lo
         .when('/rollerPicker', {
             templateUrl: baseViewTplUrl + '/RollerPickerView.tpl.html',
             controller: 'FController'
+        })
+        .when('/swiperList', {
+            templateUrl: baseViewTplUrl + '/SwiperListView.tpl.html',
+            controller: 'GController'
         })
         .otherwise({
             redirectTo: '/'

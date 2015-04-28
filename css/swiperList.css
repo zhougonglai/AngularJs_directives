@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ul{
+    list-style: none;
+}
+
+.g-swiper-list{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.m-swiper-list{
+    background-color: #fff;
+}
+
+.m-swiper-list>li{
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.g-item-bd{
+    position: relative;
+    left: 0;
+    -webkit-transition: 0.02s linear all;
+    -moz-transition: 0.02s linear all;
+    -ms-transition: 0.02s linear all;
+    -o-transition: 0.02s linear all;
+    transition: 0.02s linear all;
+}
+.g-item-bd.swiperLeft{
+    left: -160px;
+}
+
+.g-item-ctrl{
+    position: absolute;
+    right: -160px;
+    top: 0;
+    bottom: 0;
+    width: 160px;
+    overflow: hidden;
+    -webkit-transition: 0.02s linear all;
+    -moz-transition: 0.02s linear all;
+    -ms-transition: 0.02s linear all;
+    -o-transition: 0.02s linear all;
+    transition: 0.02s linear all;
+}
+
+.g-item-ctrl.swiperLeft{
+    right: 0;
+}
+
+.g-item-ctrl>div{
+    float: left;
+    position: relative;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+}
+
+.m-top-ctrl{
+    background-color: #ddd;
+    color: #0066bb;
+}
+
+.m-del-ctrl{
+    background-color: #cc333f;
+    color: #fff;
+}
+
+.g-item-ctrl>div>a{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+}
+
+.fade-in.ng-enter,
+.fade-in.ng-move{
+    -webkit-transition: .5s linear all;
+    -moz-transition: .5s linear all;
+    -ms-transition: .5s linear all;
+    -o-transition: .5s linear all;
+    transition: .5s linear all;
+}
+
+.fade-in.ng-leave{
+    -webkit-transition: .2s linear all;
+    -moz-transition: .2s linear all;
+    -ms-transition: .2s linear all;
+    -o-transition: .2s linear all;
+    transition: .2s linear all;
+}
+
+.fade-in.ng-enter{
+    left: 100%;
+    opacity: 0;
+}
+
+.fade-in.ng-enter.ng-enter-active,
+.fade-in.ng-leave {
+    left: 0;
+    opacity: 1;
+}
+
+.fade-in.ng-leave.ng-leave-active {
+    left: -100%;
+}
+
+.u-item-top-tip{
+    position: absolute;
+    right: 0;
+    top:10px;
+    color: red;
+}
