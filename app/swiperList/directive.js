@@ -14,18 +14,6 @@ myAppDirectives
                 scope.dataList = [];
                 var stopTime;
 
-                //var dataTemplate = {
-                //    'list|5': [
-                //        {
-                //            title: '@title',
-                //            sentence: '@sentence',
-                //            email: '@email',
-                //            cnName: '@chineseName',
-                //            showAction: false
-                //        }
-                //    ]
-                //};
-                //var mockData = Mock.mock(dataTemplate);
 
                 scope.init = function() {
                     scope.renderData();
@@ -40,10 +28,8 @@ myAppDirectives
                  */
                 function addItem() {
                     if(scope.dataList.length === 5 && angular.isDefined(stopTime)) {
-                        $log.info(stopTime);
                         $interval.cancel(stopTime);
                         stopTime = null;
-                        $log.info(stopTime);
                         return;
                     }
                     var mockData = Mock.mock({
@@ -57,10 +43,35 @@ myAppDirectives
                     scope.dataList.push(mockData);
                 }
 
+                scope.$watch('dataList', function(newDataList, oldDataList) {
+                    $log.info(newDataList, oldDataList);
+
+                }, true);
+
+                scope.swiperLeft = function(item) {
+                    var len = scope.dataList.length,
+                        i = 0,
+                        dataObj;
+                    for(; i < len; i++) {
+                        dataObj = scope.dataList[i];
+                        if(angular.equals(dataObj, item)) {
+                            continue;
+                        }
+                        dataObj.showAction = false;
+                    }
+
+                    item.showAction = true;
+                };
+
+                scope.swiperRight = function(item) {
+                    item.showAction = false;
+                };
+
                 /**
                  * @description 删除按钮点击事件，删除条目
                  *              根据li上data-item-id在scope.dataList中查找匹配id的对象，删除该对象。
                  * @param e
+                 * @param isTop 是否已经置顶
                  * @param type 操作类型，'del':删除条目，'top':置顶条目
                  */
                 scope.ctrlButtonHandler = function(e, type, isTop) {
@@ -80,7 +91,6 @@ myAppDirectives
                             if(itemId === itemObj.id) {
                                 if(type === 'del') {
                                     scope.dataList.splice(i, 1);
-                                    $log.info(scope.dataList);
                                 }
                                 if(type === 'top') {
                                     topItemObj = scope.dataList.splice(i, 1)[0];
@@ -93,7 +103,6 @@ myAppDirectives
                                         topItemObj.isTop = false;
                                         scope.dataList.push(topItemObj);
                                     }
-                                    $log.info(scope.dataList);
                                 }
                                 return;
                             }

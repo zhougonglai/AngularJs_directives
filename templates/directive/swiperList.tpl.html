@@ -2,8 +2,8 @@
     <ul class="m-swiper-list">
         <li class="fade-in" data-item-id="{{item.id}}"
             ng-repeat="item in dataList"
-            ng-swipe-left="item.showAction = true"
-            ng-swipe-right="item.showAction = false">
+            ng-swipe-left="swiperLeft(item)"
+            ng-swipe-right="swiperRight(item)">
 
             <div class="g-item-bd" ng-class="{swiperLeft: item.showAction}">
                 <h4 class="u-item-tt">{{item.title}}</h4>
@@ -12,7 +12,9 @@
                     <span>{{item.email}}</span>
                 </div>
                 <p class="u-item-ct">{{item.sentence}}</p>
-                <p ng-if="item.isTop" class="u-item-top-tip"><strong>[置顶]</strong></p>
+                <p ng-if="item.isTop" class="u-item-top-tip">
+                    <strong>[置顶]</strong>
+                </p>
             </div>
 
             <div class="g-item-ctrl"
