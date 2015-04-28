@@ -44,7 +44,9 @@ __指令列表__
 |---|---|---|
 |datePicker|日期选择指令|100%|
 |cityPicker|城市选择指令|100%|
-|modalDialog|模态框指令|0%|
+|swiperList|条目左滑操作指令|90%|
+|modalDialog|模态框指令|90%|
 |rollerPicker|类似ios的滚筒日期城市选择指令|0%|
+
 
 
