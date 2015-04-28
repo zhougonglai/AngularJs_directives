@@ -5,7 +5,8 @@ myAppDirectives
         marginBottom: '90px',
         footerButtonList: null,
         show: false,
-        title: '模态框'
+        title: '模态框',
+        autoHide: false
     })
     .directive('modalDialog', ['$timeout', 'modalDialogConfig', '$log',
         function ($timeout, modalDialogConfig, $log) {
@@ -84,9 +85,17 @@ myAppDirectives
 
                     /**
                      * @description 监听父级作用域向子级广播的“打开模态框事件”
+                     *              检查用户是否设置自动关闭模态框，delay模态框显示时间，单位毫秒
                      */
                     scope.$on('showModalDialog', function (e, data) {
+                        var autoHide = options.autoHide,
+                            delay = options.delay;
                         scope.open();
+                        if(autoHide) {
+                            $timeout(function() {
+                               scope.hide();
+                            }, delay)
+                        }
                     });
 
                     /**
@@ -111,6 +120,10 @@ myAppDirectives
                         scope.show = true;
                     };
 
+                    scope.hide = function() {
+                        scope.show = false;
+                    };
+
                     /**
                      * @description 关闭modal dialog
                      */
@@ -120,7 +133,7 @@ myAppDirectives
                             className = target.getAttribute('class');
                         if (className) {
                             if (className.indexOf('modal-layer') !== -1 || className.indexOf('modal-close') !== -1) {
-                                scope.show = false;
+                                scope.hide();
                             }
                         }
                     };
