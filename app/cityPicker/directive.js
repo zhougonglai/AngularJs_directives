@@ -527,6 +527,7 @@ myAppDirectives
                         case 'train':
                             if (!sctType) {
                                 train.updateHistorySelected(cityObj, self);
+                                sctCityObj = cityObj;
                             } else {
                                 sctCityObj = {
                                     cityname: cityObj
@@ -535,6 +536,7 @@ myAppDirectives
                             break;
                         case 'flight':
                             if (!sctType) {
+                                sctCityObj = cityObj;
                                 flight.updateHistorySelected(cityObj, self);
                             } else {
                                 sctCityObj = {
