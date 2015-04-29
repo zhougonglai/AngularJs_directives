@@ -1,5 +1,6 @@
 <div ng-controller="HomeController">
-    <ul class="m-directive-list" ng-click="directiveListClickHandler($event)">
+    <ul class="m-directive-list" ng-mouseover="directiveListMouseOverHandler($event)"
+        ng-click="directiveListClickHandler($event)">
         <li><a id="j-modal-dialog">模态框指令</a></li>
         <li><a id="j-date-picker-base">日期选择指令(基础指令)</a></li>
         <li><a id="j-date-picker-visa">日期选择指令(签证项目)</a></li>
@@ -8,4 +9,5 @@
         <li><a id="j-roller-picker">类似滚筒选择指令</a></li>
         <li><a id="j-swiper-list">滑动条目显示操作指令</a></li>
     </ul>
+    <img-preview preview-config="{{previewConfig}}"></img-preview>
 </div>

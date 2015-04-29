@@ -6,7 +6,7 @@ myAppControllers
         $scope.directiveListClickHandler = function (e) {
             var target = e.target,
                 id = target.id;
-            if(target.nodeName.toLocaleUpperCase() === 'A') {
+            if (target.nodeName.toLocaleUpperCase() === 'A') {
                 switch (id) {
                     case 'j-modal-dialog':
                         $location.path('/modalDialog');
@@ -32,6 +32,24 @@ myAppControllers
                     default:
                         break;
                 }
+            }
+        };
+
+        $scope.directiveListMouseOverHandler = function (e) {
+            var target = e.target,
+                id = target.id;
+            if (target.nodeName.toLocaleUpperCase() === 'A') {
+                $scope.$broadcast('mouseOverEvent', {
+                    e: e,
+                    imgUrl: [
+                        './img/1.jpg',
+                        './img/2.jpg',
+                        './img/3.jpg',
+                        './img/4.jpg',
+                        './img/5.jpg',
+                        './img/6.jpg'
+                    ]
+                });
             }
         }
     }]);

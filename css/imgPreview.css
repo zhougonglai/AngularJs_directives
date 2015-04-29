@@ -1,0 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.g-img-pre-ctn{
+    position: absolute;
+}
+
+.m-img-pre{
+    height: 100%;
+    background-color: #ddd;
+}
