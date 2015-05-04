@@ -44,9 +44,9 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
             templateUrl: baseViewTplUrl + '/HomeView.tpl.html',
             controller: 'HomeController',
             resolve: {
-                "ngInfo": function (ngInfo) {
+                "ngInfo": ['ngInfo', function (ngInfo) {
                     return ngInfo.getNgVersion();
-                }
+                }]
             }
         })
         .when('/modalDialog', {
