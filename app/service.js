@@ -1,6 +1,19 @@
 /**
  * Created by dulin on 2015/4/17.
  */
+myAppServices.factory('ngInfo', ['Ajax', function(Ajax) {
+
+    var ngVersionUrl = './jsonData/ngVersion.json';
+
+    return {
+        getNgVersion: function() {
+            return Ajax.post({
+                url: ngVersionUrl
+            });
+        }
+    }
+}]);
+
 myAppServices.factory('dataManager', ['$log', function($log) {
     var dataCache = {};
     return {

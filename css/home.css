@@ -50,3 +50,26 @@ body{
 .m-directive-list>li:nth-of-type(9)>a{
     background-color: #83af9b;
 }
+
+.u-loading{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0, 0.3);
+}
+
+.u-loading>p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 20px;
+    line-height: 20px;
+    margin-left: -25px;
+    margin-top: -10px;
+    color: #fff;
+    text-align: center;
+}
+

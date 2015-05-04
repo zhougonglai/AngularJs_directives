@@ -10,21 +10,44 @@ var myApp = angular.module('myApp', [
     'myApp.directives'
 ]);
 
+myApp.run(['$rootScope', '$log', '$timeout', '$window', function ($rootScope, $log, $timeout, $window) {
+    $rootScope.loading = false;
+    $rootScope.$on('$routeChangeStart', function (event, current, previous, rejection) {
+        $rootScope.loading = true;
+    });
+    $rootScope.$on('$routeChangeSuccess', function (event, current, previous, rejection) {
+        $timeout(function () {
+            $rootScope.loading = false;
+        }, 1000);
+    });
+    $rootScope.$on('$routeChangeError', function () {
+        $window.location.href = './error.html';
+    });
+}]).config(['$logProvider', function($logProvider) {
+    $logProvider.debugEnabled(true);
+}]);
+
+
 var myAppControllers = angular.module('myApp.controllers', []);
 var myAppServices = angular.module('myApp.services', []);
 var myAppDirectives = angular.module('myApp.directives', []);
 
 
-myApp.config(['$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
+myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
 
     var baseViewTplUrl = './templates/view';
 
     //$locationProvider.html5Mode(true);
 
     $routeProvider
-        .when('/', {
+        .when('/home', {
             templateUrl: baseViewTplUrl + '/HomeView.tpl.html',
-            controller: 'HomeController'
+            controller: 'HomeController',
+            resolve: {
+                "ngInfo": function (ngInfo) {
+                    return ngInfo.getNgVersion();
+                }
+            }
         })
         .when('/modalDialog', {
             templateUrl: baseViewTplUrl + '/ModalDialogView.tpl.html',
@@ -55,7 +78,7 @@ myApp.config(['$routeProvider','$locationProvider', function($routeProvider, $lo
             controller: 'GController'
         })
         .otherwise({
-            redirectTo: '/'
+            redirectTo: '/home'
         });
 }]);
 
