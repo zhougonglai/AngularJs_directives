@@ -4,7 +4,7 @@
 
 
 myAppDirectives
-    .directive('cityPicker', ['$http', 'dataManager', 'Ajax', function ($http, dataManager, Ajax) {
+    .directive('cityPicker', ['$http', 'dataManager', 'Ajax', '$timeout', function ($http, dataManager, Ajax, $timeout) {
         return {
             restrict: 'EA',
             replace: true,
@@ -36,6 +36,7 @@ myAppDirectives
                 $scope.$on('openSelectCity', function (e, data) {
                     self.open = true;
                     self.initHistorySelected();
+                    self.initLetterListHeight();
                 });
 
                 /**
@@ -84,7 +85,6 @@ myAppDirectives
                  *              3.初始化城市等的历史选择
                  */
                 self.init = function () {
-                    self.initLetterListHeight();
                     self.setAnchor('#', true);
                     self.initHistorySelected();
                 };
@@ -536,7 +536,6 @@ myAppDirectives
                             break;
                         case 'flight':
                             if (!sctType) {
-                                sctCityObj = cityObj;
                                 flight.updateHistorySelected(cityObj, self);
                             } else {
                                 sctCityObj = {
