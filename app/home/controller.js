@@ -2,7 +2,7 @@
  * Created by dulin on 2015/4/27.
  */
 myAppControllers
-    .controller('HomeController', ['$scope', '$log', '$location', function ($scope, $log, $location) {
+    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', function ($scope, $log, $location, ngInfo) {
         $scope.directiveListClickHandler = function (e) {
             var target = e.target,
                 id = target.id;
@@ -34,6 +34,10 @@ myAppControllers
                 }
             }
         };
+        $log.debug('if "debugEnabled" is set to "false", this message will not display');
+        if(ngInfo.data) {
+            $scope.ngVersion = ngInfo.data.ngVersion;
+        }
 
         $scope.directiveListMouseOverHandler = function (e) {
             var target = e.target,

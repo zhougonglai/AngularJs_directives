@@ -1,6 +1,19 @@
 /**
  * Created by dulin on 2015/4/17.
  */
+myAppServices.factory('ngInfo', ['Ajax', function(Ajax) {
+
+    var ngVersionUrl = './jsonData/ngVersion.json';
+
+    return {
+        getNgVersion: function() {
+            return Ajax.post({
+                url: ngVersionUrl
+            });
+        }
+    }
+}]);
+
 myAppServices.factory('dataManager', ['$log', function($log) {
     var dataCache = {};
     return {
@@ -30,11 +43,14 @@ myAppServices.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) 
             var url = options.url,
                 data = options.data;
             $http.post(url, data).success(function(data, status, headers) {
-                deferred.resolve({
-                    data: data,
-                    status: status,
-                    headers: headers
-                });
+                if(data) {
+                    deferred.resolve({
+                        data: data,
+                        status: status,
+                        headers: headers
+                    });
+                }
+
             }).error(function(data, status, headers) {
                 deferred.reject(data);
             });
@@ -45,11 +61,13 @@ myAppServices.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) 
             var deferred = $q.defer();
             var url = options.url;
             $http.get(url).success(function(data, status, headers) {
-                deferred.resolve({
-                    data: data,
-                    status: status,
-                    headers: headers
-                });
+                if(data) {
+                    deferred.resolve({
+                        data: data,
+                        status: status,
+                        headers: headers
+                    });
+                }
             }).error(function(data, status, headers) {
                 deferred.reject(data);
             });
