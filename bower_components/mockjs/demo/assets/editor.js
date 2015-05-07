@@ -41,7 +41,7 @@ $(function() {
             var data = editor.getValue()
             new Function('return ' + data)
             $.ajax({
-                url: '/save?test=true',
+                url: '/save?tests=true',
                 data: {
                     tpl: data
                 },

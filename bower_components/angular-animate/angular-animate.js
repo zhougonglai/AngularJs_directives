@@ -1595,7 +1595,7 @@ angular.module('ngAnimate', ['ng'])
       // Register both events in case `window.onanimationend` is not supported because of that,
       // do the same for `transitionend` as Safari is likely to exhibit similar behavior.
       // Also, the only modern browser that uses vendor prefixes for transitions/keyframes is webkit
-      // therefore there is no reason to test anymore for other vendor prefixes: http://caniuse.com/#search=transition
+      // therefore there is no reason to tests anymore for other vendor prefixes: http://caniuse.com/#search=transition
       if (window.ontransitionend === undefined && window.onwebkittransitionend !== undefined) {
         CSS_PREFIX = '-webkit-';
         TRANSITION_PROP = 'WebkitTransition';

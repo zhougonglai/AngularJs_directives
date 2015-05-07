@@ -311,7 +311,7 @@ Handle.extend({
                     //     result = parseFloat(phed, 10)
                     //     break
                     // }
-                    // if (/^(true|false)$/.test(phed)) {
+                    // if (/^(true|false)$/.tests(phed)) {
                     //     result = phed === 'true' ? true :
                     //         phed === 'false' ? false :
                     //         phed // 已经是布尔值

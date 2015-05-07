@@ -24,7 +24,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            files: ['Gruntfile.js', 'package.json', 'src/**/*.js', 'test/**/*.js',
+            files: ['Gruntfile.js', 'package.json', 'src/**/*.js', 'tests/**/*.js',
                 '!src/xhr.js', '!src/MockHttpRequest.js',
                 '!**/*-prefix.js', '!**/*-suffix.js',
                 '!**/node_modules/**/*.js', '!**/bower_components/**/*.js'
@@ -35,15 +35,15 @@ module.exports = function(grunt) {
         },
         qunit: {
             files: [
-                'test/mock.html'
+                'tests/mock.html'
             ]
         },
         nodeunit: {
-            all: ['test/nodeunit/*.js', '!test/**/noop.*']
+            all: ['tests/nodeunit/*.js', '!tests/**/noop.*']
         },
         watch: {
             dev: {
-                files: ['<%= jshint.files %>', 'test/**/*.*', 'doc/**/*.md', 'doc/template.html', '!doc/index.md'],
+                files: ['<%= jshint.files %>', 'tests/**/*.*', 'doc/**/*.md', 'doc/template.html', '!doc/index.md'],
                 tasks: ['base']
             },
             doc: {

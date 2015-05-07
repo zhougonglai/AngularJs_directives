@@ -171,6 +171,7 @@ myAppDirectives
                  */
                 self.close = function () {
                     self.open = false;
+                    $scope.search = '';
                     $scope.$emit('closeSelectCity', {});
                 };
 
