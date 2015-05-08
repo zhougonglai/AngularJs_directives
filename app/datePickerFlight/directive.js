@@ -139,7 +139,7 @@ myAppDirectives
                 renderType = self.renderType;
 
             if (isInit || ((dateType === 'goTrip' || dateType === 'backTrip') && !renderType)) {
-                renderMonthCount = 12;
+                renderMonthCount = 13;
             }
             if (renderType) {
                 renderMonthCount = (endDateArr[0] - beginDateArr[0]) * 12 + (endDateArr[1] - beginDateArr[1]) + 1;
@@ -479,6 +479,10 @@ myAppDirectives
                             isUsable = true;
                             isHasPrice = true;
                             var t = 0;
+                        }
+
+                        if(eachYear === beginDateArr[0] + 1 && eachMonth === beginDateArr[1] && renderDate === beginDateArr[2]) {
+                            isUsable = false;
                         }
 
                         //计算渲染日期对应的价格的开始位置
