@@ -16,6 +16,7 @@
     -ms-user-select: none;
     user-select: none;
     background-color: #F8F8F8;
+    -webkit-overflow-scrolling : touch;
     font-family: "Microsoft yahei", "Lucida Grande", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", sans-serif;
 }
 .g-dp-hd{
