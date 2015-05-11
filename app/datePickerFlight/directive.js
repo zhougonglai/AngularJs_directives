@@ -481,9 +481,7 @@ myAppDirectives
                             var t = 0;
                         }
 
-                        if(eachYear === beginDateArr[0] + 1 && eachMonth === beginDateArr[1] && renderDate === beginDateArr[2]) {
-                            isUsable = false;
-                        }
+
 
                         //计算渲染日期对应的价格的开始位置
                         if (isHasPrice) {
@@ -516,6 +514,10 @@ myAppDirectives
                             isSelected = !self.dateCompare(renderDateArr, backTripDateArr) && isUsable;
                         } else {
                             isSelected = !self.dateCompare(renderDateArr, goTripDateArr);
+                        }
+
+                        if(eachYear === beginDateArr[0] + 1 && eachMonth === beginDateArr[1] && renderDate >= beginDateArr[2]) {
+                            isUsable = false;
                         }
 
 
