@@ -12,7 +12,7 @@ myAppDirectives
             controller: 'DPFlightController',
             controllerAs: 'DPFlightController'
         }
-    }).controller('DPFlightController', ['$scope', '$element', '$http', '$log', '$cacheFactory', function ($scope, $element, $http, $log, $cacheFactory) {
+    }).controller('DPFlightController', ['$scope', '$element', '$http', '$log', '$cacheFactory','$location', function ($scope, $element, $http, $log, $cacheFactory, $location) {
 
         var self = this,
             weekDay = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
@@ -64,25 +64,36 @@ myAppDirectives
 
         self.init = function (isOpen) {
             self.dateArray = [];
-
+            var serverTimePromise = $http({
+                method: 'GET',
+                url: $location.absUrl()
+            });
             //请求服务器数据,得到90天日期价格
             if (isInit) {
-                var promise = self.requestData();
-                promise.success(function () {
-                    self.initialize(isOpen);
+                localStorage.removeItem('datePickerData');
+                serverTimePromise.success(function(data, status, headers) {
+                    serverTime = headers('date');
+
+                    //当前日期
+                    beginDateArr = self.getBeginDate();
+                    beginDateStr = self.getFormatDate(beginDateArr);
+                    //当前日期+90天=结束日期
+                    endDateArr = self.getEndDate();
+                    endDateStr = self.getFormatDate(endDateArr);
+
+                    var promise = self.requestData();
+                    promise.success(function () {
+                        self.initialize(isOpen);
+                    });
                 });
+
             } else {
                 self.initialize(isOpen);
             }
         };
 
         self.initialize = function (isOpen) {
-            //当前日期
-            beginDateArr = self.getBeginDate();
-            beginDateStr = self.getFormatDate(beginDateArr);
-            //当前日期+90天=结束日期
-            endDateArr = self.getEndDate();
-            endDateStr = self.getFormatDate(endDateArr);
+
             //初始化页面显示的日期（明天）
             renderMonthCount = self.getRenderMonthCount();
             //渲染的结束日期(渲染12个月的日期)
