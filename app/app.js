@@ -24,7 +24,7 @@ myApp.run(['$rootScope', '$log', '$timeout', '$window', function ($rootScope, $l
         $window.location.href = './error.html';
     });
 }]).config(['$logProvider', function($logProvider) {
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(false);
 }]);
 
 
@@ -76,6 +76,10 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
         .when('/swiperList', {
             templateUrl: baseViewTplUrl + '/SwiperListView.tpl.html',
             controller: 'GController'
+        })
+        .when('/tab', {
+            templateUrl: baseViewTplUrl + '/tabView.tpl.html',
+            controller: 'HController'
         })
         .otherwise({
             redirectTo: '/home'

@@ -29,6 +29,9 @@ myAppControllers
                     case 'j-swiper-list':
                         $location.path('/swiperList');
                         break;
+                    case 'j-tab':
+                        $location.path('/tab');
+                        break;
                     default:
                         break;
                 }

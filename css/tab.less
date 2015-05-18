@@ -1,0 +1,54 @@
+.bgc (@color) {
+    background-color: @color;
+}
+.c(@color) {
+    color: @color;
+}
+.bd (@px: 1px, @type: solid, @color: #ddd) {
+    border: @arguments;
+}
+.bdb (@px: 1px, @type: solid, @color: #ddd) {
+    border-bottom: @arguments
+}
+body {
+    position: relative;
+    font-family: "Microsoft yahei", "Lucida Grande", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.absTRBL0{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.g-tab-ctn{
+    .bgc(#fff);
+    >.g-tab-tt{
+        height: 50px;
+        .bdb;
+        >.m-tab-tt{
+            float: left;
+            height: 100%;
+            button {
+                display: block;
+                width: 100%;
+                height: 100%;
+                .bgc(#fff);
+                outline: none;
+                .bd();
+                &.selected{
+                    .bgc(#ddd);
+                    .c(#fff);
+                }
+            }
+
+        }
+
+    }
+}
+
+
+
+
