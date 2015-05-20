@@ -16,7 +16,6 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
             scope.isMaskShow = false
             scope.contentType = ''
             guid = ''
-            doubleLeftItemGuid = ''
 
             for btnObj, i in scope.btnList
                 btnObj.active = i
@@ -36,8 +35,13 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                         scope.singleItemActive = dataCache.get('singleItemActive' + guid) or 0
                         scope.contents = btnObj.content
                     when 'double'
-                        scope.doubleItemActive = 0
-                        scope.conditionItemActive = 0
+                        doubleItem = dataCache.get('doubleItem' + guid)
+                        if doubleItem?
+                            scope.doubleItemActive = doubleItem.doubleLeftItem.active
+                            scope.conditionItemActive = doubleItem.conditionItemActive
+                        else
+                            scope.doubleItemActive = 0
+                            scope.conditionItemActive = 0
                         scope.contents = btnObj.content.list
                     else
                         break;
@@ -67,6 +71,7 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 scope.doubleItemActive = contentObj.active
                 dataCache.put('doubleLeftItem' + contentObj.guid, contentObj)
                 scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) or 0
+
                 scope.$emit('doubleTypeSelectEvent', contentObj)
                 return
 
@@ -74,6 +79,10 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 e.stopPropagation()
                 scope.conditionItemActive = condition.active
                 dataCache.put('conditionItemActive' + contentObj.guid, condition.active)
+                dataCache.put('doubleItem' + guid, {
+                    doubleLeftItem: contentObj
+                    conditionItemActive: condition.active
+                })
                 return
             return
     }

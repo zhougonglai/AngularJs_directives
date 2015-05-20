@@ -11,7 +11,7 @@
           config: '='
         },
         link: function(scope, element, attrs) {
-          var btnObj, condition, config, doubleLeftItemGuid, guid, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4;
+          var btnObj, condition, config, guid, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4;
           config = scope.config;
           scope.btnList = config.btnList;
           scope.btnNum = scope.btnList.length;
@@ -19,7 +19,6 @@
           scope.isMaskShow = false;
           scope.contentType = '';
           guid = '';
-          doubleLeftItemGuid = '';
           ref = scope.btnList;
           for (i = l = 0, len = ref.length; l < len; i = ++l) {
             btnObj = ref[i];
@@ -41,7 +40,7 @@
             }
           }
           scope.btnClickEventHandler = function(btnObj) {
-            var contentObj, len3, o, ref5;
+            var contentObj, doubleItem, len3, o, ref5;
             scope.contentType = btnObj.type;
             guid = btnObj.guid;
             switch (scope.contentType) {
@@ -50,8 +49,14 @@
                 scope.contents = btnObj.content;
                 break;
               case 'double':
-                scope.doubleItemActive = 0;
-                scope.conditionItemActive = 0;
+                doubleItem = dataCache.get('doubleItem' + guid);
+                if (doubleItem != null) {
+                  scope.doubleItemActive = doubleItem.doubleLeftItem.active;
+                  scope.conditionItemActive = doubleItem.conditionItemActive;
+                } else {
+                  scope.doubleItemActive = 0;
+                  scope.conditionItemActive = 0;
+                }
                 scope.contents = btnObj.content.list;
                 break;
               default:
@@ -89,6 +94,10 @@
             e.stopPropagation();
             scope.conditionItemActive = condition.active;
             dataCache.put('conditionItemActive' + contentObj.guid, condition.active);
+            dataCache.put('doubleItem' + guid, {
+              doubleLeftItem: contentObj,
+              conditionItemActive: condition.active
+            });
           };
         }
       };
