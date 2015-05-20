@@ -1,0 +1,48 @@
+<div class="g-ft-ctn">
+
+    <div class="g-ft-btn">
+        <div class="m-ft"
+             ng-repeat="btnObj in btnList"
+             ng-style="{'width': 100 / btnNum + '%'}">
+            <button ng-click="btnClickEventHandler(btnObj)"
+                    ng-class="{selected: active === btnObj.active}">
+                <i>{{btnObj.text}}</i>
+            </button>
+        </div>
+    </div>
+    <div class="u-ft-mask"
+         ng-click="maskClickEventHandler()"
+         ng-show="isMaskShow">
+        <div class="g-ft-content-ctn">
+            <div class="m-ft-content-ctn">
+                <ul class="m-ft-content-single" ng-show="contentType === 'single'">
+                    <li ng-class="{selected: singleItemActive === contentObj.active}"
+                        ng-click="singleTypeClickEventHandler(contentObj, $event)"
+                        ng-repeat="contentObj in contents">{{contentObj.text}}</li>
+                </ul>
+                <div class="m-ft-content-double" ng-show="contentType === 'double'">
+                    <div class="m-ft-content-db-tt">
+                        <a>取消</a>
+                        <button>清空筛选</button>
+                        <a>确定</a>
+                    </div>
+                    <div class="m-ft-content-db-l">
+                        <ul>
+                            <li ng-class="{selected: doubleItemActive === contentObj.active}"
+                                ng-click="doubleTypeLeftListClickEventHandler(contentObj, $event)"
+                                ng-repeat="contentObj in contents">
+                                {{contentObj.text}}
+                                <div class="m-ft-content-db-r" ng-show="doubleItemActive === contentObj.active">
+                                    <ul>
+                                        <li ng-repeat="condition in contentObj.condition">{{condition.text}}</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

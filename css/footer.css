@@ -1,0 +1,139 @@
+body {
+  overflow: hidden;
+}
+.g-ft-ctn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  min-width: 320px;
+  overflow: hidden;
+}
+.g-ft-ctn * {
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.g-ft-ctn ul {
+  list-style: none;
+}
+.g-ft-ctn > .g-ft-btn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+}
+.g-ft-ctn > .g-ft-btn > .m-ft {
+  float: left;
+  height: 100%;
+}
+.g-ft-ctn > .g-ft-btn > .m-ft > button {
+  width: 100%;
+  height: 100%;
+  background-color: #464646;
+  border: none;
+  color: #ffffff;
+}
+.g-ft-ctn > .g-ft-btn > .m-ft > button.selected {
+  color: #d30775;
+}
+.g-ft-ctn > .g-ft-btn > .m-ft > button > i {
+  font-style: normal;
+}
+.g-ft-ctn > .u-ft-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.g-ft-ctn .g-ft-content-ctn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn {
+  background-color: #ffffff;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn li {
+  line-height: 44px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: default;
+  color: #666666;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn li.selected {
+  background-color: #ffffff;
+  color: #d30775;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #666666;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l {
+  float: left;
+  width: 130px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li {
+  border: none;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li > .m-ft-content-db-r {
+  position: absolute;
+  top: 44px;
+  left: 130px;
+  right: 0;
+  bottom: 0;
+  min-width: 300px;
+  background-color: #ffffff;
+  color: #666666;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li > .m-ft-content-db-r li {
+  text-align: left;
+  background-color: #ffffff;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt {
+  position: relative;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt > a {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  color: #d30775;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt > a:first-child {
+  left: 30px;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt > a:last-child {
+  right: 30px;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt > button {
+  height: 30px;
+  width: 70px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  color: #666666;
+}

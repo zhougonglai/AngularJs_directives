@@ -40,8 +40,6 @@ myAppDirectives.directive('tab', ['$log', ($log)->
                     index: tabTitleObj.index
                 })
                 return
-
-
             return
     }
 ])

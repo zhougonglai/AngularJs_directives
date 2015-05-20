@@ -32,6 +32,9 @@ myAppControllers
                     case 'j-tab':
                         $location.path('/tab');
                         break;
+                    case 'j-footer':
+                        $location.path('/footer');
+                        break;
                     default:
                         break;
                 }

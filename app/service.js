@@ -36,6 +36,11 @@ myAppServices.factory('dataManager', ['$log', function($log) {
     }
 }]);
 
+
+myAppServices.factory('dataCache', ['$cacheFactory', function($cacheFactory) {
+    return $cacheFactory('dataCache');
+}]);
+
 myAppServices.factory('Ajax', ['$log', '$q', '$http', function($log, $q, $http) {
     return {
         post: function(options) {
