@@ -15,7 +15,9 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
             scope.active = 0
             scope.isMaskShow = false
             scope.contentType = ''
+            scope.conditionTags = []
             guid = ''
+            exportData = null
 
             for btnObj, i in scope.btnList
                 btnObj.active = i
@@ -56,14 +58,14 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 return
 
             scope.maskClickEventHandler = ->
-                scope.isMaskShow = false
+                hideContent()
                 return
 
             scope.singleTypeClickEventHandler = (contentObj, e)->
                 e.stopPropagation()
                 scope.singleItemActive = contentObj.active
                 dataCache.put('singleItemActive' + guid, contentObj.active)
-                scope.$emit('singleTypeSelectEvent', contentObj)
+                emitData(contentObj)
                 return
 
             scope.doubleTypeLeftListClickEventHandler = (contentObj, e)->
@@ -71,8 +73,6 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 scope.doubleItemActive = contentObj.active
                 dataCache.put('doubleLeftItem' + contentObj.guid, contentObj)
                 scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) or 0
-
-                scope.$emit('doubleTypeSelectEvent', contentObj)
                 return
 
             scope.doubleTypeRightListClickEventHandler = (contentObj, condition, e) ->
@@ -83,6 +83,40 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                     doubleLeftItem: contentObj
                     conditionItemActive: condition.active
                 })
+                exportData = {
+                    leftItem: contentObj
+                    rightItem: condition
+                }
+                setConditionTag(condition)
+                return
+
+            setConditionTag = (condition)->
+                if scope.conditionTags.indexOf(condition) is -1
+                    scope.conditionTags.push(condition)
+                return
+
+            scope.emptyHandler = (e)->
+                e.stopPropagation()
+                scope.conditionTags.length = 0
+                return
+
+            scope.stopPropagation = (e)->
+                e.stopPropagation()
+                return
+            scope.cancelHandler = ->
+                hideContent()
+                return
+            hideContent = ->
+                scope.isMaskShow = false
+                return
+
+            scope.confirmHandler = ->
+                emitData(exportData)
+                hideContent()
+                return
+
+            emitData = (data)->
+                scope.$emit('selectCondition', data)
                 return
             return
     }

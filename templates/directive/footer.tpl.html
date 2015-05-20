@@ -1,5 +1,4 @@
 <div class="g-ft-ctn">
-
     <div class="g-ft-btn">
         <div class="m-ft"
              ng-repeat="btnObj in btnList"
@@ -10,9 +9,13 @@
             </button>
         </div>
     </div>
+
     <div class="u-ft-mask"
          ng-click="maskClickEventHandler()"
          ng-show="isMaskShow">
+        <div class="g-condition-tag">
+            <a ng-repeat="condition in conditionTags">{{condition.text}}</a>
+        </div>
         <div class="g-ft-content-ctn">
             <div class="m-ft-content-ctn">
                 <ul class="m-ft-content-single" ng-show="contentType === 'single'">
@@ -20,11 +23,11 @@
                         ng-click="singleTypeClickEventHandler(contentObj, $event)"
                         ng-repeat="contentObj in contents">{{contentObj.text}}</li>
                 </ul>
-                <div class="m-ft-content-double" ng-show="contentType === 'double'">
+                <div ng-click="stopPropagation($event)" class="m-ft-content-double" ng-show="contentType === 'double'">
                     <div class="m-ft-content-db-tt">
-                        <a>取消</a>
-                        <button>清空筛选</button>
-                        <a>确定</a>
+                        <a ng-click="cancelHandler()">取消</a>
+                        <button ng-click="emptyHandler($event)">清空筛选</button>
+                        <a ng-click="confirmHandler()">确定</a>
                     </div>
                     <div class="m-ft-content-db-l">
                         <ul>
@@ -42,7 +45,6 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </div>

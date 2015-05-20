@@ -11,14 +11,16 @@
           config: '='
         },
         link: function(scope, element, attrs) {
-          var btnObj, condition, config, guid, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4;
+          var btnObj, condition, config, emitData, exportData, guid, hideContent, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4, setConditionTag;
           config = scope.config;
           scope.btnList = config.btnList;
           scope.btnNum = scope.btnList.length;
           scope.active = 0;
           scope.isMaskShow = false;
           scope.contentType = '';
+          scope.conditionTags = [];
           guid = '';
+          exportData = null;
           ref = scope.btnList;
           for (i = l = 0, len = ref.length; l < len; i = ++l) {
             btnObj = ref[i];
@@ -75,20 +77,19 @@
             scope.active = btnObj.active;
           };
           scope.maskClickEventHandler = function() {
-            scope.isMaskShow = false;
+            hideContent();
           };
           scope.singleTypeClickEventHandler = function(contentObj, e) {
             e.stopPropagation();
             scope.singleItemActive = contentObj.active;
             dataCache.put('singleItemActive' + guid, contentObj.active);
-            scope.$emit('singleTypeSelectEvent', contentObj);
+            emitData(contentObj);
           };
           scope.doubleTypeLeftListClickEventHandler = function(contentObj, e) {
             e.stopPropagation();
             scope.doubleItemActive = contentObj.active;
             dataCache.put('doubleLeftItem' + contentObj.guid, contentObj);
             scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) || 0;
-            scope.$emit('doubleTypeSelectEvent', contentObj);
           };
           scope.doubleTypeRightListClickEventHandler = function(contentObj, condition, e) {
             e.stopPropagation();
@@ -98,6 +99,36 @@
               doubleLeftItem: contentObj,
               conditionItemActive: condition.active
             });
+            exportData = {
+              leftItem: contentObj,
+              rightItem: condition
+            };
+            setConditionTag(condition);
+          };
+          setConditionTag = function(condition) {
+            if (scope.conditionTags.indexOf(condition) === -1) {
+              scope.conditionTags.push(condition);
+            }
+          };
+          scope.emptyHandler = function(e) {
+            e.stopPropagation();
+            scope.conditionTags.length = 0;
+          };
+          scope.stopPropagation = function(e) {
+            e.stopPropagation();
+          };
+          scope.cancelHandler = function() {
+            hideContent();
+          };
+          hideContent = function() {
+            scope.isMaskShow = false;
+          };
+          scope.confirmHandler = function() {
+            emitData(exportData);
+            hideContent();
+          };
+          emitData = function(data) {
+            scope.$emit('selectCondition', data);
           };
         }
       };

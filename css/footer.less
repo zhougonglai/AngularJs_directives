@@ -36,6 +36,7 @@ body{
     & ul {
         list-style: none;
     }
+
     >.g-ft-btn{
         position: absolute;
         bottom: 0;
@@ -68,7 +69,28 @@ body{
         top: 0;
         bottom: 50px;
         .bgc(rgba(0,0,0,0.5));
+        >.g-condition-tag{
+            position: absolute;
+            bottom: 264px;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            >a{
+                position: relative;
+                float: left;
+                height: 30px;
+                line-height: 30px;
+                padding: 0 12px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                border-radius: 3px;
+                .bgc(#fff);
+                .c(#D30775);
+                font-size: 14px;
+            }
+        }
     }
+
     & .g-ft-content-ctn{
         position: absolute;
         bottom: 0;
@@ -121,6 +143,7 @@ body{
                             & li{
                                 text-align: left;
                                 .bgc(#fff);
+                                border-bottom: 1px solid #ddd;
                                 &.selected{
                                     .c(#D30775);
                                 }

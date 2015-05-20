@@ -132,12 +132,7 @@ myAppControllers.controller('IController', ['$scope', '$log', ($scope, $log)->
     }
 
 
-    $scope.$on('singleTypeSelectEvent', (e, data)->
-        $log.info(data)
-        return
-    )
-
-    $scope.$on('doubleTypeSelectEvent', (e, data)->
+    $scope.$on('selectCondition', (e, data)->
         $log.info(data)
         return
     )

@@ -53,6 +53,26 @@ body {
   bottom: 50px;
   background-color: rgba(0, 0, 0, 0.5);
 }
+.g-ft-ctn > .u-ft-mask > .g-condition-tag {
+  position: absolute;
+  bottom: 264px;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+.g-ft-ctn > .u-ft-mask > .g-condition-tag > a {
+  position: relative;
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 12px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  color: #d30775;
+  font-size: 14px;
+}
 .g-ft-ctn .g-ft-content-ctn {
   position: absolute;
   bottom: 0;
@@ -110,6 +130,7 @@ body {
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li > .m-ft-content-db-r li {
   text-align: left;
   background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
 }
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li > .m-ft-content-db-r li.selected {
   color: #d30775;
