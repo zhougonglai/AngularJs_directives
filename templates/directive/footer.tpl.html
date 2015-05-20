@@ -13,12 +13,12 @@
     <div class="u-ft-mask"
          ng-click="maskClickEventHandler()"
          ng-show="isMaskShow">
-        <div class="g-condition-tag">
+        <div class="g-condition-tag" ng-show="contentType === 'double'">
             <a ng-repeat="condition in conditionTags">{{condition.text}}</a>
         </div>
         <div class="g-ft-content-ctn">
             <div class="m-ft-content-ctn">
-                <ul class="m-ft-content-single" ng-show="contentType === 'single'">
+                <ul class="m-ft-content-single slide-up" ng-show="contentType === 'single'">
                     <li ng-class="{selected: singleItemActive === contentObj.active}"
                         ng-click="singleTypeClickEventHandler(contentObj, $event)"
                         ng-repeat="contentObj in contents">{{contentObj.text}}</li>
