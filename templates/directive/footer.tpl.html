@@ -34,7 +34,9 @@
                                 {{contentObj.text}}
                                 <div class="m-ft-content-db-r" ng-show="doubleItemActive === contentObj.active">
                                     <ul>
-                                        <li ng-repeat="condition in contentObj.condition">{{condition.text}}</li>
+                                        <li ng-class="{selected: conditionItemActive === condition.active}"
+                                            ng-click="doubleTypeRightListClickEventHandler(contentObj, condition, $event)"
+                                            ng-repeat="condition in contentObj.condition">{{condition.text}}</li>
                                     </ul>
                                 </div>
                             </li>

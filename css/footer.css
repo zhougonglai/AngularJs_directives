@@ -111,6 +111,9 @@ body {
   text-align: left;
   background-color: #ffffff;
 }
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l li > .m-ft-content-db-r li.selected {
+  color: #d30775;
+}
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt {
   position: relative;
   height: 44px;

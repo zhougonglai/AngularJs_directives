@@ -16,11 +16,17 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
             scope.isMaskShow = false
             scope.contentType = ''
             guid = ''
+            doubleLeftItemGuid = ''
 
             for btnObj, i in scope.btnList
                 btnObj.active = i
-                btnObj.guid = Mock.Random.guid()
-
+                btnObj.guid = Mock.Random.guid() ? new Date().getTime()
+                if btnObj.type is 'double'
+                    for leftItemObj, j in btnObj.content.list
+                        leftItemObj.guid = Mock.Random.guid() ? new Date().getTime()
+                        if angular.isArray leftItemObj.condition
+                            for condition, k in leftItemObj.condition
+                                condition.active = k
 
             scope.btnClickEventHandler = (btnObj)->
                 scope.contentType = btnObj.type
@@ -30,12 +36,14 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                         scope.singleItemActive = dataCache.get('singleItemActive' + guid) or 0
                         scope.contents = btnObj.content
                     when 'double'
-                        scope.doubleItemActive = dataCache.get('doubleItemActive' + guid) or 0
+                        scope.doubleItemActive = 0
+                        scope.conditionItemActive = 0
                         scope.contents = btnObj.content.list
                     else
                         break;
                 for contentObj, i in scope.contents
                     contentObj.active = i
+
                 if scope.active is btnObj.active
                     scope.isMaskShow = not scope.isMaskShow
                 else
@@ -51,12 +59,21 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 e.stopPropagation()
                 scope.singleItemActive = contentObj.active
                 dataCache.put('singleItemActive' + guid, contentObj.active)
+                scope.$emit('singleTypeSelectEvent', contentObj)
                 return
 
             scope.doubleTypeLeftListClickEventHandler = (contentObj, e)->
                 e.stopPropagation()
                 scope.doubleItemActive = contentObj.active
-                dataCache.put('doubleItemActive' + guid, contentObj.active)
+                dataCache.put('doubleLeftItem' + contentObj.guid, contentObj)
+                scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) or 0
+                scope.$emit('doubleTypeSelectEvent', contentObj)
+                return
+
+            scope.doubleTypeRightListClickEventHandler = (contentObj, condition, e) ->
+                e.stopPropagation()
+                scope.conditionItemActive = condition.active
+                dataCache.put('conditionItemActive' + contentObj.guid, condition.active)
                 return
             return
     }

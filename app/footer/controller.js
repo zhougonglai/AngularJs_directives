@@ -109,6 +109,12 @@
           }
         ]
       };
+      $scope.$on('singleTypeSelectEvent', function(e, data) {
+        $log.info(data);
+      });
+      $scope.$on('doubleTypeSelectEvent', function(e, data) {
+        $log.info(data);
+      });
     }
   ]);
 

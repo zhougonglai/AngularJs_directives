@@ -11,7 +11,7 @@
           config: '='
         },
         link: function(scope, element, attrs) {
-          var btnObj, config, guid, i, j, len, ref;
+          var btnObj, condition, config, doubleLeftItemGuid, guid, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4;
           config = scope.config;
           scope.btnList = config.btnList;
           scope.btnNum = scope.btnList.length;
@@ -19,14 +19,29 @@
           scope.isMaskShow = false;
           scope.contentType = '';
           guid = '';
+          doubleLeftItemGuid = '';
           ref = scope.btnList;
-          for (i = j = 0, len = ref.length; j < len; i = ++j) {
+          for (i = l = 0, len = ref.length; l < len; i = ++l) {
             btnObj = ref[i];
             btnObj.active = i;
-            btnObj.guid = Mock.Random.guid();
+            btnObj.guid = (ref1 = Mock.Random.guid()) != null ? ref1 : new Date().getTime();
+            if (btnObj.type === 'double') {
+              ref2 = btnObj.content.list;
+              for (j = m = 0, len1 = ref2.length; m < len1; j = ++m) {
+                leftItemObj = ref2[j];
+                leftItemObj.guid = (ref3 = Mock.Random.guid()) != null ? ref3 : new Date().getTime();
+                if (angular.isArray(leftItemObj.condition)) {
+                  ref4 = leftItemObj.condition;
+                  for (k = n = 0, len2 = ref4.length; n < len2; k = ++n) {
+                    condition = ref4[k];
+                    condition.active = k;
+                  }
+                }
+              }
+            }
           }
           scope.btnClickEventHandler = function(btnObj) {
-            var contentObj, k, len1, ref1;
+            var contentObj, len3, o, ref5;
             scope.contentType = btnObj.type;
             guid = btnObj.guid;
             switch (scope.contentType) {
@@ -35,15 +50,16 @@
                 scope.contents = btnObj.content;
                 break;
               case 'double':
-                scope.doubleItemActive = dataCache.get('doubleItemActive' + guid) || 0;
+                scope.doubleItemActive = 0;
+                scope.conditionItemActive = 0;
                 scope.contents = btnObj.content.list;
                 break;
               default:
                 break;
             }
-            ref1 = scope.contents;
-            for (i = k = 0, len1 = ref1.length; k < len1; i = ++k) {
-              contentObj = ref1[i];
+            ref5 = scope.contents;
+            for (i = o = 0, len3 = ref5.length; o < len3; i = ++o) {
+              contentObj = ref5[i];
               contentObj.active = i;
             }
             if (scope.active === btnObj.active) {
@@ -60,11 +76,19 @@
             e.stopPropagation();
             scope.singleItemActive = contentObj.active;
             dataCache.put('singleItemActive' + guid, contentObj.active);
+            scope.$emit('singleTypeSelectEvent', contentObj);
           };
           scope.doubleTypeLeftListClickEventHandler = function(contentObj, e) {
             e.stopPropagation();
             scope.doubleItemActive = contentObj.active;
-            dataCache.put('doubleItemActive' + guid, contentObj.active);
+            dataCache.put('doubleLeftItem' + contentObj.guid, contentObj);
+            scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) || 0;
+            scope.$emit('doubleTypeSelectEvent', contentObj);
+          };
+          scope.doubleTypeRightListClickEventHandler = function(contentObj, condition, e) {
+            e.stopPropagation();
+            scope.conditionItemActive = condition.active;
+            dataCache.put('conditionItemActive' + contentObj.guid, condition.active);
           };
         }
       };
