@@ -42,10 +42,14 @@ __指令列表__
 
 |指令名称|指令功能|完成度|
 |---|---|---|
-|datePicker|日期选择指令|100%|
-|cityPicker|城市选择指令|100%|
+|datePickerBase|基础日期选择指令|100%|
+|datePickerFlight|添加飞机票项目业务逻辑的日期选择指令|100%|
+|datePickerVisa|添加签证项目业务逻辑的日期选择指令|100%|
+|cityPicker|城市选择指令(火车票，飞机票，签证，三个项目三套模版数据)|100%|
 |swiperList|条目左滑操作指令|90%|
 |modalDialog|模态框指令|90%|
+|footer|公共底部|90%|
+|tab|tab页切换|90%|
 |rollerPicker|类似ios的滚筒日期城市选择指令|0%|
 
 
