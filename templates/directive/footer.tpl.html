@@ -41,7 +41,10 @@
                                     <ul>
                                         <li ng-class="{selected: conditionItemActive === condition.active}"
                                             ng-click="doubleTypeRightListClickEventHandler(contentObj, condition, $event)"
-                                            ng-repeat="condition in contentObj.condition">{{condition.text}}</li>
+                                            ng-repeat="condition in contentObj.condition">
+                                            {{condition.text}}
+                                            <i ng-show="conditionItemActive === condition.active"></i>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>

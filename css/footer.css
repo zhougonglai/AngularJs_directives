@@ -169,19 +169,36 @@ body {
   left: 130px;
   right: 0;
   bottom: 0;
-  min-width: 300px;
   background-color: #ffffff;
   color: #666666;
   overflow-x: hidden;
   overflow-y: auto;
 }
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l > ul > li > .m-ft-content-db-r li {
+  position: relative;
   text-align: left;
   background-color: #ffffff;
+  border-top: none;
   border-bottom: 1px solid #ddd;
 }
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l > ul > li > .m-ft-content-db-r li.selected {
   color: #d30775;
+}
+.g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-l > ul > li > .m-ft-content-db-r li > i {
+  position: absolute;
+  display: block;
+  top: 50%;
+  right: 10px;
+  width: 8px;
+  height: 16px;
+  margin-top: -12px;
+  border-left: 1px solid #D30775;
+  border-top: 1px solid #D30775;
+  -webkit-transform: rotate(-125deg);
+  -moz-transform: rotate(-125deg);
+  -ms-transform: rotate(-125deg);
+  -o-transform: rotate(-125deg);
+  transform: rotate(-125deg);
 }
 .g-ft-ctn .g-ft-content-ctn > .m-ft-content-ctn > .m-ft-content-double > .m-ft-content-db-tt {
   position: relative;
