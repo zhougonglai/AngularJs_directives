@@ -125,9 +125,9 @@
             function handle(instance, changeObj) {
                 var tpl;
                 try {
-                    tpl = instance.getValue()
+                    tpl = instance.getValue();
                     tpl = tpl.replace(/^([\r\n]*)/i, '')
-                        .replace(/([\r\n]*$)/i, '')
+                        .replace(/([\r\n]*$)/i, '');
                     if (/^\s*[\[\{\(]/.test(tpl)) {
                         tpl = new Function('return ' + instance.getValue());
                         tpl = tpl()
@@ -136,8 +136,8 @@
                     console.error(error.stack);
                     tpl = error.toString()
                 }
-                var data = Mock.mock(tpl)
-                data = JSON.stringify(data, null, 4)
+                var data = Mock.mock(tpl);
+                data = JSON.stringify(data, null, 4);
                 result.setValue(data);
                 return handle
             }

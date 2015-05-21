@@ -51,8 +51,8 @@
       </tr>
     </thead>
     <tbody>
-      {{#each list}}
-      <tr class="tr-parent bold">
+    {{#each; list}}
+    <tr class="tr-parent bold">
         <td><i mx-click="toggle" class="J_expendCollapse icon-expend"></i></td>
         <td>{{id}} {{分组}}</td>
         <td>
@@ -69,8 +69,8 @@
         <td>
         </td>
       </tr>
-      {{#each children}}
-      <tr class="tr-child">
+    {{#each; children}}
+    <tr class="tr-child">
         <td></td>
         <td>{{渠道}}</td>
         <td>

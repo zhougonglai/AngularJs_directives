@@ -1,7 +1,7 @@
 // var Mock = require('./mock')
 // var Util = require('./util')
 
-var Util = Mock.Util
+var Util = Mock.Util;
 
 // BEGIN(BROWSER)
 
@@ -76,11 +76,11 @@ var FakeXMLHttpRequest = (function() {
         LOADING: 3,
         // The data transfer has been completed or something went wrong during the transfer (e.g. infinite redirects).
         DONE: 4
-    }
+    };
 
-    var XHR_EVENTS = 'readystatechange loadstart progress abort error load timeout loadend'.split(' ')
+    var XHR_EVENTS = 'readystatechange loadstart progress abort error load timeout loadend'.split(' ');
 
-    var XHR_RESPONSE_PROPERTIES = 'readyState responseURL status statusText responseType response responseText responseXML'.split(' ')
+    var XHR_RESPONSE_PROPERTIES = 'readyState responseURL status statusText responseType response responseText responseXML'.split(' ');
 
     // https://github.com/trek/FakeXMLHttpRequest/blob/master/fake_xml_http_request.app#L32
     var HTTP_STATUS_CODES = {
@@ -125,20 +125,20 @@ var FakeXMLHttpRequest = (function() {
         503: "Service Unavailable",
         504: "Gateway Timeout",
         505: "HTTP Version Not Supported"
-    }
+    };
 
     // Inspired by jQuery
     function createOriginalXMLHttpRequest() {
         var isLocal = function() {
-            var rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/
-            var rurl = /^([\w.+-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/
-            var ajaxLocation = location.href
-            var ajaxLocParts = rurl.exec(ajaxLocation.toLowerCase()) || []
+            var rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/;
+            var rurl = /^([\w.+-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/;
+            var ajaxLocation = location.href;
+            var ajaxLocParts = rurl.exec(ajaxLocation.toLowerCase()) || [];
             return rlocalProtocol.test(ajaxLocParts[1])
-        }()
+        }();
 
         return window.ActiveXObject ?
-            (!isLocal && createStandardXHR() || createActiveXHR()) : createStandardXHR()
+            (!isLocal && createStandardXHR() || createActiveXHR()) : createStandardXHR();
 
         function createStandardXHR() {
             try {
@@ -159,7 +159,7 @@ var FakeXMLHttpRequest = (function() {
     function find(options) {
 
         for (var sUrlType in Mock._mocked) {
-            var item = Mock._mocked[sUrlType]
+            var item = Mock._mocked[sUrlType];
             if (
                 (!item.rurl || match(item.rurl, options.url)) &&
                 (!item.rtype || match(item.rtype, options.type.toLowerCase()))
@@ -191,22 +191,22 @@ var FakeXMLHttpRequest = (function() {
 
     function FakeXMLHttpRequest() {
         // 冒牌 XHR 对象
-        var fake = this
+        var fake = this;
 
         // 创建原生 XHR 对象
-        var xhr = createOriginalXMLHttpRequest()
+        var xhr = createOriginalXMLHttpRequest();
 
         // 初始化 custom 对象，用于存储自定义属性
         fake.custom = {
             xhr: xhr,
             events: {},
             requestHeaders: {}
-        }
+        };
 
         // 初始化所有事件，用于监听原生 XHR 对象的事件
         for (var i = 0; i < XHR_EVENTS.length; i++) {
-            xhr.addEventListener(XHR_EVENTS[i], handle)
-            xhr['on' + XHR_EVENTS[i]] = onhandle
+            xhr.addEventListener(XHR_EVENTS[i], handle);
+            xhr['on' + XHR_EVENTS[i]] = onhandle;
 
             fake['on' + XHR_EVENTS[i]] = function(event) {
                 console.log('[EVENT]   ', event.type, fake.readyState)
@@ -214,13 +214,13 @@ var FakeXMLHttpRequest = (function() {
         }
 
         function handle(event) {
-            console.log('[EVENT]   ', event.type, xhr.readyState)
+            console.log('[EVENT]   ', event.type, xhr.readyState);
 
-            syncProperties()
+            syncProperties();
 
-            var handles = fake.custom.events[event.type] || []
+            var handles = fake.custom.events[event.type] || [];
             for (var i = 0; i < handles.length; i++) {
-                if (typeof handles[i] !== "function") continue
+                if (typeof handles[i] !== "function") continue;
                 handles[i].call(fake, event)
             }
         }
@@ -228,9 +228,9 @@ var FakeXMLHttpRequest = (function() {
         function onhandle(event) {
             // console.log('[ON_EVENT]', event.type, xhr.readyState)
 
-            syncProperties()
+            syncProperties();
 
-            var ontype = 'on' + event.type
+            var ontype = 'on' + event.type;
             if (fake[ontype]) fake[ontype].call(fake, event)
         }
 
@@ -241,13 +241,13 @@ var FakeXMLHttpRequest = (function() {
         }
     }
 
-    Util.extend(FakeXMLHttpRequest, XHR_STATES)
-    Util.extend(FakeXMLHttpRequest.prototype, XHR_STATES)
+    Util.extend(FakeXMLHttpRequest, XHR_STATES);
+    Util.extend(FakeXMLHttpRequest.prototype, XHR_STATES);
 
     // 标记运行模式为 Mock 模式
-    FakeXMLHttpRequest.prototype.mock = false
+    FakeXMLHttpRequest.prototype.mock = false;
     // 标记当前对象为 FakeXMLHttpRequest
-    FakeXMLHttpRequest.prototype.fake = true
+    FakeXMLHttpRequest.prototype.fake = true;
 
     // Request 相关的属性和方法
     Util.extend(FakeXMLHttpRequest.prototype, {
@@ -258,28 +258,28 @@ var FakeXMLHttpRequest = (function() {
                 async: typeof async === "boolean" ? async : true,
                 username: username,
                 password: password
-            })
+            });
 
             var options = {
                 url: url,
                 type: method
-            }
-            var item = find(options)
+            };
+            var item = find(options);
 
             if (!item) {
-                var xhr = this.custom.xhr
-                if (username) xhr.open(method, url, async, username, password)
+                var xhr = this.custom.xhr;
+                if (username) xhr.open(method, url, async, username, password);
                 else xhr.open(method, url, async)
             }
 
-            this.mock = true
+            this.mock = true;
 
-            debugger
+            debugger;
 
             // readyStateChange(this, FakeXMLHttpRequest.OPENED)
         },
         setRequestHeader: function setRequestHeader(name, value) {
-            this.custom.xhr.setRequestHeader(name, value)
+            this.custom.xhr.setRequestHeader(name, value);
             /*var requestHeaders = this.custom.requestHeaders
             if (requestHeaders[name]) requestHeaders[name] += "," + value;
             else requestHeaders[name] = value;*/
@@ -291,28 +291,28 @@ var FakeXMLHttpRequest = (function() {
             var options = {
                 url: this.custom.url,
                 type: this.custom.method
-            }
-            var item = find(options)
+            };
+            var item = find(options);
 
             if (!item) {
-                var xhr = this.custom.xhr
-                xhr.send(data)
+                var xhr = this.custom.xhr;
+                xhr.send(data);
                 return
             }
 
-            this.mock = true
+            this.mock = true;
 
-            this.dispatchEvent(new Event("loadstart", false, false, this))
-            this.readyStateChange(FakeXMLHttpRequest.HEADERS_RECEIVED)
-            this.readyStateChange(FakeXMLHttpRequest.LOADING)
+            this.dispatchEvent(new Event("loadstart", false, false, this));
+            this.readyStateChange(FakeXMLHttpRequest.HEADERS_RECEIVED);
+            this.readyStateChange(FakeXMLHttpRequest.LOADING);
 
-            this.responseText = JSON.stringify(convert(item, options), null, 4)
+            this.responseText = JSON.stringify(convert(item, options), null, 4);
 
             this.readyStateChange(FakeXMLHttpRequest.DONE)
         },
         abort: function abort() {
-            var xhr = this.custom.xhr
-            xhr.abort()
+            var xhr = this.custom.xhr;
+            xhr.abort();
             /*
             readyStateChange(this, FakeXMLHttpRequest.DONE)
             this.readyState = FakeXMLHttpRequest.UNSENT
@@ -325,7 +325,7 @@ var FakeXMLHttpRequest = (function() {
             }
             */
         }
-    })
+    });
 
     // Response 相关的属性和方法
     Util.extend(FakeXMLHttpRequest.prototype, {
@@ -333,7 +333,7 @@ var FakeXMLHttpRequest = (function() {
         status: FakeXMLHttpRequest.UNSENT,
         statusText: '',
         getResponseHeader: function getResponseHeader(name) {
-            return this.custom.xhr.getResponseHeader(name)
+            return this.custom.xhr.getResponseHeader(name);
 
             /*if (this.readyState < FakeXMLHttpRequest.HEADERS_RECEIVED) return null
 
@@ -348,7 +348,7 @@ var FakeXMLHttpRequest = (function() {
             return null*/
         },
         getAllResponseHeaders: function getAllResponseHeaders() {
-            return this.custom.xhr.getAllResponseHeaders()
+            return this.custom.xhr.getAllResponseHeaders();
 
             /*if (this.readyState < FakeXMLHttpRequest.HEADERS_RECEIVED) {
                 return ""
@@ -367,18 +367,18 @@ var FakeXMLHttpRequest = (function() {
         response: null,
         responseText: '',
         responseXML: null
-    })
+    });
 
     // EventTarget
     Util.extend(FakeXMLHttpRequest.prototype, {
         addEventListene: function addEventListene(type, handle) {
-            if (!this.custom.events[type]) this.custom.events[type] = []
+            if (!this.custom.events[type]) this.custom.events[type] = [];
 
-            var handles = this.custom.events[type]
+            var handles = this.custom.events[type];
             handles.push(handle)
         },
         removeEventListener: function removeEventListener(type, handle) {
-            var handles = this.custom.events[type] || []
+            var handles = this.custom.events[type] || [];
             for (var i = 0, l = handles.length; i < l; ++i) {
                 if (handles[i] === handle) {
                     return handles.splice(i, 1);
@@ -386,14 +386,14 @@ var FakeXMLHttpRequest = (function() {
             }
         },
         dispatchEvent: function dispatchEvent(event) {
-            var type = event.type
-            var handles = this.custom.events[type] || []
+            var type = event.type;
+            var handles = this.custom.events[type] || [];
             for (var i = 0; i < handles.length; i++) {
-                if (typeof handles[i] !== "function") continue
+                if (typeof handles[i] !== "function") continue;
                 handles[i].call(this, event)
             }
 
-            var ontype = 'on' + event.type
+            var ontype = 'on' + event.type;
             if (this[ontype]) this[ontype](event)
         },
         readyStateChange: function readyStateChange(state) {
@@ -412,10 +412,10 @@ var FakeXMLHttpRequest = (function() {
                 this.dispatchEvent(new Event("loadend", false, false, this));
             }
         }
-    })
+    });
 
     return FakeXMLHttpRequest
 
-})()
+})();
 
 // END(BROWSER)

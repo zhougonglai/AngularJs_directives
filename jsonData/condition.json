@@ -1,0 +1,306 @@
+{
+  "code": "1",
+  "data": {
+    "conditionsList": [
+      {
+        "conditionsList": [
+          {
+            "code": "",
+            "value": "不限"
+          },
+          {
+            "code": "routeNum=2",
+            "value": "2天"
+          },
+          {
+            "code": "routeNum=3",
+            "value": "3天"
+          },
+          {
+            "code": "routeNum=4",
+            "value": "4天"
+          },
+          {
+            "code": "routeNum=5",
+            "value": "5天"
+          }
+        ],
+        "conditionsType": "游玩天数"
+      },
+      {
+        "conditionsList": [
+          {
+            "code": "",
+            "value": "不限"
+          },
+          {
+            "code": "destId=267",
+            "value": "海南"
+          },
+          {
+            "code": "destId=272",
+            "value": "三亚"
+          },
+          {
+            "code": "destId=231978",
+            "value": "海棠湾镇"
+          },
+          {
+            "code": "destId=496",
+            "value": "陵水"
+          }
+        ],
+        "conditionsType": "包含地区"
+      },
+      {
+        "conditionsList": [
+          {
+            "code": "",
+            "value": "不限"
+          },
+          {
+            "code": "viewPiont=10600417",
+            "value": "三亚梦幻水上乐园"
+          },
+          {
+            "code": "viewPiont=153217",
+            "value": "亚龙湾热带天堂森林公园"
+          },
+          {
+            "code": "viewPiont=101548",
+            "value": "蜈支洲岛度假中心"
+          },
+          {
+            "code": "viewPiont=100530",
+            "value": "南山寺"
+          },
+          {
+            "code": "viewPiont=101681",
+            "value": "鹿回头山顶公园"
+          }
+        ],
+        "conditionsType": "景点"
+      },
+      {
+        "conditionsList": [
+          {
+            "code": "",
+            "value": "不限"
+          },
+          {
+            "code": "subjectId=87",
+            "value": "海滨岛屿"
+          },
+          {
+            "code": "subjectId=86",
+            "value": "温泉"
+          }
+        ],
+        "conditionsType": "主题"
+      },
+      {
+        "conditionsList": [
+          {
+            "code": "",
+            "value": "不限"
+          },
+          {
+            "code": "price=(0,1000)",
+            "value": "1000元以内"
+          },
+          {
+            "code": "price=1000,3000",
+            "value": "1000-3000元"
+          },
+          {
+            "code": "price=3001,5000",
+            "value": "3001-5000元"
+          },
+          {
+            "code": "price=(5000",
+            "value": "5000元以上"
+          }
+        ],
+        "conditionsType": "价格范围"
+      }
+    ],
+    "lastPage": false,
+    "routeList": [
+      {
+        "cashBack": 0,
+        "checkInInfo": "",
+        "cmtNum": 0,
+        "commentGood": "100%",
+        "coupon": "",
+        "fromDest": "",
+        "marketPrice": 0,
+        "middleImage": "http://pic.lvmama.com/pics//uploads/pc/place2/2015-04-05/0c7262d1-f94a-418a-93f5-091bdcc9a136_480_.jpg",
+        "outingNum": "",
+        "productId": 415697,
+        "productName": "【驴悦推荐】【三亚自由行】三亚红树林酒店5天4晚※2晚三亚湾红树林2晚亚龙湾红树林,赠水乐园门票,自助餐",
+        "productType": "自由行",
+        "promotionCNName": [],
+        "promotionFlag": true,
+        "promotionTypes": ["more_order_more_favorable"],
+        "recommend": false,
+        "routeDataFrom": "",
+        "routeProductType": "AROUND",
+        "sellPrice": 1501,
+        "smallImage": "",
+        "tagNames": [],
+        "tags": [],
+        "tagsDescript": "",
+        "tagsGroup": "",
+        "toDest": "",
+        "topic": "海滨岛屿 ",
+        "visitDay": "5"
+      },
+      {
+        "cashBack": 0,
+        "checkInInfo": "",
+        "cmtNum": 0,
+        "commentGood": "99.3%",
+        "coupon": "",
+        "fromDest": "",
+        "marketPrice": 0,
+        "middleImage": "http://pic.lvmama.com/pics//uploads/pc/place2/2014-10-16/1413461623089_480_.jpg",
+        "outingNum": "",
+        "productId": 227972,
+        "productName": "【驴悦推荐】三亚湾国光豪生度假酒店5天4晚自由行",
+        "productType": "自由行",
+        "promotionCNName": [],
+        "promotionFlag": true,
+        "promotionTypes": [
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "more_order_more_favorable",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE"
+        ],
+        "recommend": false,
+        "routeDataFrom": "",
+        "routeProductType": "INLAND",
+        "sellPrice": 2560,
+        "smallImage": "",
+        "tagNames": [],
+        "tags": [],
+        "tagsDescript": "",
+        "tagsGroup": "",
+        "toDest": "",
+        "topic": "海滨岛屿 ",
+        "visitDay": "5"
+      },
+      {
+        "cashBack": 0,
+        "checkInInfo": "",
+        "cmtNum": 0,
+        "commentGood": "100%",
+        "coupon": "",
+        "fromDest": "",
+        "marketPrice": 0,
+        "middleImage": "http://pic.lvmama.com/pics//uploads/pc/place2/2015-04-05/0c7262d1-f94a-418a-93f5-091bdcc9a136_480_.jpg",
+        "outingNum": "",
+        "productId": 419811,
+        "productName": "【三亚自由行】三亚湾红树林木棉酒店5天4晚自由行",
+        "productType": "自由行",
+        "promotionCNName": [],
+        "promotionFlag": true,
+        "promotionTypes": [
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "more_order_more_favorable",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE"
+        ],
+        "recommend": false,
+        "routeDataFrom": "",
+        "routeProductType": "INLAND",
+        "sellPrice": 2200,
+        "smallImage": "",
+        "tagNames": [],
+        "tags": [],
+        "tagsDescript": "",
+        "tagsGroup": "",
+        "toDest": "",
+        "topic": "海滨岛屿 ",
+        "visitDay": "5"
+      },
+      {
+        "cashBack": 0,
+        "checkInInfo": "",
+        "cmtNum": 0,
+        "commentGood": "100%",
+        "coupon": "",
+        "fromDest": "",
+        "marketPrice": 0,
+        "middleImage": "http://pic.lvmama.com/pics//uploads/pc/place2/2015-04-07/fc7749a4-90a8-4d0e-a77b-6c82074702ca_480_.jpg",
+        "outingNum": "",
+        "productId": 412418,
+        "productName": "【三亚自由行】玉华苑海景酒店5天4晚",
+        "productType": "自由行",
+        "promotionCNName": [],
+        "promotionFlag": true,
+        "promotionTypes": ["more_order_more_favorable"],
+        "recommend": false,
+        "routeDataFrom": "",
+        "routeProductType": "INLAND",
+        "sellPrice": 1900,
+        "smallImage": "",
+        "tagNames": [],
+        "tags": [],
+        "tagsDescript": "",
+        "tagsGroup": "",
+        "toDest": "",
+        "topic": "海滨岛屿 ",
+        "visitDay": "5"
+      },
+      {
+        "cashBack": 0,
+        "checkInInfo": "",
+        "cmtNum": 0,
+        "commentGood": "99.4%",
+        "coupon": "",
+        "fromDest": "",
+        "marketPrice": 0,
+        "middleImage": "http://pic.lvmama.com/pics//uploads/pc/place2/2014-10-16/1413460638548_480_.jpg",
+        "outingNum": "",
+        "productId": 227980,
+        "productName": "【三亚自由行】三亚湾假日酒店5天4晚",
+        "productType": "自由行",
+        "promotionCNName": [],
+        "promotionFlag": true,
+        "promotionTypes": [
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE",
+          "more_order_more_favorable",
+          "IMMEDIATELY_FAVORABLE",
+          "IMMEDIATELY_FAVORABLE"
+        ],
+        "recommend": false,
+        "routeDataFrom": "",
+        "routeProductType": "INLAND",
+        "sellPrice": 2300,
+        "smallImage": "",
+        "tagNames": [],
+        "tags": [],
+        "tagsDescript": "",
+        "tagsGroup": "",
+        "toDest": "",
+        "topic": "海滨岛屿 ",
+        "visitDay": "5"
+      }
+    ]
+  },
+  "errorMessage": "",
+  "message": "",
+  "version": "96131950645a1ad7b89230cb33f5745b"
+}

@@ -31,7 +31,7 @@ var rkey = /(.+)\|(?:\+(\d+)|([\+\-]?\d+-?[\+\-]?\d*)?(?:\.(\d+-?\d*))?)/,
     rrange = /([\+\-]?\d+)-?([\+\-]?\d+)?/,
     rplaceholder = /\\*@([^@#%&()\?\s\/\.]+)(?:\((.*?)\))?/g; // (^(?:.|\r|\n)*?)
 
-Mock.extend = Util.extend
+Mock.extend = Util.extend;
 
 /*
     ## Mock
@@ -53,23 +53,23 @@ Mock.mock = function(rurl, rtype, template) {
     }
     // Mock.mock(rurl, template)
     if (arguments.length === 2) {
-        template = rtype
+        template = rtype;
         rtype = undefined
     }
     Mock._mocked[rurl + (rtype || '')] = {
         rurl: rurl,
         rtype: rtype,
         template: template
-    }
+    };
     return Mock
-}
+};
 
 var Handle = {
     extend: Util.extend
-}
+};
 
 Handle.rule = function(name) {
-    name = (name || '') + ''
+    name = (name || '') + '';
 
     var parameters = (name || '').match(rkey),
 
@@ -99,7 +99,7 @@ Handle.rule = function(name) {
         dcount: dcount,
         point: point
     }
-}
+};
 
 /*
     template        属性值（即数据模板）
@@ -114,9 +114,9 @@ Handle.rule = function(name) {
         root, templateRoot
 */
 Handle.gen = function(template, name, context) {
-    name = name = (name || '') + ''
+    name = name = (name || '') + '';
 
-    context = context || {}
+    context = context || {};
     context = {
         // 当前访问路径，只有属性名，不包括生成规则
         path: context.path || [],
@@ -127,11 +127,11 @@ Handle.gen = function(template, name, context) {
         templateCurrentContext: context.templateCurrentContext || template,
         root: context.root,
         templateRoot: context.templateRoot
-    }
+    };
     // console.log('path:', path.join('.'), template)
 
-    var rule = Handle.rule(name)
-    var type = Util.type(template)
+    var rule = Handle.rule(name);
+    var type = Util.type(template);
 
     if (Handle[type]) {
         return Handle[type]({
@@ -151,7 +151,7 @@ Handle.gen = function(template, name, context) {
         })
     }
     return template
-}
+};
 
 Handle.extend({
     array: function(options) {
@@ -160,32 +160,32 @@ Handle.extend({
         // 'arr': [{ 'email': '@EMAIL' }, { 'email': '@EMAIL' }]
         if (!options.rule.parameters) {
             for (i = 0; i < options.template.length; i++) {
-                options.context.path.push(i)
+                options.context.path.push(i);
                 result.push(
                     Handle.gen(options.template[i], i, {
                         currentContext: result,
                         templateCurrentContext: options.template,
                         path: options.context.path
                     })
-                )
+                );
                 options.context.path.pop()
             }
         } else {
             // 'method|1': ['GET', 'POST', 'HEAD', 'DELETE']
             if (options.rule.count === 1 && options.template.length > 1) {
                 // fix #17
-                options.context.path.push(options.name)
+                options.context.path.push(options.name);
                 result = Random.pick(Handle.gen(options.template, undefined, {
                     currentContext: result,
                     templateCurrentContext: options.template,
                     path: options.context.path
-                }))
+                }));
                 options.context.path.pop()
             } else {
                 // 'data|1-10': [{}]
                 for (i = 0; i < options.rule.count; i++) {
                     // 'data|1-10': [{}, {}]
-                    j = 0
+                    j = 0;
                     do {
                         // 'data|1-10': []
                         result.push(Handle.gen(options.template[j++]))
@@ -201,29 +201,29 @@ Handle.extend({
 
         // 'obj|min-max': {}
         if (options.rule.min) {
-            keys = Util.keys(options.template)
-            keys = Random.shuffle(keys)
-            keys = keys.slice(0, options.rule.count)
+            keys = Util.keys(options.template);
+            keys = Random.shuffle(keys);
+            keys = keys.slice(0, options.rule.count);
             for (i = 0; i < keys.length; i++) {
-                key = keys[i]
-                parsedKey = key.replace(rkey, '$1')
-                options.context.path.push(parsedKey)
+                key = keys[i];
+                parsedKey = key.replace(rkey, '$1');
+                options.context.path.push(parsedKey);
                 result[parsedKey] = Handle.gen(options.template[key], key, {
                     currentContext: result,
                     templateCurrentContext: options.template,
                     path: options.context.path
-                })
+                });
                 options.context.path.pop()
             }
 
         } else {
             // 'obj': {}
-            keys = []
-            fnKeys = [] // #25 改变了非函数属性的顺序，查找起来不方便
+            keys = [];
+            fnKeys = []; // #25 改变了非函数属性的顺序，查找起来不方便
             for (key in options.template) {
                 (typeof options.template[key] === 'function' ? fnKeys : keys).push(key)
             }
-            keys = keys.concat(fnKeys)
+            keys = keys.concat(fnKeys);
 
             /*
             会改变非函数属性的顺序
@@ -238,17 +238,17 @@ Handle.extend({
             */
 
             for (i = 0; i < keys.length; i++) {
-                key = keys[i]
-                parsedKey = key.replace(rkey, '$1')
-                options.context.path.push(parsedKey)
+                key = keys[i];
+                parsedKey = key.replace(rkey, '$1');
+                options.context.path.push(parsedKey);
                 result[parsedKey] = Handle.gen(options.template[key], key, {
                     currentContext: result,
                     templateCurrentContext: options.template,
                     path: options.context.path
-                })
-                options.context.path.pop()
+                });
+                options.context.path.pop();
                 // 'id|+1': 1
-                inc = key.match(rkey)
+                inc = key.match(rkey);
                 if (inc && inc[2] && Util.type(options.template[key]) === 'number') {
                     options.template[key] += parseInt(inc[2], 10)
                 }
@@ -259,14 +259,14 @@ Handle.extend({
     number: function(options) {
         var result, parts, i;
         if (options.rule.point) { // float
-            options.template += ''
-            parts = options.template.split('.')
+            options.template += '';
+            parts = options.template.split('.');
             // 'float1|.1-10': 10,
             // 'float2|1-100.1-10': 1,
             // 'float3|999.1-10': 1,
             // 'float4|.3-10': 123.123,
-            parts[0] = options.rule.range ? options.rule.count : parts[0]
-            parts[1] = (parts[1] || '').slice(0, options.rule.dcount)
+            parts[0] = options.rule.range ? options.rule.count : parts[0];
+            parts[1] = (parts[1] || '').slice(0, options.rule.dcount);
             for (i = 0; parts[1].length < options.rule.dcount; i++) {
                 parts[1] += Random.character('number')
             }
@@ -281,7 +281,7 @@ Handle.extend({
         var result;
         // 'prop|multiple': false, 当前值是相反值的概率倍数
         // 'prop|probability-probability': false, 当前值与相反值的概率
-        result = options.rule.parameters ? Random.bool(options.rule.min, options.rule.max, options.template) : options.template
+        result = options.rule.parameters ? Random.bool(options.rule.min, options.rule.max, options.template) : options.template;
         return result
     },
     string: function(options) {
@@ -293,19 +293,19 @@ Handle.extend({
                 result += options.template
             }
             // 'email|1-10': '@EMAIL, ',
-            placeholders = result.match(rplaceholder) || [] // A-Z_0-9 > \w_
+            placeholders = result.match(rplaceholder) || []; // A-Z_0-9 > \w_
             for (i = 0; i < placeholders.length; i++) {
-                ph = placeholders[i]
+                ph = placeholders[i];
                 // TODO 只有转义斜杠是偶数时，才不需要解析占位符？
                 if (/^\\/.test(ph)) {
-                    placeholders.splice(i--, 1)
+                    placeholders.splice(i--, 1);
                     continue
                 }
-                phed = Handle.placeholder(ph, options.context.currentContext, options.context.templateCurrentContext)
+                phed = Handle.placeholder(ph, options.context.currentContext, options.context.templateCurrentContext);
                 // 只有一个占位符，并且没有其他字符
                 if (placeholders.length === 1 && ph === result && typeof phed !== typeof result) { // 
-                    result = phed
-                    break
+                    result = phed;
+                    break;
 
                     // if (Util.isNumeric(phed)) {
                     //     result = parseFloat(phed, 10)
@@ -330,7 +330,7 @@ Handle.extend({
     'function': function(options) {
         return options.template.call(options.context.currentContext)
     }
-})
+});
 
 Handle.extend({
     _all: function() {
@@ -340,12 +340,12 @@ Handle.extend({
     },
     placeholder: function(placeholder, obj, templateContext) {
         // 1 key, 2 params
-        rplaceholder.exec('')
+        rplaceholder.exec('');
         var parts = rplaceholder.exec(placeholder),
             key = parts && parts[1],
             lkey = key && key.toLowerCase(),
             okey = this._all()[lkey],
-            params = parts && parts[2] || ''
+            params = parts && parts[2] || '';
 
         // 解析占位符的参数
         try {
@@ -366,7 +366,7 @@ Handle.extend({
         }
 
         // 占位符优先引用数据模板中的属性
-        if (obj && (key in obj)) return obj[key]
+        if (obj && (key in obj)) return obj[key];
 
         if (templateContext &&
             (typeof templateContext === 'object') &&
@@ -376,28 +376,28 @@ Handle.extend({
             templateContext[key] = Handle.gen(templateContext[key], key, {
                 currentContext: obj,
                 templateCurrentContext: templateContext
-            })
+            });
             return templateContext[key]
         }
 
-        if (!(key in Random) && !(lkey in Random) && !(okey in Random)) return placeholder
+        if (!(key in Random) && !(lkey in Random) && !(okey in Random)) return placeholder;
 
         for (var i = 0; i < params.length; i++) {
-            rplaceholder.exec('')
+            rplaceholder.exec('');
             if (rplaceholder.test(params[i])) {
                 params[i] = Handle.placeholder(params[i], obj)
             }
         }
 
-        var handle = Random[key] || Random[lkey] || Random[okey]
+        var handle = Random[key] || Random[lkey] || Random[okey];
         switch (Util.type(handle)) {
             case 'array':
-                return Random.pick(handle)
+                return Random.pick(handle);
             case 'function':
-                var re = handle.apply(Random, params)
-                if (re === undefined) re = ''
+                var re = handle.apply(Random, params);
+                if (re === undefined) re = '';
                 return re
         }
     }
-})
+});
 // END(BROWSER)

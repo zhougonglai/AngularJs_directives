@@ -11,7 +11,7 @@
           config: '='
         },
         link: function(scope, element, attrs) {
-          var btnObj, condition, config, emitData, exportData, guid, hideContent, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4, setConditionTag;
+          var btnObj, condition, config, contentObjGuidList, emitData, exportData, guid, hideContent, i, j, k, l, leftItemObj, len, len1, len2, m, n, ref, ref1, ref2, ref3, ref4, setConditionTag;
           config = scope.config;
           scope.btnList = config.btnList;
           scope.btnNum = scope.btnList.length;
@@ -19,6 +19,8 @@
           scope.isMaskShow = false;
           scope.contentType = '';
           scope.conditionTags = [];
+          scope.contentList = [];
+          contentObjGuidList = [];
           guid = '';
           exportData = null;
           ref = scope.btnList;
@@ -92,9 +94,11 @@
             scope.conditionItemActive = dataCache.get('conditionItemActive' + contentObj.guid) || 0;
           };
           scope.doubleTypeRightListClickEventHandler = function(contentObj, condition, e) {
+            var elem, len3, o, ref5;
             e.stopPropagation();
             scope.conditionItemActive = condition.active;
             dataCache.put('conditionItemActive' + contentObj.guid, condition.active);
+            contentObjGuidList.push(contentObj.guid);
             dataCache.put('doubleItem' + guid, {
               doubleLeftItem: contentObj,
               conditionItemActive: condition.active
@@ -103,16 +107,60 @@
               leftItem: contentObj,
               rightItem: condition
             };
-            setConditionTag(condition);
+            ref5 = contentObj.condition;
+            for (i = o = 0, len3 = ref5.length; o < len3; i = ++o) {
+              elem = ref5[i];
+              if (elem.code !== '') {
+                contentObj.conditionCode = elem.code.slice(0, elem.code.indexOf('='));
+              }
+            }
+            setConditionTag(contentObj, condition);
           };
-          setConditionTag = function(condition) {
-            if (scope.conditionTags.indexOf(condition) === -1) {
-              scope.conditionTags.push(condition);
+          setConditionTag = function(contentObj, condition) {
+            var code, codeIndex, codeList, conditionCode, conditionIndex, elem, index, len3, o, ref5;
+            codeList = [];
+            if (scope.conditionTags.length > 0) {
+              conditionIndex = scope.conditionTags.indexOf(condition);
+              if (conditionIndex !== -1) {
+                return;
+              } else {
+                ref5 = scope.conditionTags;
+                for (i = o = 0, len3 = ref5.length; o < len3; i = ++o) {
+                  elem = ref5[i];
+                  code = elem.code.slice(0, elem.code.indexOf('='));
+                  codeList.push(code);
+                }
+                if (condition.code !== '') {
+                  conditionCode = condition.code.slice(0, condition.code.indexOf('='));
+                  codeIndex = codeList.indexOf(conditionCode);
+                  if (codeIndex === -1) {
+                    scope.conditionTags.push(condition);
+                  } else {
+                    scope.conditionTags[codeIndex] = condition;
+                  }
+                } else {
+                  conditionCode = contentObj.conditionCode;
+                  index = codeList.indexOf(conditionCode);
+                  scope.conditionTags.splice(index, 1);
+                }
+              }
+            } else {
+              if (condition.code !== '') {
+                scope.conditionTags.push(condition);
+              } else {
+                return;
+              }
             }
           };
           scope.emptyHandler = function(e) {
+            var len3, o;
             e.stopPropagation();
             scope.conditionTags.length = 0;
+            scope.conditionItemActive = 0;
+            for (i = o = 0, len3 = contentObjGuidList.length; o < len3; i = ++o) {
+              guid = contentObjGuidList[i];
+              dataCache.put('conditionItemActive' + guid, 0);
+            }
           };
           scope.stopPropagation = function(e) {
             e.stopPropagation();

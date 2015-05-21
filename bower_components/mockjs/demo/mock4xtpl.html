@@ -36,7 +36,7 @@
         <div class="window float-left">
             <textarea id="editor">
 {{#with data}}
-  {{#if n > ../limit/5.0}}
+  {{#if; n >; ../limit/5.0; ../limit/5.0; ../limit/5.0}}
     {{n+1.0}}
   {{/if}}
 {{/with}}
@@ -45,12 +45,7 @@
   {{author}}: {{body}}
 {{/each}}
 
-<!-- Mock
-{
-  author: '@NAME',
-  body: '@SENTENCE'
-}
---></textarea>
+</textarea>
         </div>
         <div class="handler" id="handler_vertical" style="left: 50%;"></div>
         <div class="window float-right">
@@ -86,7 +81,7 @@
                         data = error.toString();
                     }
                     result.setValue(JSON.stringify(data, null, 4));
-                })
+                });
                 return handle
             }
             editor.on('change', handle(editor));

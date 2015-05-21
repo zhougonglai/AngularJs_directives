@@ -81,10 +81,10 @@ function hprefix(node) {
         indexes.push(node.parent.index + 1);
         node = node.parent;
     }
-    indexes.push(orig.index + 1)
+    indexes.push(orig.index + 1);
     prefix = indexes.length === 1 ? indexes[0] + '.' : indexes.join('.');
     prefix += ' ';
-    return ''
+    return '';
     return prefix;
 }
 
@@ -100,7 +100,7 @@ function hhtml(tree, level) {
         prefix = hprefix(tree[i]);
         tree[i].el.html(prefix + tree[i].el.text());
         text = tree[i].el.text();
-        text = anchor(text)
+        text = anchor(text);
         text = '<a href="' + (tree[i].el.attr('href') || '#' + text) + '">' + text + '</a>';
         if (tree[i].level <= level) html += '<li>' + text + '</li>';
         if (level) {

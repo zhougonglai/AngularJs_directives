@@ -3,10 +3,10 @@
 
     把 Expose 部分放在代码头部非常直观 <https://github.com/kennethcachia/Background-Check/blob/master/background-check.js>
 */
-Mock.Util = Util
+Mock.Util = Util;
 // Mock.FakeXMLHttpRequest = FakeXMLHttpRequest
-Mock.Random = Random
-Mock.heredoc = Util.heredoc
+Mock.Random = Random;
+Mock.heredoc = Util.heredoc;
 
 /*
     For Module Loader
@@ -19,7 +19,7 @@ if (typeof module === 'object' && module.exports) {
     // AMD modules
     define('mock', [], function() {
         return Mock
-    })
+    });
     define('mockjs', [], function() {
         return Mock
     })
@@ -33,8 +33,8 @@ if (typeof module === 'object' && module.exports) {
 }
 // else {
 // other, i.e. browser
-this.Mock = Mock
-this.Random = Random
+this.Mock = Mock;
+this.Random = Random;
 // }
 
 // For KISSY
@@ -49,7 +49,7 @@ if (typeof KISSY != 'undefined') {
         'gallery/Mock/0.1.9/'
     ], function register(name) {
         KISSY.add(name, function(S) {
-            Mock.mockjax(S)
+            Mock.mockjax(S);
             return Mock
         }, {
             requires: ['ajax']

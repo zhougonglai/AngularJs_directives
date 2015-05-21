@@ -1,5 +1,5 @@
 $(function() {
-    $('.content').css('opacity', 1)
+    $('.content').css('opacity', 1);
 
     var win = $(window),
         ctn = $('.content'),
@@ -8,8 +8,8 @@ $(function() {
 
     function resize(divide) {
         ctns.width(win.width() / 2 - 60)
-            .height(win.height() - ctn.offset().top - 40)
-        bar.css('left', win.width() / 2 - bar.width() / 2)
+            .height(win.height() - ctn.offset().top - 40);
+        bar.css('left', win.width() / 2 - bar.width() / 2);
         return resize;
     }
     win.on('resize', resize(true));
@@ -28,18 +28,18 @@ $(function() {
         theme: 'neat'
     });
 
-    window.editor = editor
-    window.result = result
+    window.editor = editor;
+    window.result = result;
 
     /*
      
      */
 
     $('#save').on('click', function(event) {
-        return
+        return;
         try {
-            var data = editor.getValue()
-            new Function('return ' + data)
+            var data = editor.getValue();
+            new Function('return ' + data);
             $.ajax({
                 url: '/save?tests=true',
                 data: {
@@ -51,10 +51,10 @@ $(function() {
         } catch (exception) {
             alert(exception)
         }
-    })
+    });
 
-    $('#beautifier').on('click', function(event) {})
-    $('#share').on('click', function(event) {})
+    $('#beautifier').on('click', function(event) {});
+    $('#share').on('click', function(event) {});
     $('#account').on('click', function(event) {})
 
 });

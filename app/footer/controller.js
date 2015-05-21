@@ -48,16 +48,16 @@
                   condition: [
                     {
                       text: '不限',
-                      code: '1'
+                      code: ''
                     }, {
                       text: '北京',
-                      code: '2'
+                      code: 'a=2'
                     }, {
                       text: '上海',
-                      code: '3'
+                      code: 'a=3'
                     }, {
                       text: '天津',
-                      code: '4'
+                      code: 'a=4'
                     }
                   ]
                 }, {
@@ -66,16 +66,16 @@
                   condition: [
                     {
                       text: '购买当日可入园',
-                      code: '0'
+                      code: 'b=1'
                     }, {
                       text: '景区不定期举办活动节目',
-                      code: '1'
+                      code: 'b=2'
                     }, {
                       text: '景点门票支持返现',
-                      code: '2'
+                      code: 'b=3'
                     }, {
                       text: '景点包含优惠立减等活动',
-                      code: '3'
+                      code: 'b=4'
                     }
                   ]
                 }, {
@@ -84,16 +84,16 @@
                   condition: [
                     {
                       text: '不限',
-                      code: '0'
+                      code: ''
                     }, {
                       text: '5A景区',
-                      code: '1'
+                      code: 'c=2'
                     }, {
                       text: '4A景区',
-                      code: '2'
+                      code: 'c=3'
                     }, {
                       text: '3A景区',
-                      code: '3'
+                      code: 'c=4'
                     }
                   ]
                 }, {

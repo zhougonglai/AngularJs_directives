@@ -7,4 +7,4 @@
 	var Mock = {
 		version: '0.1.9',
 		_mocked: {}
-	}
+	};;

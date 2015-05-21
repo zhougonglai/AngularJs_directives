@@ -16,6 +16,8 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
             scope.isMaskShow = false
             scope.contentType = ''
             scope.conditionTags = []
+            scope.contentList = []
+            contentObjGuidList = []
             guid = ''
             exportData = null
 
@@ -79,6 +81,7 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 e.stopPropagation()
                 scope.conditionItemActive = condition.active
                 dataCache.put('conditionItemActive' + contentObj.guid, condition.active)
+                contentObjGuidList.push(contentObj.guid)
                 dataCache.put('doubleItem' + guid, {
                     doubleLeftItem: contentObj
                     conditionItemActive: condition.active
@@ -87,17 +90,48 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                     leftItem: contentObj
                     rightItem: condition
                 }
-                setConditionTag(condition)
+                for elem, i in contentObj.condition
+                    if elem.code isnt ''
+                        contentObj.conditionCode = elem.code.slice(0, elem.code.indexOf('='))
+                setConditionTag(contentObj, condition)
                 return
 
-            setConditionTag = (condition)->
-                if scope.conditionTags.indexOf(condition) is -1
-                    scope.conditionTags.push(condition)
+            setConditionTag = (contentObj, condition)->
+                codeList = []
+                if scope.conditionTags.length > 0
+                    conditionIndex = scope.conditionTags.indexOf(condition)
+                    if conditionIndex isnt -1
+                        return
+                    else
+                        for elem, i in scope.conditionTags
+                            code = elem.code.slice(0, elem.code.indexOf('='))
+                            codeList.push(code)
+
+                        if condition.code isnt ''
+                            conditionCode = condition.code.slice(0, condition.code.indexOf('='))
+                            codeIndex = codeList.indexOf(conditionCode)
+                            if  codeIndex is -1
+                                scope.conditionTags.push(condition)
+                            else
+                                scope.conditionTags[codeIndex] = condition
+                        else
+                            conditionCode = contentObj.conditionCode
+                            index = codeList.indexOf(conditionCode)
+                            scope.conditionTags.splice(index, 1)
+
+                else
+                    if condition.code isnt ''
+                        scope.conditionTags.push(condition)
+                    else
+                        return
                 return
 
             scope.emptyHandler = (e)->
                 e.stopPropagation()
                 scope.conditionTags.length = 0
+                scope.conditionItemActive = 0
+                for guid, i in contentObjGuidList
+                    dataCache.put('conditionItemActive' + guid, 0)
                 return
 
             scope.stopPropagation = (e)->

@@ -1,12 +1,12 @@
 var Mock = require('./mock');
-var Util = require('./util')
+var Util = require('./util');
 
 // BEGIN(BROWSER)
 
 function find(options) {
 
     for (var sUrlType in Mock._mocked) {
-        var item = Mock._mocked[sUrlType]
+        var item = Mock._mocked[sUrlType];
         if (
             (!item.rurl || match(item.rurl, options.url)) &&
             (!item.rtype || match(item.rtype, options.type.toLowerCase()))
@@ -59,7 +59,7 @@ Mock.mockjax = function mockjax(jQuery) {
     }
 
     function prefilter(options, originalOptions, jqXHR) {
-        var item = find(options)
+        var item = find(options);
         if (item) {
             options.dataFilter =
                 options.converters['text json'] =
@@ -67,8 +67,8 @@ Mock.mockjax = function mockjax(jQuery) {
                 options.converters['text script'] =
                 options.converters['script json'] = function() {
                     return convert(item, options)
-            }
-            options.xhr = mockxhr
+            };
+            options.xhr = mockxhr;
 
             if (originalOptions.dataType !== 'script') return 'json'
         }
@@ -76,12 +76,12 @@ Mock.mockjax = function mockjax(jQuery) {
 
     // #22 步加载js文件的时候发现问题
     // #23 Mock.mockjax 导致 $.getScript 不执行回调
-    jQuery.ajaxPrefilter('json jsonp script', prefilter)
+    jQuery.ajaxPrefilter('json jsonp script', prefilter);
 
     return Mock
-}
+};
 
-if (typeof jQuery != 'undefined') Mock.mockjax(jQuery)
+if (typeof jQuery != 'undefined') Mock.mockjax(jQuery);
 
 /*
     for Zepto
@@ -89,7 +89,7 @@ if (typeof jQuery != 'undefined') Mock.mockjax(jQuery)
 */
 if (typeof Zepto != 'undefined') {
     Mock.mockjax = function(Zepto) {
-        var __original_ajax = Zepto.ajax
+        var __original_ajax = Zepto.ajax;
         var xhr = {
             readyState: 4,
             responseText: '',
@@ -98,19 +98,19 @@ if (typeof Zepto != 'undefined') {
             status: 200,
             statusText: 'success',
             timeoutTimer: null
-        }
+        };
 
         Zepto.ajax = function(options) {
-            var item = find(options)
+            var item = find(options);
             if (item) {
-                var data = Mock.mock(item.template)
-                if (options.success) options.success(data, xhr, options)
-                if (options.complete) options.complete(xhr.status, xhr, options)
+                var data = Mock.mock(item.template);
+                if (options.success) options.success(data, xhr, options);
+                if (options.complete) options.complete(xhr.status, xhr, options);
                 return xhr
             }
             return __original_ajax.call(Zepto, options)
         }
-    }
+    };
 
     Mock.mockjax(Zepto)
 }
@@ -132,15 +132,15 @@ if (typeof KISSY != 'undefined' && KISSY.add) {
         };
 
         KISSY.io = function(options) {
-            var item = find(options)
+            var item = find(options);
             if (item) {
-                var data = Mock.mock(item.template)
-                if (options.success) options.success(data, xhr, options)
-                if (options.complete) options.complete(xhr.status, xhr, options)
+                var data = Mock.mock(item.template);
+                if (options.success) options.success(data, xhr, options);
+                if (options.complete) options.complete(xhr.status, xhr, options);
                 return xhr
             }
             return _original_ajax.apply(this, arguments)
-        }
+        };
 
         // 还原 KISSY.io 上的属性
         for (var name in _original_ajax) {

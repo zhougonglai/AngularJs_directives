@@ -14,16 +14,16 @@ var Mock = require('./mock'),
 (function(undefined) {
     var Mock4Tpl = {
         version: '0.0.1'
-    }
+    };
 
-    if (!this.Mock) module.exports = Mock4Tpl
+    if (!this.Mock) module.exports = Mock4Tpl;
 
     Mock.tpl = function(input, options, helpers, partials) {
         return Mock4Tpl.mock(input, options, helpers, partials)
-    }
+    };
     Mock.parse = function(input) {
         return Handlebars.parse(input)
-    }
+    };
 
     /*
         Mock4Tpl.mock(input)
@@ -33,16 +33,16 @@ var Mock = require('./mock'),
     */
     Mock4Tpl.mock = function(input, options, helpers, partials) {
         helpers = helpers ? Util.extend({}, helpers, Handlebars.helpers) :
-            Handlebars.helpers
+            Handlebars.helpers;
         partials = partials ? Util.extend({}, partials, Handlebars.partials) :
-            Handlebars.partials
+            Handlebars.partials;
         return Handle.gen(input, null, options, helpers, partials)
-    }
+    };
 
     var Handle = {
         debug: Mock4Tpl.debug || false,
         extend: Util.extend
-    }
+    };
 
     /*
         Handle.gen(input, context, options, helpers, partials)
@@ -84,29 +84,29 @@ var Mock = require('./mock'),
      */
     Handle.gen = function(node, context, options, helpers, partials) {
         if (Util.isString(node)) {
-            var ast = Handlebars.parse(node)
-            options = Handle.parseOptions(node, options)
-            var data = Handle.gen(ast, context, options, helpers, partials)
+            var ast = Handlebars.parse(node);
+            options = Handle.parseOptions(node, options);
+            var data = Handle.gen(ast, context, options, helpers, partials);
             return data
         }
 
-        context = context || [{}]
-        options = options || {}
+        context = context || [{}];
+        options = options || {};
 
-        if (this[node.type] === Util.noop) return
+        if (this[node.type] === Util.noop) return;
 
-        options.__path = options.__path || []
+        options.__path = options.__path || [];
 
         if (Mock4Tpl.debug || Handle.debug) {
-            console.log()
-            console.group('[' + node.type + ']', JSON.stringify(node))
+            console.log();
+            console.group('[' + node.type + ']', JSON.stringify(node));
             // console.log('[context]', context.length, JSON.stringify(context))
             console.log('[options]', options.__path.length, JSON.stringify(options))
         }
 
-        var preLength = options.__path.length
-        this[node.type](node, context, options, helpers, partials)
-        options.__path.splice(preLength)
+        var preLength = options.__path.length;
+        this[node.type](node, context, options, helpers, partials);
+        options.__path.splice(preLength);
 
         if (Mock4Tpl.debug || Handle.debug) {
             // console.log('[context]', context.length, JSON.stringify(context))
@@ -114,24 +114,24 @@ var Mock = require('./mock'),
         }
 
         return context[context.length - 1]
-    }
+    };
 
     Handle.parseOptions = function(input, options) {
         var rComment = /<!--\s*\n*Mock\s*\n*([\w\W]+?)\s*\n*-->/g;
         var comments = input.match(rComment),
             ret = {}, i, ma, option;
         for (i = 0; comments && i < comments.length; i++) {
-            rComment.lastIndex = 0
-            ma = rComment.exec(comments[i])
+            rComment.lastIndex = 0;
+            ma = rComment.exec(comments[i]);
             if (ma) {
                 /*jslint evil: true */
-                option = new Function('return ' + ma[1])
-                option = option()
+                option = new Function('return ' + ma[1]);
+                option = option();
                 Util.extend(ret, option)
             }
         }
         return Util.extend(ret, options)
-    }
+    };
 
     /*
         name    字符串，属性名
@@ -140,19 +140,19 @@ var Mock = require('./mock'),
         def     默认值
     */
     Handle.val = function(name, options, context, def) {
-        if (name !== options.__path[options.__path.length - 1]) throw new Error(name + '!==' + options.__path)
+        if (name !== options.__path[options.__path.length - 1]) throw new Error(name + '!==' + options.__path);
         if (Mock4Tpl.debug || Handle.debug) console.log('[options]', name, options.__path);
-        if (def !== undefined) def = Mock.mock(def)
+        if (def !== undefined) def = Mock.mock(def);
         if (options) {
-            var mocked = Mock.mock(options)
-            if (Util.isString(mocked)) return mocked
+            var mocked = Mock.mock(options);
+            if (Util.isString(mocked)) return mocked;
             if (name in mocked) {
                 return mocked[name]
             }
         }
-        if (Util.isArray(context[0])) return {}
+        if (Util.isArray(context[0])) return {};
         return def !== undefined ? def : (name) || Random.word()
-    }
+    };
 
 
     /*
@@ -164,7 +164,7 @@ var Mock = require('./mock'),
             this.gen(node.statements[i], context, options, helpers, partials)
         }
         // TODO node.inverse
-    }
+    };
 
     Handle.mustache = function(node, context, options, helpers, partials) { // string id params
         var i,
@@ -172,8 +172,8 @@ var Mock = require('./mock'),
             contextLength = context.length;
 
         if (Util.type(currentContext) === 'array') {
-            currentContext.push({})
-            currentContext = currentContext[currentContext.length - 1]
+            currentContext.push({});
+            currentContext = currentContext[currentContext.length - 1];
             context.unshift(currentContext)
         }
 
@@ -192,14 +192,14 @@ var Mock = require('./mock'),
             if (node.hash) this.gen(node.hash, context, options, helpers, partials)
         } else {
             // node.id
-            this.gen(node.id, context, options, helpers, partials)
+            this.gen(node.id, context, options, helpers, partials);
             /*
                 node.id.type === 'DATA'
                 eg @index，放到 DATA 中处理 TODO 
             */
         }
         if (context.length > contextLength) context.splice(0, context.length - contextLength)
-    }
+    };
 
     Handle.block = function(node, context, options, helpers, partials) { // mustache program inverse
         var parts = node.mustache.id.parts,
@@ -239,22 +239,22 @@ var Mock = require('./mock'),
         // block.mustache
         if (node.mustache.isHelper ||
             helpers && helpers[node.mustache.id.string]) {
-            type = parts[0] // helper: each if unless with log
+            type = parts[0]; // helper: each if unless with log
             // 指定 Handle 为上下文是为了使用 Handle 的方法
-            val = (Helpers[type] || Helpers.custom).apply(this, arguments)
+            val = (Helpers[type] || Helpers.custom).apply(this, arguments);
             currentContext = context[0]
         } else {
             for (i = 0; i < parts.length; i++) {
-                options.__path.push(parts[i])
+                options.__path.push(parts[i]);
 
-                cur = parts[i]
+                cur = parts[i];
 
-                val = this.val(cur, options, context, {})
-                currentContext[cur] = Util.isArray(val) && [] || val
+                val = this.val(cur, options, context, {});
+                currentContext[cur] = Util.isArray(val) && [] || val;
 
-                type = Util.type(currentContext[cur])
+                type = Util.type(currentContext[cur]);
                 if (type === 'object' || type === 'array') {
-                    currentContext = currentContext[cur]
+                    currentContext = currentContext[cur];
                     context.unshift(currentContext)
                 }
             }
@@ -263,33 +263,33 @@ var Mock = require('./mock'),
         // block.program
         if (node.program) {
             if (Util.type(currentContext) === 'array') {
-                len = val.length || Random.integer(3, 7)
+                len = val.length || Random.integer(3, 7);
                 // Handle.program() 可以自己解析和生成数据，但是不知道该重复几次，所以这里需要循环调用
                 for (i = 0; i < len; i++) {
-                    currentContext.push(typeof val[i] !== 'undefined' ? val[i] : {})
+                    currentContext.push(typeof val[i] !== 'undefined' ? val[i] : {});
 
-                    options.__path.push('[]')
-                    context.unshift(currentContext[currentContext.length - 1])
-                    this.gen(node.program, context, options, helpers, partials)
-                    options.__path.pop()
+                    options.__path.push('[]');
+                    context.unshift(currentContext[currentContext.length - 1]);
+                    this.gen(node.program, context, options, helpers, partials);
+                    options.__path.pop();
                     context.shift()
                 }
             } else this.gen(node.program, context, options, helpers, partials)
         }
 
         if (context.length > contextLength) context.splice(0, context.length - contextLength)
-    }
+    };
 
     Handle.hash = function(node, context, options, helpers, partials) {
         var pairs = node.pairs,
             pair, i, j;
         for (i = 0; i < pairs.length; i++) {
-            pair = pairs[i]
+            pair = pairs[i];
             for (j = 1; j < pair.length; j++) {
                 this.gen(pair[j], context, options, helpers, partials)
             }
         }
-    }
+    };
 
     Handle.ID = function(node, context, options) { // , helpers, partials
         var parts = node.parts,
@@ -297,23 +297,23 @@ var Mock = require('./mock'),
             currentContext = context[node.depth], // back path, eg {{../permalink}}
             contextLength = context.length;
 
-        if (Util.isArray(currentContext)) currentContext = context[node.depth + 1]
+        if (Util.isArray(currentContext)) currentContext = context[node.depth + 1];
 
         if (!parts.length) {
             // TODO 修正父节点的类型
         } else {
             for (i = 0, len = parts.length; i < len; i++) {
-                options.__path.push(parts[i])
+                options.__path.push(parts[i]);
 
-                cur = parts[i]
-                prev = parts[i - 1]
-                preOptions = options[prev]
+                cur = parts[i];
+                prev = parts[i - 1];
+                preOptions = options[prev];
 
-                def = i === len - 1 ? currentContext[cur] : {}
-                val = this.val(cur, /*preOptions && preOptions[cur] ? preOptions :*/ options, context, def)
+                def = i === len - 1 ? currentContext[cur] : {};
+                val = this.val(cur, /*preOptions && preOptions[cur] ? preOptions :*/ options, context, def);
 
-                type = Util.type(currentContext[cur])
-                valType = Util.type(val)
+                type = Util.type(currentContext[cur]);
+                valType = Util.type(val);
                 if (type === 'undefined') {
                     // 如果不是最后一个属性，并且当前值不是 [] 或 {}，则修正为 [] 或 {}
                     if (i < len - 1 && valType !== 'object' && valType !== 'array') {
@@ -329,59 +329,59 @@ var Mock = require('./mock'),
                     }
                 }
 
-                type = Util.type(currentContext[cur])
+                type = Util.type(currentContext[cur]);
                 if (type === 'object' || type === 'array') {
-                    currentContext = currentContext[cur]
+                    currentContext = currentContext[cur];
                     context.unshift(currentContext)
                 }
             }
         }
         if (context.length > contextLength) context.splice(0, context.length - contextLength)
-    }
+    };
 
     Handle.partial = function(node, context, options, helpers, partials) {
         var name = node.partialName.name,
             partial = partials && partials[name],
             contextLength = context.length;
 
-        if (partial) Handle.gen(partial, context, options, helpers, partials)
+        if (partial) Handle.gen(partial, context, options, helpers, partials);
 
         if (context.length > contextLength) context.splice(0, context.length - contextLength)
-    }
-    Handle.content = Util.noop
-    Handle.PARTIAL_NAME = Util.noop
-    Handle.DATA = Util.noop
-    Handle.STRING = Util.noop
-    Handle.INTEGER = Util.noop
-    Handle.BOOLEAN = Util.noop
-    Handle.comment = Util.noop
+    };
+    Handle.content = Util.noop;
+    Handle.PARTIAL_NAME = Util.noop;
+    Handle.DATA = Util.noop;
+    Handle.STRING = Util.noop;
+    Handle.INTEGER = Util.noop;
+    Handle.BOOLEAN = Util.noop;
+    Handle.comment = Util.noop;
 
-    var Helpers = {}
+    var Helpers = {};
 
     Helpers.each = function(node, context, options) {
         var i, len, cur, val, parts, def, type,
             currentContext = context[0];
 
-        parts = node.mustache.params[0].parts // each 只需要处理第一个参数，更多的参数由 each 自己处理
+        parts = node.mustache.params[0].parts; // each 只需要处理第一个参数，更多的参数由 each 自己处理
         for (i = 0, len = parts.length; i < len; i++) {
-            options.__path.push(parts[i])
+            options.__path.push(parts[i]);
 
-            cur = parts[i]
-            def = i === len - 1 ? [] : {}
+            cur = parts[i];
+            def = i === len - 1 ? [] : {};
 
-            val = this.val(cur, options, context, def)
+            val = this.val(cur, options, context, def);
 
-            currentContext[cur] = Util.isArray(val) && [] || val
+            currentContext[cur] = Util.isArray(val) && [] || val;
 
-            type = Util.type(currentContext[cur])
+            type = Util.type(currentContext[cur]);
             if (type === 'object' || type === 'array') {
-                currentContext = currentContext[cur]
+                currentContext = currentContext[cur];
                 context.unshift(currentContext)
             }
         }
 
         return val
-    }
+    };
 
     Helpers['if'] = Helpers.unless = function(node, context, options) {
         var params = node.mustache.params,
@@ -389,53 +389,53 @@ var Mock = require('./mock'),
             currentContext = context[0];
 
         for (i = 0; i < params.length; i++) {
-            parts = params[i].parts
+            parts = params[i].parts;
             for (j = 0; j < parts.length; j++) {
-                if (i === 0) options.__path.push(parts[j])
+                if (i === 0) options.__path.push(parts[j]);
 
-                cur = parts[j]
-                def = j === parts.length - 1 ? '@BOOL(2,1,true)' : {}
+                cur = parts[j];
+                def = j === parts.length - 1 ? '@BOOL(2,1,true)' : {};
 
-                val = this.val(cur, options, context, def)
+                val = this.val(cur, options, context, def);
                 if (j === parts.length - 1) {
                     val = val === 'true' ? true :
                         val === 'false' ? false : val
                 }
 
-                currentContext[cur] = Util.isArray(val) ? [] : val
+                currentContext[cur] = Util.isArray(val) ? [] : val;
 
-                type = Util.type(currentContext[cur])
+                type = Util.type(currentContext[cur]);
                 if (type === 'object' || type === 'array') {
-                    currentContext = currentContext[cur]
+                    currentContext = currentContext[cur];
                     context.unshift(currentContext)
                 }
             }
         }
         return val
-    }
+    };
 
     Helpers['with'] = function(node, context, options) {
         var i, cur, val, parts, def,
             currentContext = context[0];
 
-        parts = node.mustache.params[0].parts
+        parts = node.mustache.params[0].parts;
         for (i = 0; i < parts.length; i++) {
-            options.__path.push(parts[i])
+            options.__path.push(parts[i]);
 
-            cur = parts[i]
-            def = {}
+            cur = parts[i];
+            def = {};
 
-            val = this.val(cur, options, context, def)
+            val = this.val(cur, options, context, def);
 
-            currentContext = currentContext[cur] = val
+            currentContext = currentContext[cur] = val;
             context.unshift(currentContext)
         }
         return val
-    }
+    };
 
     Helpers.log = function() {
         // {{log "Look at me!"}}
-    }
+    };
 
     Helpers.custom = function(node, context, options) {
         var i, len, cur, val, parts, def, type,
@@ -444,40 +444,40 @@ var Mock = require('./mock'),
         // custom helper
         // 如果 helper 没有参数，则认为是在当前上下文中判断 helper 是否为 true
         if (node.mustache.params.length === 0) {
-            return
+            return;
 
             // 按理说，Mock4Tpl 不需要也不应该模拟 helper 的行为（返回值），只需要处理 helper 的 params 和 statements。
             // 之所以保留下面的代码，是为了以防需要时扩展，也就是说，如果连 helper 也需要模拟的话！
-            options.__path.push(node.mustache.id.string)
+            options.__path.push(node.mustache.id.string);
 
-            cur = node.mustache.id.string
-            def = '@BOOL(2,1,true)'
+            cur = node.mustache.id.string;
+            def = '@BOOL(2,1,true)';
 
-            val = this.val(cur, options, context, def)
+            val = this.val(cur, options, context, def);
 
-            currentContext[cur] = Util.isArray(val) && [] || val
+            currentContext[cur] = Util.isArray(val) && [] || val;
 
-            type = Util.type(currentContext[cur])
+            type = Util.type(currentContext[cur]);
             if (type === 'object' || type === 'array') {
-                currentContext = currentContext[cur]
+                currentContext = currentContext[cur];
                 context.unshift(currentContext)
             }
 
         } else {
-            parts = node.mustache.params[0].parts
+            parts = node.mustache.params[0].parts;
             for (i = 0, len = parts.length; i < len; i++) {
-                options.__path.push(parts[i])
+                options.__path.push(parts[i]);
 
-                cur = parts[i]
-                def = i === len - 1 ? [] : {} // 默认值也可以是 []，如果有必要的话
+                cur = parts[i];
+                def = i === len - 1 ? [] : {}; // 默认值也可以是 []，如果有必要的话
 
-                val = this.val(cur, options, context, def)
+                val = this.val(cur, options, context, def);
 
-                currentContext[cur] = Util.isArray(val) && [] || val
+                currentContext[cur] = Util.isArray(val) && [] || val;
 
-                type = Util.type(currentContext[cur])
+                type = Util.type(currentContext[cur]);
                 if (type === 'object' || type === 'array') {
-                    currentContext = currentContext[cur]
+                    currentContext = currentContext[cur];
                     context.unshift(currentContext)
                 }
             }

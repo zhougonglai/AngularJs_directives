@@ -99,10 +99,10 @@
 
     <script type="text/javascript">
         $(function(){
-            return
+            return;
             function resize(){
-                var h = $(window).height() - $('.catalog').offset().top - 20
-                $('.catalog, .content').height(h)
+                var h = $(window).height() - $('.catalog').offset().top - 20;
+                $('.catalog, .content').height(h);
                 return resize
             }
             $(window).on('resize', resize());
@@ -121,8 +121,8 @@
     <script src="./node_modules/codemirror/mode/javascript/javascript.js"></script>
     <script type="text/javascript">
         $('pre').each(function(index, el){
-            $(this).hide()
-            var ctn = $('<pre class="cm-s-neat">').insertAfter(this)
+            $(this).hide();
+            var ctn = $('<pre class="cm-s-neat">').insertAfter(this);
             CodeMirror.runMode($(this).find('code').text(), 'javascript',
                      ctn.get(0));
         })

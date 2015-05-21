@@ -5,26 +5,26 @@ var KISSY = require('kissy'),
 
 // BEGIN(BROWSER)
 (function(undefined) {
-    if (typeof KISSY === 'undefined') return
+    if (typeof KISSY === 'undefined') return;
 
     var Mock4XTpl = {
         debug: false
-    }
+    };
 
     var XTemplate;
 
     KISSY.use('xtemplate', function(S, T) {
         XTemplate = T
-    })
+    });
 
-    if (!this.Mock) module.exports = Mock4XTpl
+    if (!this.Mock) module.exports = Mock4XTpl;
 
     Mock.xtpl = function(input, options, helpers, partials) {
         return Mock4XTpl.mock(input, options, helpers, partials)
-    }
+    };
     Mock.xparse = function(input) {
         return XTemplate.compiler.parse(input)
-    }
+    };
 
     /*
         参数 options 可以通过 {{mock ...}} 指定，有2种方式：
@@ -37,49 +37,49 @@ var KISSY = require('kissy'),
     */
     Mock4XTpl.mock = function(input, options, helpers, partials) {
         helpers = helpers ? Util.extend({}, helpers, XTemplate.RunTime.commands) :
-            XTemplate.RunTime.commands
+            XTemplate.RunTime.commands;
         partials = partials ? Util.extend({}, partials, XTemplate.RunTime.subTpls) :
-            XTemplate.RunTime.subTpls
+            XTemplate.RunTime.subTpls;
         // XTemplate.RunTime.subTpls // 全局子模板
         // xtemplate.option.subTpls 局部子模板
         return this.gen(input, null, options, helpers, partials, {})
-    }
+    };
 
     Mock4XTpl.parse = function(input) {
         return XTemplate.compiler.parse(input)
-    }
+    };
 
     Mock4XTpl.gen = function(node, context, options, helpers, partials, other) {
         if (typeof node === 'string') {
             if (Mock4XTpl.debug) {
                 console.log('[tpl    ]\n', node)
             }
-            var ast = this.parse(node)
-            options = this.parseOptions(node, options)
-            var data = this.gen(ast, context, options, helpers, partials, other)
+            var ast = this.parse(node);
+            options = this.parseOptions(node, options);
+            var data = this.gen(ast, context, options, helpers, partials, other);
             return data
         }
 
-        context = context || [{}]
-        options = options || {}
+        context = context || [{}];
+        options = options || {};
 
-        node.type = node.type
+        node.type = node.type;
         // for (var n in node) node[n] = node[n]
 
-        if (this[node.type] === Util.noop) return
+        if (this[node.type] === Util.noop) return;
 
-        options.__path = options.__path || []
+        options.__path = options.__path || [];
 
         if (Mock4XTpl.debug) {
-            console.log()
-            console.group('[' + node.type + ']', JSON.stringify(node))
-            console.log('[context]', '[before]', context.length, JSON.stringify(context))
-            console.log('[options]', '[before]', options.__path.length, JSON.stringify(options))
+            console.log();
+            console.group('[' + node.type + ']', JSON.stringify(node));
+            console.log('[context]', '[before]', context.length, JSON.stringify(context));
+            console.log('[options]', '[before]', options.__path.length, JSON.stringify(options));
             console.log('[other  ]', '[before]', JSON.stringify(other))
         }
 
-        var preLength = options.__path.length
-        this[node.type](node, context, options, helpers, partials, other)
+        var preLength = options.__path.length;
+        this[node.type](node, context, options, helpers, partials, other);
 
         if (Mock4XTpl.debug) {
             console.log('[__path ]', '[after ]', options.__path);
@@ -91,12 +91,12 @@ var KISSY = require('kissy'),
         }
 
         if (Mock4XTpl.debug) {
-            console.log('[context]', '[after ]', context.length, JSON.stringify(context))
+            console.log('[context]', '[after ]', context.length, JSON.stringify(context));
             console.groupEnd()
         }
 
         return context[context.length - 1]
-    }
+    };
 
 
     /*
@@ -112,24 +112,24 @@ var KISSY = require('kissy'),
             ret = {},
             i, ma, option;
         for (i = 0; comments && i < comments.length; i++) {
-            rComment.lastIndex = 0
-            ma = rComment.exec(comments[i])
+            rComment.lastIndex = 0;
+            ma = rComment.exec(comments[i]);
             if (ma) {
                 /*jslint evil: true */
-                option = new Function('return ' + ma[1])
-                option = option()
+                option = new Function('return ' + ma[1]);
+                option = option();
                 Util.extend(ret, option)
             }
         }
         return Util.extend(ret, options)
-    }
+    };
 
     Mock4XTpl.parseVal = function(expr, object) {
 
         function queryArray(prop, context) {
-            if (typeof context === 'object' && prop in context) return [context[prop]]
+            if (typeof context === 'object' && prop in context) return [context[prop]];
 
-            var ret = []
+            var ret = [];
             for (var i = 0; i < context.length; i++) {
                 ret.push.apply(ret, query(prop, [context[i]]))
             }
@@ -137,7 +137,7 @@ var KISSY = require('kissy'),
         }
 
         function queryObject(prop, context) {
-            if (typeof context === 'object' && prop in context) return [context[prop]]
+            if (typeof context === 'object' && prop in context) return [context[prop]];
 
             var ret = [];
             for (var key in context) {
@@ -149,8 +149,8 @@ var KISSY = require('kissy'),
         function query(prop, set) {
             var ret = [];
             for (var i = 0; i < set.length; i++) {
-                if (typeof set [i] !== 'object') continue
-                if (prop in set [i]) ret.push(set [i][prop])
+                if (typeof set [i] !== 'object') continue;
+                if (prop in set [i]) ret.push(set [i][prop]);
                 else {
                     ret.push.apply(ret, Util.isArray(set [i]) ?
                         queryArray(prop, set [i]) :
@@ -170,26 +170,26 @@ var KISSY = require('kissy'),
         }
 
         return parse(expr, object)
-    }
+    };
 
     Mock4XTpl.val = function(name, options, context, def) {
-        if (name !== options.__path[options.__path.length - 1]) throw new Error(name + '!==' + options.__path)
-        if (def !== undefined) def = Mock.mock(def)
+        if (name !== options.__path[options.__path.length - 1]) throw new Error(name + '!==' + options.__path);
+        if (def !== undefined) def = Mock.mock(def);
         if (options) {
-            var mocked = Mock.mock(options)
-            if (Util.isString(mocked)) return mocked
+            var mocked = Mock.mock(options);
+            if (Util.isString(mocked)) return mocked;
 
             // TODO 深沉嵌套配置
-            var ret = Mock4XTpl.parseVal(options.__path, mocked)
-            if (ret.length > 0) return ret[0]
+            var ret = Mock4XTpl.parseVal(options.__path, mocked);
+            if (ret.length > 0) return ret[0];
 
             if (name in mocked) {
                 return mocked[name]
             }
         }
-        if (Util.isArray(context[0])) return {}
+        if (Util.isArray(context[0])) return {};
         return def !== undefined ? def : name
-    }
+    };
 
     Mock4XTpl.program = function(node, context, options, helpers, partials, other) {
         // node.statements
@@ -200,10 +200,10 @@ var KISSY = require('kissy'),
         for (var j = 0; node.inverse && j < node.inverse.length; j++) {
             this.gen(node.inverse[j], context, options, helpers, partials, other)
         }
-    }
+    };
 
     Mock4XTpl.block = function(node, context, options, helpers, partials, other) { // mustache program inverse
-        var contextLength = context.length
+        var contextLength = context.length;
 
         // node.tpl
         this.gen(node.tpl, context, options, helpers, partials, Util.extend({}, other, {
@@ -214,33 +214,33 @@ var KISSY = require('kissy'),
             */
             def: {}, // 
             hold: true
-        }))
+        }));
 
         // node.program
         var currentContext = context[0],
             mocked, i, len;
         if (Util.type(currentContext) === 'array') {
-            mocked = this.val(options.__path[options.__path.length - 1], options, context)
-            len = mocked && mocked.length || Random.integer(3, 7)
+            mocked = this.val(options.__path[options.__path.length - 1], options, context);
+            len = mocked && mocked.length || Random.integer(3, 7);
             for (i = 0; i < len; i++) {
                 // test_relational_expression_each > mocked[i] != undefined
-                currentContext.push(mocked && mocked[i] !== undefined ? mocked[i] : {})
+                currentContext.push(mocked && mocked[i] !== undefined ? mocked[i] : {});
 
-                options.__path.push(i)
-                context.unshift(currentContext[currentContext.length - 1])
+                options.__path.push(i);
+                context.unshift(currentContext[currentContext.length - 1]);
 
-                this.gen(node.program, context, options, helpers, partials, other)
+                this.gen(node.program, context, options, helpers, partials, other);
 
-                options.__path.pop()
+                options.__path.pop();
                 context.shift()
             }
-        } else this.gen(node.program, context, options, helpers, partials, other)
+        } else this.gen(node.program, context, options, helpers, partials, other);
 
         if (!other.hold ||
             typeof other.hold === 'function' && !other.hold(node, options, context)) {
             context.splice(0, context.length - contextLength)
         }
-    }
+    };
 
     Mock4XTpl.tpl = function(node, context, options, helpers, partials, other) {
         if (node.params && node.params.length) {
@@ -262,12 +262,12 @@ var KISSY = require('kissy'),
                     'with': true,
                     'include': false
                 }[node.path.string]
-            })
+            });
             // node.params
             for (var i = 0, input; i < node.params.length; i++) {
                 if (node.path.string === 'include') {
                     input = partials && partials[node.params[i].value]
-                } else input = node.params[i]
+                } else input = node.params[i];
                 if (input) this.gen(input, context, options, helpers, partials, other)
             }
             // node.hash
@@ -277,13 +277,13 @@ var KISSY = require('kissy'),
         } else {
             this.gen(node.path, context, options, helpers, partials, other)
         }
-    }
+    };
     Mock4XTpl.tplExpression = function(node, context, options, helpers, partials, other) {
         this.gen(node.expression, context, options, helpers, partials, other)
-    }
+    };
 
-    Mock4XTpl.content = Util.noop
-    Mock4XTpl.unaryExpression = Util.noop
+    Mock4XTpl.content = Util.noop;
+    Mock4XTpl.unaryExpression = Util.noop;
 
     Mock4XTpl.multiplicativeExpression =
         Mock4XTpl.additiveExpression = function(node, context, options, helpers, partials, other) {
@@ -296,7 +296,7 @@ var KISSY = require('kissy'),
                         Random.integer() :
                         undefined
                 }()
-            }))
+            }));
             this.gen(node.op2, context, options, helpers, partials, Util.extend({}, other, {
                 def: function() {
                     return node.op1.type === 'number' ?
@@ -306,19 +306,19 @@ var KISSY = require('kissy'),
                         undefined
                 }()
             }))
-    }
+    };
 
     Mock4XTpl.relationalExpression = function(node, context, options, helpers, partials, other) {
-        this.gen(node.op1, context, options, helpers, partials, other)
+        this.gen(node.op1, context, options, helpers, partials, other);
         this.gen(node.op2, context, options, helpers, partials, other)
-    }
+    };
 
-    Mock4XTpl.equalityExpression = Util.noop
-    Mock4XTpl.conditionalAndExpression = Util.noop
-    Mock4XTpl.conditionalOrExpression = Util.noop
-    Mock4XTpl.string = Util.noop
-    Mock4XTpl.number = Util.noop
-    Mock4XTpl.boolean = Util.noop
+    Mock4XTpl.equalityExpression = Util.noop;
+    Mock4XTpl.conditionalAndExpression = Util.noop;
+    Mock4XTpl.conditionalOrExpression = Util.noop;
+    Mock4XTpl.string = Util.noop;
+    Mock4XTpl.number = Util.noop;
+    Mock4XTpl.boolean = Util.noop;
 
     Mock4XTpl.hash = function(node, context, options, helpers, partials, other) {
         var pairs = node.value,
@@ -326,10 +326,10 @@ var KISSY = require('kissy'),
         for (key in pairs) {
             this.gen(pairs[key], context, options, helpers, partials, other)
         }
-    }
+    };
 
     Mock4XTpl.id = function(node, context, options, helpers, partials, other) {
-        var contextLength = context.length
+        var contextLength = context.length;
 
         var parts = node.parts,
             currentContext = context[node.depth],
@@ -339,7 +339,7 @@ var KISSY = require('kissy'),
             var type = Util.type(currentContext[name]),
                 valType = Util.type(val);
             val = val === 'true' ? true :
-                val === 'false' ? false : val
+                val === 'false' ? false : val;
             if (type === 'undefined') {
                 // 如果不是最后一个属性，并且当前值不是 [] 或 {}，则修正为 [] 或 {}
                 if (index < length - 1 && !Util.isObjectOrArray(val)) {
@@ -369,7 +369,7 @@ var KISSY = require('kissy'),
             return currentContext[name]
         }
 
-        if (Util.isArray(currentContext)) currentContext = context[node.depth + 1]
+        if (Util.isArray(currentContext)) currentContext = context[node.depth + 1];
 
         for (i = 0, len = parts.length; i < len; i++) {
             /*
@@ -379,25 +379,25 @@ var KISSY = require('kissy'),
                 TODO 遇到 xindex、xcount 要修正为数组
                 TODO 遇到 xkey 要修正为对象
             */
-            if (i === 0 && parts[i] === 'this') continue
-            if (/^(xindex|xcount|xkey)$/.test(parts[i])) continue // TODO 需要判断内置占位符（xindex、xcount、xkey）的位置吗，例如是否是第一个？
-            if (i === 0 && len === 1 && parts[i] in helpers) continue
+            if (i === 0 && parts[i] === 'this') continue;
+            if (/^(xindex|xcount|xkey)$/.test(parts[i])) continue; // TODO 需要判断内置占位符（xindex、xcount、xkey）的位置吗，例如是否是第一个？
+            if (i === 0 && len === 1 && parts[i] in helpers) continue;
 
-            options.__path.push(parts[i])
+            options.__path.push(parts[i]);
 
-            cur = parts[i]
+            cur = parts[i];
 
             def = i === len - 1 ?
                 other.def !== undefined ? other.def :
-                context[0][cur] : {}
-            val = this.val(cur, options, context, def)
+                context[0][cur] : {};
+            val = this.val(cur, options, context, def);
 
             if (Mock4XTpl.debug) {
-                console.log('[def    ]', JSON.stringify(def))
+                console.log('[def    ]', JSON.stringify(def));
                 console.log('[val    ]', JSON.stringify(val))
             }
 
-            val = fix(currentContext, i, len, cur, val)
+            val = fix(currentContext, i, len, cur, val);
 
             if (Util.isObjectOrArray(currentContext[cur])) {
                 context.unshift(currentContext = currentContext[cur])

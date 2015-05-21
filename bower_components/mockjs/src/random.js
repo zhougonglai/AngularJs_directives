@@ -44,7 +44,7 @@ var Util = require('./util');
 var Random = (function() {
     var Random = {
         extend: Util.extend
-    }
+    };
     /*
         #### Basics
     */
@@ -85,8 +85,8 @@ var Random = (function() {
         */
         boolean: function(min, max, cur) {
             if (cur !== undefined) {
-                min = typeof min !== 'undefined' && !isNaN(min) ? parseInt(min, 10) : 1
-                max = typeof max !== 'undefined' && !isNaN(max) ? parseInt(max, 10) : 1
+                min = typeof min !== 'undefined' && !isNaN(min) ? parseInt(min, 10) : 1;
+                max = typeof max !== 'undefined' && !isNaN(max) ? parseInt(max, 10) : 1;
                 return Math.random() > 1.0 / (min + max) * min ? !cur : cur
             }
 
@@ -119,8 +119,8 @@ var Random = (function() {
                 // => 77
         */
         natural: function(min, max) {
-            min = typeof min !== 'undefined' ? parseInt(min, 10) : 0
-            max = typeof max !== 'undefined' ? parseInt(max, 10) : 9007199254740992 // 2^53
+            min = typeof min !== 'undefined' ? parseInt(min, 10) : 0;
+            max = typeof max !== 'undefined' ? parseInt(max, 10) : 9007199254740992; // 2^53
             return Math.round(Math.random() * (max - min)) + min
         },
         /*
@@ -145,8 +145,8 @@ var Random = (function() {
             // => 96
         */
         integer: function(min, max) {
-            min = typeof min !== 'undefined' ? parseInt(min, 10) : -9007199254740992
-            max = typeof max !== 'undefined' ? parseInt(max, 10) : 9007199254740992 // 2^53
+            min = typeof min !== 'undefined' ? parseInt(min, 10) : -9007199254740992;
+            max = typeof max !== 'undefined' ? parseInt(max, 10) : 9007199254740992; // 2^53
             return Math.round(Math.random() * (max - min)) + min
         },
         int: function(min, max) {
@@ -181,10 +181,10 @@ var Random = (function() {
                 // => 70.6849
         */
         float: function(min, max, dmin, dmax) {
-            dmin = dmin === undefined ? 0 : dmin
-            dmin = Math.max(Math.min(dmin, 17), 0)
-            dmax = dmax === undefined ? 17 : dmax
-            dmax = Math.max(Math.min(dmax, 17), 0)
+            dmin = dmin === undefined ? 0 : dmin;
+            dmin = Math.max(Math.min(dmin, 17), 0);
+            dmax = dmax === undefined ? 17 : dmax;
+            dmax = Math.max(Math.min(dmax, 17), 0);
             var ret = this.integer(min, max) + '.';
             for (var i = 0, dcount = this.natural(dmin, dmax); i < dcount; i++) {
                 ret += this.character('number')
@@ -234,11 +234,11 @@ var Random = (function() {
                 upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                 number: "0123456789",
                 symbol: "!@#$%^&*()[]"
-            }
-            pools.alpha = pools.lower + pools.upper
-            pools['undefined'] = pools.lower + pools.upper + pools.number + pools.symbol
+            };
+            pools.alpha = pools.lower + pools.upper;
+            pools['undefined'] = pools.lower + pools.upper + pools.number + pools.symbol;
 
-            pool = pools[('' + pool).toLowerCase()] || pool
+            pool = pools[('' + pool).toLowerCase()] || pool;
             return pool.charAt(Random.natural(0, pool.length - 1))
         },
         char: function(pool) {
@@ -296,20 +296,20 @@ var Random = (function() {
                     length = min
                 } else {
                     // string( min, max )
-                    length = Random.natural(pool, min)
+                    length = Random.natural(pool, min);
                     pool = undefined
                 }
             }
             // string( length )
             if (arguments.length === 1) {
-                length = pool
+                length = pool;
                 pool = undefined
             }
             if (arguments.length === 0) {
                 length = Random.natural(3, 7)
             }
 
-            var text = ''
+            var text = '';
             for (var i = 0; i < length; i++) {
                 text += Random.character(pool)
             }
@@ -353,7 +353,7 @@ var Random = (function() {
             }
             step = arguments[2] || 1;
 
-            start = +start, stop = +stop, step = +step
+            start = +start, stop = +stop, step = +step;
 
             var len = Math.max(Math.ceil((stop - start) / step), 0);
             var idx = 0;
@@ -366,7 +366,7 @@ var Random = (function() {
 
             return range;
         }
-    })
+    });
     /*
         #### Date
     */
@@ -379,7 +379,7 @@ var Random = (function() {
             y: 'yy',
 
             MM: function(date) {
-                var m = date.getMonth() + 1
+                var m = date.getMonth() + 1;
                 return m < 10 ? '0' + m : m
             },
             M: function(date) {
@@ -387,18 +387,18 @@ var Random = (function() {
             },
 
             dd: function(date) {
-                var d = date.getDate()
+                var d = date.getDate();
                 return d < 10 ? '0' + d : d
             },
             d: 'getDate',
 
             HH: function(date) {
-                var h = date.getHours()
+                var h = date.getHours();
                 return h < 10 ? '0' + h : h
             },
             H: 'getHours',
             hh: function(date) {
-                var h = date.getHours() % 12
+                var h = date.getHours() % 12;
                 return h < 10 ? '0' + h : h
             },
             h: function(date) {
@@ -406,19 +406,19 @@ var Random = (function() {
             },
 
             mm: function(date) {
-                var m = date.getMinutes()
+                var m = date.getMinutes();
                 return m < 10 ? '0' + m : m
             },
             m: 'getMinutes',
 
             ss: function(date) {
-                var s = date.getSeconds()
+                var s = date.getSeconds();
                 return s < 10 ? '0' + s : s
             },
             s: 'getSeconds',
 
             SS: function(date) {
-                var ms = date.getMilliseconds()
+                var ms = date.getMilliseconds();
                 return ms < 10 && '00' + ms || ms < 100 && '0' + ms || ms
             },
             S: 'getMilliseconds',
@@ -431,10 +431,10 @@ var Random = (function() {
             },
             T: 'getTime'
         }
-    })
+    });
     Random.extend({
         rformat: new RegExp((function() {
-            var re = []
+            var re = [];
             for (var i in Random.patternLetters) re.push(i)
             return '(' + re.join('|') + ')'
         })(), 'g'),
@@ -445,7 +445,7 @@ var Random = (function() {
         */
         format: function(date, format) {
             var patternLetters = Random.patternLetters,
-                rformat = Random.rformat
+                rformat = Random.rformat;
             return format.replace(rformat, function($0, flag) {
                 return typeof patternLetters[flag] === 'function' ?
                     patternLetters[flag](date) :
@@ -460,8 +460,8 @@ var Random = (function() {
             生成一个随机的 Date 对象。
         */
         randomDate: function(min, max) { // min, max
-            min = min === undefined ? new Date(0) : min
-            max = max === undefined ? new Date() : max
+            min = min === undefined ? new Date(0) : min;
+            max = max === undefined ? new Date() : max;
             return new Date(Math.random() * (max.getTime() - min.getTime()))
         },
         /*
@@ -513,7 +513,7 @@ var Random = (function() {
 
         */
         date: function(format) {
-            format = format || 'yyyy-MM-dd'
+            format = format || 'yyyy-MM-dd';
             return this.format(this.randomDate(), format)
         },
         /*
@@ -542,7 +542,7 @@ var Random = (function() {
                 // => "3:5:13"
         */
         time: function(format) {
-            format = format || 'HH:mm:ss'
+            format = format || 'HH:mm:ss';
             return this.format(this.randomDate(), format)
         },
         /*
@@ -571,7 +571,7 @@ var Random = (function() {
                 // => "02-4-23 2:49:40"
         */
         datetime: function(format) {
-            format = format || 'yyyy-MM-dd HH:mm:ss'
+            format = format || 'yyyy-MM-dd HH:mm:ss';
             return this.format(this.randomDate(), format)
         },
         /*
@@ -585,27 +585,27 @@ var Random = (function() {
         now: function(unit, format) {
             if (arguments.length === 1) {
                 if (!/year|month|week|day|hour|minute|second|week/.test(unit)) {
-                    format = unit
+                    format = unit;
                     unit = ''
                 }
             }
-            unit = (unit || '').toLowerCase()
-            format = format || 'yyyy-MM-dd HH:mm:ss'
+            unit = (unit || '').toLowerCase();
+            format = format || 'yyyy-MM-dd HH:mm:ss';
 
-            var date = new Date()
+            var date = new Date();
             /* jshint -W086 */
             switch (unit) {
                 case 'year':
-                    date.setMonth(0)
+                    date.setMonth(0);
                 case 'month':
-                    date.setDate(1)
+                    date.setDate(1);
                 case 'week':
                 case 'day':
-                    date.setHours(0)
+                    date.setHours(0);
                 case 'hour':
-                    date.setMinutes(0)
+                    date.setMinutes(0);
                 case 'minute':
-                    date.setSeconds(0)
+                    date.setSeconds(0);
                 case 'second':
                     date.setMilliseconds(0)
             }
@@ -616,7 +616,7 @@ var Random = (function() {
 
             return this.format(date, format)
         }
-    })
+    });
     /*
         #### Image
     */
@@ -695,17 +695,17 @@ var Random = (function() {
         */
         image: function(size, background, foreground, format, text) {
             if (arguments.length === 4) {
-                text = format
+                text = format;
                 format = undefined
             }
             if (arguments.length === 3) {
-                text = foreground
+                text = foreground;
                 foreground = undefined
             }
-            if (!size) size = this.pick(this.ad_size)
+            if (!size) size = this.pick(this.ad_size);
 
-            if (background && ~background.indexOf('#')) background = background.slice(1)
-            if (foreground && ~foreground.indexOf('#')) foreground = foreground.slice(1)
+            if (background && ~background.indexOf('#')) background = background.slice(1);
+            if (foreground && ~foreground.indexOf('#')) foreground = foreground.slice(1);
 
             // http://dummyimage.com/600x400/cc00cc/470047.png&text=hello
             return 'http://dummyimage.com/' + size +
@@ -717,7 +717,7 @@ var Random = (function() {
         img: function() {
             return this.image.apply(this, arguments)
         }
-    })
+    });
     Random.extend({
         /*
             BrandColors
@@ -899,12 +899,12 @@ var Random = (function() {
         dataImage: function(size, text) {
             var canvas = (typeof document !== 'undefined') && document.createElement('canvas'),
                 ctx = canvas && canvas.getContext && canvas.getContext("2d");
-            if (!canvas || !ctx) return ''
+            if (!canvas || !ctx) return '';
 
-            if (!size) size = this.pick(this.ad_size)
-            text = text !== undefined ? text : size
+            if (!size) size = this.pick(this.ad_size);
+            text = text !== undefined ? text : size;
 
-            size = size.split('x')
+            size = size.split('x');
 
             var width = parseInt(size[0], 10),
                 height = parseInt(size[1], 10),
@@ -913,18 +913,18 @@ var Random = (function() {
                 text_height = 14,
                 font = 'sans-serif';
 
-            canvas.width = width
-            canvas.height = height
-            ctx.textAlign = "center"
-            ctx.textBaseline = "middle"
-            ctx.fillStyle = background
-            ctx.fillRect(0, 0, width, height)
-            ctx.fillStyle = foreground
-            ctx.font = "bold " + text_height + "px " + font
-            ctx.fillText(text, (width / 2), (height / 2), width)
+            canvas.width = width;
+            canvas.height = height;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = background;
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = foreground;
+            ctx.font = "bold " + text_height + "px " + font;
+            ctx.fillText(text, (width / 2), (height / 2), width);
             return canvas.toDataURL("image/png")
         }
-    })
+    });
     /*
         #### Color
     */
@@ -942,11 +942,11 @@ var Random = (function() {
                 // => "#3538b2"
         */
         color: function() {
-            var colour = Math.floor(Math.random() * (16 * 16 * 16 * 16 * 16 * 16 - 1)).toString(16)
-            colour = "#" + ("000000" + colour).slice(-6)
+            var colour = Math.floor(Math.random() * (16 * 16 * 16 * 16 * 16 * 16 - 1)).toString(16);
+            colour = "#" + ("000000" + colour).slice(-6);
             return colour
         }
-    })
+    });
     /*
         #### Helpers
     */
@@ -1007,7 +1007,7 @@ var Random = (function() {
                 // => "o"
         */
         pick: function(arr) {
-            arr = arr || []
+            arr = arr || [];
             return arr[this.natural(0, arr.length - 1)]
         },
         /*
@@ -1024,19 +1024,19 @@ var Random = (function() {
                 // => ["o", "u", "e", "i", "a"]
         */
         shuffle: function(arr) {
-            arr = arr || []
+            arr = arr || [];
             var old = arr.slice(0),
                 result = [],
                 index = 0,
                 length = old.length;
             for (var i = 0; i < length; i++) {
-                index = this.natural(0, old.length - 1)
-                result.push(old[index])
+                index = this.natural(0, old.length - 1);
+                result.push(old[index]);
                 old.splice(index, 1)
             }
             return result
         }
-    })
+    });
     /*
         #### Text
     */
@@ -1067,15 +1067,15 @@ var Random = (function() {
         */
         paragraph: function(min, max) {
             var len;
-            if (arguments.length === 0) len = Random.natural(3, 7)
-            if (arguments.length === 1) len = max = min
+            if (arguments.length === 0) len = Random.natural(3, 7);
+            if (arguments.length === 1) len = max = min;
             if (arguments.length === 2) {
-                min = parseInt(min, 10)
-                max = parseInt(max, 10)
+                min = parseInt(min, 10);
+                max = parseInt(max, 10);
                 len = Random.natural(min, max)
             }
 
-            var arr = []
+            var arr = [];
             for (var i = 0; i < len; i++) {
                 arr.push(Random.sentence())
             }
@@ -1107,15 +1107,15 @@ var Random = (function() {
         */
         sentence: function(min, max) {
             var len;
-            if (arguments.length === 0) len = Random.natural(12, 18)
-            if (arguments.length === 1) len = max = min
+            if (arguments.length === 0) len = Random.natural(12, 18);
+            if (arguments.length === 1) len = max = min;
             if (arguments.length === 2) {
-                min = parseInt(min, 10)
-                max = parseInt(max, 10)
+                min = parseInt(min, 10);
+                max = parseInt(max, 10);
                 len = Random.natural(min, max)
             }
 
-            var arr = []
+            var arr = [];
             for (var i = 0; i < len; i++) {
                 arr.push(Random.word())
             }
@@ -1149,11 +1149,11 @@ var Random = (function() {
         */
         word: function(min, max) {
             var len;
-            if (arguments.length === 0) len = Random.natural(3, 10)
-            if (arguments.length === 1) len = max = min
+            if (arguments.length === 0) len = Random.natural(3, 10);
+            if (arguments.length === 1) len = max = min;
             if (arguments.length === 2) {
-                min = parseInt(min, 10)
-                max = parseInt(max, 10)
+                min = parseInt(min, 10);
+                max = parseInt(max, 10);
                 len = Random.natural(min, max)
             }
 
@@ -1192,11 +1192,11 @@ var Random = (function() {
             var len,
                 result = [];
 
-            if (arguments.length === 0) len = Random.natural(3, 7)
-            if (arguments.length === 1) len = max = min
+            if (arguments.length === 0) len = Random.natural(3, 7);
+            if (arguments.length === 1) len = max = min;
             if (arguments.length === 2) {
-                min = parseInt(min, 10)
-                max = parseInt(max, 10)
+                min = parseInt(min, 10);
+                max = parseInt(max, 10);
                 len = Random.natural(min, max)
             }
 
@@ -1205,7 +1205,7 @@ var Random = (function() {
             }
             return result.join(' ')
         }
-    })
+    });
     /*
         #### Name
     */
@@ -1241,7 +1241,7 @@ var Random = (function() {
                 "Michelle", "Laura", "Sarah", "Kimberly", "Deborah",
                 "Jessica", "Shirley", "Cynthia", "Angela", "Melissa",
                 "Brenda", "Amy", "Anna"
-            ])
+            ]);
             return this.pick(names)
         },
         /*
@@ -1265,7 +1265,7 @@ var Random = (function() {
                 "Lopez", "Lee", "Gonzalez", "Harris", "Clark",
                 "Lewis", "Robinson", "Walker", "Perez", "Hall",
                 "Young", "Allen"
-            ]
+            ];
             return this.pick(names)
         },
         /*
@@ -1322,7 +1322,7 @@ var Random = (function() {
             }
             return familyName + name;
         }
-    })
+    });
     /*
         #### Web
     */
@@ -1370,7 +1370,7 @@ var Random = (function() {
                 // => "x.davis@jackson.edu"
         */
         email: function(domain) {
-            return this.character('lower') + '.' + this.last().toLowerCase() + '@' + this.last().toLowerCase() + '.' + this.tld()
+            return this.character('lower') + '.' + this.last().toLowerCase() + '@' + this.last().toLowerCase() + '.' + this.tld();
             // return this.word() + '@' + (domain || this.domain())
         },
         /*
@@ -1407,7 +1407,7 @@ var Random = (function() {
         tld: function() { // Top Level Domain
             return this.pick(this.tlds)
         }
-    })
+    });
     /*
         #### Address
         TODO 
@@ -1495,17 +1495,17 @@ var Random = (function() {
 
         },
         zip: function(len) {
-            var zip = ''
+            var zip = '';
             for (var i = 0; i < (len || 6); i++) zip += this.natural(0, 9)
             return zip
         }
-    })
+    });
     // TODO ...
     Random.extend({
         todo: function() {
             return 'todo'
         }
-    })
+    });
 
     /*
         #### Miscellaneous
@@ -1584,7 +1584,7 @@ var Random = (function() {
 
             id = this.pick(this.regions).split(' ')[0] +
                 this.date('yyyyMMdd') +
-                this.string('number', 3)
+                this.string('number', 3);
 
             for (var i = 0; i < id.length; i++) {
                 sum += id[i] * rank[i];
@@ -1623,10 +1623,10 @@ var Random = (function() {
         inc: function(step) {
             return this.increment(step)
         }
-    })
+    });
 
     return Random
-})()
+})();
 // END(BROWSER)
 
-module.exports = Random
+module.exports = Random;
