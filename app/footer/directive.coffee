@@ -18,7 +18,7 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
             scope.contentType = ''
             scope.conditionTags = []
             scope.contentList = []
-            contentObjGuidList = []
+            contentObjList = []
             guid = ''
             exportData = null
 
@@ -45,6 +45,7 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                     if btnObj.type is 'double'
                         for leftItemObj, j in btnObj.content.list
                             leftItemObj.guid = Mock.Random.guid() ? new Date().getTime()
+                            leftItemObj.hasCondition = false
                             if angular.isArray leftItemObj.condition
                                 for condition, k in leftItemObj.condition
                                     condition.active = k
@@ -102,7 +103,7 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                 e.stopPropagation()
                 scope.conditionItemActive = condition.active
                 dataCache.put('conditionItemActive' + contentObj.guid, condition.active)
-                contentObjGuidList.push(contentObj.guid)
+                contentObjList.push(contentObj)
                 dataCache.put('doubleItem' + guid, {
                     doubleLeftItem: contentObj
                     conditionItemActive: condition.active
@@ -137,6 +138,7 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                             conditionCode = contentObj.conditionCode
                             index = codeList.indexOf(conditionCode)
                             scope.conditionTags.splice(index, 1)
+                            contentObj.hasCondition = false;
 
                 else
                     if condition.code isnt ''
@@ -144,10 +146,18 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                     else
                         return
 
+                setBadge()
+
                 exportData = {
                     leftItem: contentObj
                     rightItem: scope.conditionTags
                 }
+                return
+
+            setBadge = ->
+                for condition, i in scope.conditionTags
+                    contentObj = condition.parent
+                    contentObj.hasCondition = true
                 return
 
             scope.emptyHandler = (e)->
@@ -155,8 +165,9 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                 scope.conditionTags.length = 0
                 scope.conditionItemActive = 0
                 dataCache.remove('doubleItem' + guid)
-                for guid, i in contentObjGuidList
-                    dataCache.put('conditionItemActive' + guid, 0)
+                for contentObj, i in contentObjList
+                    dataCache.put('conditionItemActive' + contentObj.guid, 0)
+                    contentObj.hasCondition = false
                 return
 
             scope.removeConditionTagHandler = (condition, e) ->
@@ -165,6 +176,7 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                 scope.conditionTags.splice(conditionIndex, 1)
                 contentObj = condition.parent
                 dataCache.put('conditionItemActive' + contentObj.guid, 0)
+                contentObj.hasCondition = false
                 scope.conditionItemActive = 0
                 condition.parent = null;
                 return

@@ -168,10 +168,19 @@ body{
                     width: 130px;
                     overflow-x: hidden;
                     overflow-y: auto;
-                    & li{
+                    >ul>li{
                         border: none;
                         text-align: center;
                         .bgc(#f5f5f5);
+                        &.hasCondition:after{
+                            content: '';
+                            float: right;
+                            width: 6px;
+                            height: 6px;
+                            margin-top: 19px;
+                            .bdr(50%);
+                            .bgc(#D30775);
+                        }
                         >.m-ft-content-db-r{
                             position: absolute;
                             top: 44px;

@@ -33,7 +33,7 @@
                     </div>
                     <div class="m-ft-content-db-l">
                         <ul>
-                            <li ng-class="{selected: doubleItemActive === contentObj.active}"
+                            <li ng-class="{selected: doubleItemActive === contentObj.active, hasCondition: contentObj.hasCondition}"
                                 ng-click="doubleTypeLeftListClickEventHandler(contentObj, $event)"
                                 ng-repeat="contentObj in contents">
                                 {{contentObj.text}}

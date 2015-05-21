@@ -11,7 +11,7 @@
           config: '='
         },
         link: function(scope, element, attrs) {
-          var config, contentObjGuidList, emitData, exportData, factoryData, guid, hideContent, promise, setConditionTag, url;
+          var config, contentObjList, emitData, exportData, factoryData, guid, hideContent, promise, setBadge, setConditionTag, url;
           config = scope.config;
           url = config.url;
           scope.btnList = null;
@@ -21,7 +21,7 @@
           scope.contentType = '';
           scope.conditionTags = [];
           scope.contentList = [];
-          contentObjGuidList = [];
+          contentObjList = [];
           guid = '';
           exportData = null;
           promise = $http({
@@ -48,6 +48,7 @@
                 for (j = m = 0, len1 = ref2.length; m < len1; j = ++m) {
                   leftItemObj = ref2[j];
                   leftItemObj.guid = (ref3 = Mock.Random.guid()) != null ? ref3 : new Date().getTime();
+                  leftItemObj.hasCondition = false;
                   if (angular.isArray(leftItemObj.condition)) {
                     ref4 = leftItemObj.condition;
                     for (k = n = 0, len2 = ref4.length; n < len2; k = ++n) {
@@ -114,7 +115,7 @@
             e.stopPropagation();
             scope.conditionItemActive = condition.active;
             dataCache.put('conditionItemActive' + contentObj.guid, condition.active);
-            contentObjGuidList.push(contentObj.guid);
+            contentObjList.push(contentObj);
             dataCache.put('doubleItem' + guid, {
               doubleLeftItem: contentObj,
               conditionItemActive: condition.active
@@ -155,6 +156,7 @@
                   conditionCode = contentObj.conditionCode;
                   index = codeList.indexOf(conditionCode);
                   scope.conditionTags.splice(index, 1);
+                  contentObj.hasCondition = false;
                 }
               }
             } else {
@@ -164,20 +166,31 @@
                 return;
               }
             }
+            setBadge();
             exportData = {
               leftItem: contentObj,
               rightItem: scope.conditionTags
             };
           };
+          setBadge = function() {
+            var condition, contentObj, i, l, len, ref;
+            ref = scope.conditionTags;
+            for (i = l = 0, len = ref.length; l < len; i = ++l) {
+              condition = ref[i];
+              contentObj = condition.parent;
+              contentObj.hasCondition = true;
+            }
+          };
           scope.emptyHandler = function(e) {
-            var i, l, len;
+            var contentObj, i, l, len;
             e.stopPropagation();
             scope.conditionTags.length = 0;
             scope.conditionItemActive = 0;
             dataCache.remove('doubleItem' + guid);
-            for (i = l = 0, len = contentObjGuidList.length; l < len; i = ++l) {
-              guid = contentObjGuidList[i];
-              dataCache.put('conditionItemActive' + guid, 0);
+            for (i = l = 0, len = contentObjList.length; l < len; i = ++l) {
+              contentObj = contentObjList[i];
+              dataCache.put('conditionItemActive' + contentObj.guid, 0);
+              contentObj.hasCondition = false;
             }
           };
           scope.removeConditionTagHandler = function(condition, e) {
@@ -187,6 +200,7 @@
             scope.conditionTags.splice(conditionIndex, 1);
             contentObj = condition.parent;
             dataCache.put('conditionItemActive' + contentObj.guid, 0);
+            contentObj.hasCondition = false;
             scope.conditionItemActive = 0;
             condition.parent = null;
           };
