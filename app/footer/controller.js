@@ -107,7 +107,8 @@
             },
             callback: function() {}
           }
-        ]
+        ],
+        url: './jsonData/condition.json'
       };
       $scope.$on('selectCondition', function(e, data) {
         $log.info(data);

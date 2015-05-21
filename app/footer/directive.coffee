@@ -86,13 +86,11 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                     doubleLeftItem: contentObj
                     conditionItemActive: condition.active
                 })
-                exportData = {
-                    leftItem: contentObj
-                    rightItem: condition
-                }
+
                 for elem, i in contentObj.condition
                     if elem.code isnt ''
                         contentObj.conditionCode = elem.code.slice(0, elem.code.indexOf('='))
+                condition.parent = contentObj
                 setConditionTag(contentObj, condition)
                 return
 
@@ -124,6 +122,11 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                         scope.conditionTags.push(condition)
                     else
                         return
+
+                exportData = {
+                    leftItem: contentObj
+                    rightItem: scope.conditionTags
+                }
                 return
 
             scope.emptyHandler = (e)->
@@ -132,6 +135,16 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 scope.conditionItemActive = 0
                 for guid, i in contentObjGuidList
                     dataCache.put('conditionItemActive' + guid, 0)
+                return
+
+            scope.removeConditionTagHandler = (condition, e) ->
+                e.stopPropagation()
+                conditionIndex = scope.conditionTags.indexOf(condition)
+                scope.conditionTags.splice(conditionIndex, 1)
+                contentObj = condition.parent
+                dataCache.put('conditionItemActive' + contentObj.guid, 0)
+                scope.conditionItemActive = 0
+                condition.parent = null;
                 return
 
             scope.stopPropagation = (e)->

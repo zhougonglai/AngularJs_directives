@@ -129,8 +129,8 @@ myAppControllers.controller('IController', ['$scope', '$log', ($scope, $log)->
                     return
             }
         ]
+        url: './jsonData/condition.json'
     }
-
 
     $scope.$on('selectCondition', (e, data)->
         $log.info(data)

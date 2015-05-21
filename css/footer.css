@@ -73,6 +73,43 @@ body {
   color: #d30775;
   font-size: 14px;
 }
+.g-ft-ctn > .u-ft-mask > .g-condition-tag > a > i {
+  position: absolute;
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #d30775;
+  border-radius: 12px;
+  top: -5px;
+  left: -5px;
+  background-color: #fff;
+}
+.g-ft-ctn > .u-ft-mask > .g-condition-tag > a > i:before {
+  content: "";
+  height: 7px;
+  border-left: 1px solid #d30775;
+  position: absolute;
+  top: 41%;
+  left: 23%;
+  -webkit-transform: rotate(45deg) translateY(-50%);
+  -moz-transform: rotate(45deg) translateY(-50%);
+  -ms-transform: rotate(45deg) translateY(-50%);
+  -o-transform: rotate(45deg) translateY(-50%);
+  transform: rotate(45deg) translateY(-50%);
+}
+.g-ft-ctn > .u-ft-mask > .g-condition-tag > a > i:after {
+  content: "";
+  height: 7px;
+  border-left: 1px solid #d30775;
+  position: absolute;
+  top: 41%;
+  right: 25%;
+  -webkit-transform: rotate(-45deg) translateY(-50%);
+  -moz-transform: rotate(-45deg) translateY(-50%);
+  -ms-transform: rotate(-45deg) translateY(-50%);
+  -o-transform: rotate(-45deg) translateY(-50%);
+  transform: rotate(-45deg) translateY(-50%);
+}
 .g-ft-ctn .g-ft-content-ctn {
   position: absolute;
   bottom: 0;

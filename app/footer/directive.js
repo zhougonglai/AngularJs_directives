@@ -103,10 +103,6 @@
               doubleLeftItem: contentObj,
               conditionItemActive: condition.active
             });
-            exportData = {
-              leftItem: contentObj,
-              rightItem: condition
-            };
             ref5 = contentObj.condition;
             for (i = o = 0, len3 = ref5.length; o < len3; i = ++o) {
               elem = ref5[i];
@@ -114,6 +110,7 @@
                 contentObj.conditionCode = elem.code.slice(0, elem.code.indexOf('='));
               }
             }
+            condition.parent = contentObj;
             setConditionTag(contentObj, condition);
           };
           setConditionTag = function(contentObj, condition) {
@@ -151,6 +148,10 @@
                 return;
               }
             }
+            exportData = {
+              leftItem: contentObj,
+              rightItem: scope.conditionTags
+            };
           };
           scope.emptyHandler = function(e) {
             var len3, o;
@@ -161,6 +162,16 @@
               guid = contentObjGuidList[i];
               dataCache.put('conditionItemActive' + guid, 0);
             }
+          };
+          scope.removeConditionTagHandler = function(condition, e) {
+            var conditionIndex, contentObj;
+            e.stopPropagation();
+            conditionIndex = scope.conditionTags.indexOf(condition);
+            scope.conditionTags.splice(conditionIndex, 1);
+            contentObj = condition.parent;
+            dataCache.put('conditionItemActive' + contentObj.guid, 0);
+            scope.conditionItemActive = 0;
+            condition.parent = null;
           };
           scope.stopPropagation = function(e) {
             e.stopPropagation();
