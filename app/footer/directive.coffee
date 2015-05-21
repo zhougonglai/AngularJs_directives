@@ -1,4 +1,4 @@
-myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
+myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCache, $http)->
     {
         restrict: 'A'
         replace: true
@@ -10,8 +10,9 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
         link: (scope, element, attrs) ->
 
             config = scope.config
-            scope.btnList = config.btnList
-            scope.btnNum = scope.btnList.length
+            url = config.url
+            scope.btnList = null
+            scope.btnNum = 0
             scope.active = 0
             scope.isMaskShow = false
             scope.contentType = ''
@@ -21,15 +22,35 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
             guid = ''
             exportData = null
 
-            for btnObj, i in scope.btnList
-                btnObj.active = i
-                btnObj.guid = Mock.Random.guid() ? new Date().getTime()
-                if btnObj.type is 'double'
-                    for leftItemObj, j in btnObj.content.list
-                        leftItemObj.guid = Mock.Random.guid() ? new Date().getTime()
-                        if angular.isArray leftItemObj.condition
-                            for condition, k in leftItemObj.condition
-                                condition.active = k
+            promise = $http({
+                method: 'POST'
+                url: url
+            })
+
+            promise.success((data, status, headers)->
+                scope.btnList = data
+                scope.btnNum = scope.btnList.length
+                factoryData()
+                return
+            )
+            promise.error((err) ->
+                alert('请求数据出错')
+                return
+            )
+
+            factoryData = ->
+                for btnObj, i in scope.btnList
+                    btnObj.active = i
+                    btnObj.guid = Mock.Random.guid() ? new Date().getTime()
+                    if btnObj.type is 'double'
+                        for leftItemObj, j in btnObj.content.list
+                            leftItemObj.guid = Mock.Random.guid() ? new Date().getTime()
+                            if angular.isArray leftItemObj.condition
+                                for condition, k in leftItemObj.condition
+                                    condition.active = k
+                return
+
+
 
             scope.btnClickEventHandler = (btnObj)->
                 scope.contentType = btnObj.type
@@ -133,6 +154,7 @@ myAppDirectives.directive('footer', ['$log','dataCache', ($log, dataCache)->
                 e.stopPropagation()
                 scope.conditionTags.length = 0
                 scope.conditionItemActive = 0
+                dataCache.remove('doubleItem' + guid)
                 for guid, i in contentObjGuidList
                     dataCache.put('conditionItemActive' + guid, 0)
                 return
