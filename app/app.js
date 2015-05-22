@@ -85,6 +85,10 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
             templateUrl: baseViewTplUrl + '/FooterView.tpl.html',
             controller: 'IController'
         })
+        .when('/tab2', {
+            templateUrl: baseViewTplUrl + '/Tab2View.tpl.html',
+            controller: 'JController'
+        })
         .otherwise({
             redirectTo: '/home'
         });
