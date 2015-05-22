@@ -89,6 +89,10 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
             templateUrl: baseViewTplUrl + '/Tab2View.tpl.html',
             controller: 'JController'
         })
+        .when('/test', {
+            templateUrl: baseViewTplUrl + '/TestView.tpl.html',
+            controller: 'KController'
+        })
         .otherwise({
             redirectTo: '/home'
         });

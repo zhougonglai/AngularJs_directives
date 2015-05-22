@@ -50,6 +50,15 @@ body{
 .m-directive-list>li:nth-of-type(9)>a{
     background-color: #83af9b;
 }
+.m-directive-list>li:nth-of-type(10)>a{
+    background-color: #56a0d3;
+}
+.m-directive-list>li:nth-of-type(11)>a{
+    background-color: #7f181b;
+}
+.m-directive-list>li:nth-of-type(12)>a{
+    background-color: #ed1b2e;
+}
 
 .u-loading{
     position: absolute;

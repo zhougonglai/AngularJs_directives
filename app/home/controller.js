@@ -9,7 +9,7 @@ myAppControllers
             if (target.nodeName.toLocaleUpperCase() === 'A') {
                 switch (id) {
                     case 'j-modal-dialog':
-                        $location.path('/modalDialog');
+                        $location.path('/modalDialog').replace();
                         break;
                     case 'j-date-picker-base':
                         $location.path('/datePicker/base');
@@ -34,6 +34,9 @@ myAppControllers
                         break;
                     case 'j-tab2':
                         $location.path('/tab2');
+                        break;
+                    case 'j-test':
+                        $location.path('/test');
                         break;
                     case 'j-footer':
                         $location.path('/footer');
@@ -64,13 +67,5 @@ myAppControllers
                     ]
                 });
             }
-        };
-
-        $log.info('1');
-        $scope.reload = function() {
-            $log.info('刷新');
-            //$window.location.href = $location.absUrl();  //刷新测试无效
-            //$window.location.reload() //刷新全部页面
-            $route.reload(); //刷新单页面，即刷新当前路由对应的view
         };
     }]);
