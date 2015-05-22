@@ -2,7 +2,7 @@
  * Created by dulin on 2015/4/27.
  */
 myAppControllers
-    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', function ($scope, $log, $location, ngInfo) {
+    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', '$window', '$route', function ($scope, $log, $location, ngInfo, $window, $route) {
         $scope.directiveListClickHandler = function (e) {
             var target = e.target,
                 id = target.id;
@@ -64,5 +64,13 @@ myAppControllers
                     ]
                 });
             }
-        }
+        };
+
+        $log.info('1');
+        $scope.reload = function() {
+            $log.info('刷新');
+            //$window.location.href = $location.absUrl();  //刷新测试无效
+            //$window.location.reload() //刷新全部页面
+            $route.reload(); //刷新单页面，即刷新当前路由对应的view
+        };
     }]);
