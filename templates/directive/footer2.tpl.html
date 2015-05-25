@@ -1,0 +1,54 @@
+<div class="g-ft-ctn">
+    <div class="g-ft-btn">
+        <a class="u-ft-btn"
+           ng-click="btnClickEventHandler(btnObj, $event)"
+           ng-class="{active: btnActive === btnObj.active}"
+           ng-repeat="btnObj in btnList">
+            {{btnObj.cnText}}
+        </a>
+    </div>
+    <div class="g-ft-content-ctn" ng-show="isContentShow">
+        <div class="u-ft-mask"></div>
+        <div class="g-ft-content">
+            <div class="m-ft-nav" ng-if="menuType === 'nav'">
+                <ul>
+                    <li ng-click="navClickEventHandler(navObj, $event)"
+                        ng-class="{active: navActive === navObj.active}"
+                        ng-repeat="navObj in contentData">
+                        {{navObj.cnText}}
+                    </li>
+                </ul>
+            </div>
+            <div class="m-ft-sort" ng-if="menuType === 'sort'">
+                <ul>
+                    <li ng-click="sortClickEventHandler(sortObj, $event)"
+                        ng-class="{active: sortActive === sortObj.active}"
+                        ng-repeat="sortObj in contentData">
+                        {{sortObj.text}}
+                    </li>
+                </ul>
+            </div>
+            <div class="m-ft-pick" ng-if="menuType === 'pick'">
+                <div class="m-ft-pick-tt">
+                    <a>取消</a>
+                    <button class="u-empty-pick">清空筛选</button>
+                    <a>确定</a>
+                </div>
+                <ul class="m-ft-pick-l">
+                    <li ng-click="conditionTypeClickEventHandler(conditionObj, $event)"
+                        ng-class="{active: conditionTypeActive === conditionObj.active}"
+                        ng-repeat="conditionObj in contentData">
+                        {{conditionObj.conditionsType}}
+                        <ul class="m-ft-pick-r" ng-show="conditionTypeActive === conditionObj.active">
+                            <li ng-click="childConditionClickEventHandler(cObj, $event)"
+                                ng-class="{active: childConditionActive === cObj.active}"
+                                ng-repeat="cObj in conditionObj.conditionsList">
+                                {{cObj.value}}
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

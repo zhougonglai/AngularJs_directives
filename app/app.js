@@ -85,6 +85,10 @@ myApp.config(['$routeProvider', '$locationProvider', function ($routeProvider, $
             templateUrl: baseViewTplUrl + '/FooterView.tpl.html',
             controller: 'IController'
         })
+        .when('/footer2', {
+            templateUrl: baseViewTplUrl + '/Footer2View.tpl.html',
+            controller: 'LController'
+        })
         .when('/tab2', {
             templateUrl: baseViewTplUrl + '/Tab2View.tpl.html',
             controller: 'JController'

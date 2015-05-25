@@ -41,6 +41,9 @@ myAppControllers
                     case 'j-footer':
                         $location.path('/footer');
                         break;
+                    case 'j-footer2':
+                        $location.path('/footer2');
+                        break;
                     default:
                         break;
                 }
