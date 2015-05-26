@@ -98,12 +98,22 @@ body{
     text-align: center;
     background-color: #F5F5F5;
     border: none;
+    overflow: hidden;
 }
-
-
 
 .m-ft-pick-l>li.active{
     background-color: #fff;
+}
+
+.m-ft-pick-l>li>i{
+    float: right;
+    width: 8px;
+    height: 8px;
+    margin-top: 22px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #D30976;
 }
 
 .m-ft-pick-r{

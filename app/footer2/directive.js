@@ -214,6 +214,7 @@ myAppDirectives
                     for(; i < len; i++) {
                         conditionObj = data.conditionList[i];
                         conditionObj.active = i;
+                        conditionObj.hasCondition = false;
                         conditions = conditionObj.conditionsList;
                         for (var j = 0, l = conditions.length; j < l; j++) {
                             childConditionObj = conditions[j];
@@ -279,8 +280,10 @@ myAppDirectives
 
                 scope.childConditionClickEventHandler = function(conditionObj, childCondition, event) {
                     scope.childConditionActive = childCondition.active;
+                    childCondition.parent = conditionObj;
                     dataCache.put('childCondition' + scope.conditionTypeActive, childCondition);
                     conditionTypeActives.push(scope.conditionTypeActive);
+                    conditionObj.hasCondition = true;
                     setConditionTags(conditionObj, childCondition);
                 };
 
@@ -289,6 +292,7 @@ myAppDirectives
                     var codeIndex = codeList.indexOf(conditionObj.active);
                     var conditionIndex = scope.conditionTags.indexOf(childCondition);
                     if (code !== '') {
+
                         if (conditionIndex === -1) {
                             if(codeIndex === -1) {
                                 scope.conditionTags.push(childCondition);
@@ -300,6 +304,7 @@ myAppDirectives
                     } else {
                         scope.conditionTags.splice(codeIndex, 1);
                         codeList.splice(codeIndex, 1);
+                        conditionObj.hasCondition = false;
                     }
                 }
 
@@ -312,6 +317,12 @@ myAppDirectives
                     for(; i < len; i++) {
                         dataCache.put('childCondition' + conditionTypeActives[i], 0);
                     }
+                    var j = 0,
+                        conditionList = scope.renderData.conditionList,
+                        l = conditionList.length;
+                    for(; j < l; j++) {
+                        conditionList[j].hasCondition = false;
+                    }
                 };
 
                 scope.confirmHandler = function() {
@@ -322,6 +333,8 @@ myAppDirectives
                     var conditionIndex = scope.conditionTags.indexOf(condition);
                     scope.conditionTags.splice(conditionIndex, 1);
                     scope.childConditionActive = 0;
+                    condition.parent.hasCondition = false;
+                    condition.parent = null;
                     dataCache.put('childCondition' + scope.conditionTypeActive, 0);
                 };
 

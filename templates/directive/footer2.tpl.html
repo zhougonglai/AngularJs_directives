@@ -48,6 +48,7 @@
                         ng-class="{active: conditionTypeActive === conditionObj.active}"
                         ng-repeat="conditionObj in contentData">
                         {{conditionObj.conditionsType}}
+                        <i ng-show="conditionObj.hasCondition"></i>
                         <ul class="m-ft-pick-r" ng-show="conditionTypeActive === conditionObj.active">
                             <li ng-click="childConditionClickEventHandler(conditionObj, cObj, $event)"
                                 ng-class="{active: childConditionActive === cObj.active}"
