@@ -262,6 +262,8 @@ myAppDirectives
 
                 scope.navClickEventHandler = function(navObj, event) {
                     scope.navActive = navObj.active;
+                    scope.btnList[0].cnText =  navObj.cnText;
+                    emitData(navObj);
                 };
 
                 scope.sortClickEventHandler = function(sortObj, event) {
@@ -314,7 +316,6 @@ myAppDirectives
 
                 scope.confirmHandler = function() {
                     emitData(scope.conditionTags);
-                    scope.hideContent();
                 };
 
                 scope.deleteTag = function(condition) {
@@ -334,6 +335,7 @@ myAppDirectives
                         emitData = data;
                     }
                     scope.$emit('conditionSelectedEvent', emitData);
+                    scope.hideContent();
                 }
             }
         }
