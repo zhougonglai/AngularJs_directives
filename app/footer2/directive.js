@@ -133,8 +133,8 @@ myAppDirectives
             ]
         }
     })
-    .directive('footer', ['$log', 'footerConfig', '$http',
-    function($log, footerConfig, $http) {
+    .directive('footer', ['$log', 'footerConfig', '$http', 'dataCache',
+    function($log, footerConfig, $http, dataCache) {
         return {
             restrict: 'EA',
             replace: true,
@@ -148,6 +148,7 @@ myAppDirectives
                 var userConfig = scope.userConfig,
                     conditionUrl = userConfig.conditionUrl,
                     reqPromise,
+                    codeList = [],
                     linkFn = this;
 
                 scope.renderData = null;
@@ -176,6 +177,7 @@ myAppDirectives
                 scope.menuType = '';
                 scope.isContentShow = false;
                 scope.contentData = null;
+                scope.conditionTags = [];
 
 
                 init();
@@ -267,11 +269,34 @@ myAppDirectives
 
                 scope.conditionTypeClickEventHandler = function(conditionObj, event) {
                     scope.conditionTypeActive = conditionObj.active;
+                    var childCondition = dataCache.get('childCondition' + scope.conditionTypeActive);
+                    scope.childConditionActive = childCondition ? childCondition.active : 0;
                 };
 
-                scope.childConditionClickEventHandler = function(childCondition, event) {
+                scope.childConditionClickEventHandler = function(conditionObj, childCondition, event) {
                     scope.childConditionActive = childCondition.active;
+                    dataCache.put('childCondition' + scope.conditionTypeActive, childCondition);
+                    setConditionTags(conditionObj, childCondition);
                 };
+
+                function setConditionTags(conditionObj, childCondition) {
+                    var code = childCondition.code;
+                    var codeIndex = codeList.indexOf(conditionObj.active);
+                    var conditionIndex = scope.conditionTags.indexOf(childCondition);
+                    if (code !== '') {
+                        if (conditionIndex === -1) {
+                            if(codeIndex === -1) {
+                                scope.conditionTags.push(childCondition);
+                                codeList.push(conditionObj.active);
+                            } else {
+                                scope.conditionTags[codeIndex] = childCondition;
+                            }
+                        }
+                    } else {
+                        scope.conditionTags.splice(codeIndex, 1);
+                        codeList.splice(codeIndex, 1);
+                    }
+                }
             }
         }
     }

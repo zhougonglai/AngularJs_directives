@@ -7,8 +7,15 @@
             {{btnObj.cnText}}
         </a>
     </div>
+
     <div class="g-ft-content-ctn" ng-show="isContentShow">
         <div class="u-ft-mask"></div>
+        <div class="m-ft-condition-tags-ctn">
+            <a class="u-ft-condition-tag"
+               ng-repeat="condition in conditionTags">
+                {{condition.value}}
+            </a>
+        </div>
         <div class="g-ft-content">
             <div class="m-ft-nav" ng-if="menuType === 'nav'">
                 <ul>
@@ -28,6 +35,7 @@
                     </li>
                 </ul>
             </div>
+
             <div class="m-ft-pick" ng-if="menuType === 'pick'">
                 <div class="m-ft-pick-tt">
                     <a>取消</a>
@@ -40,7 +48,7 @@
                         ng-repeat="conditionObj in contentData">
                         {{conditionObj.conditionsType}}
                         <ul class="m-ft-pick-r" ng-show="conditionTypeActive === conditionObj.active">
-                            <li ng-click="childConditionClickEventHandler(cObj, $event)"
+                            <li ng-click="childConditionClickEventHandler(conditionObj, cObj, $event)"
                                 ng-class="{active: childConditionActive === cObj.active}"
                                 ng-repeat="cObj in conditionObj.conditionsList">
                                 {{cObj.value}}
