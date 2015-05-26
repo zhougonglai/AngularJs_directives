@@ -9,11 +9,12 @@
     </div>
 
     <div class="g-ft-content-ctn" ng-show="isContentShow">
-        <div class="u-ft-mask"></div>
-        <div class="m-ft-condition-tags-ctn">
+        <div class="u-ft-mask" ng-click="hideContent()"></div>
+        <div class="m-ft-condition-tags-ctn" ng-show="menuType === 'pick'">
             <a class="u-ft-condition-tag"
                ng-repeat="condition in conditionTags">
                 {{condition.value}}
+                <i class="u-tag-close" ng-click="deleteTag(condition)"></i>
             </a>
         </div>
         <div class="g-ft-content">
@@ -38,9 +39,9 @@
 
             <div class="m-ft-pick" ng-if="menuType === 'pick'">
                 <div class="m-ft-pick-tt">
-                    <a>取消</a>
-                    <button class="u-empty-pick">清空筛选</button>
-                    <a>确定</a>
+                    <a ng-click="hideContent()">取消</a>
+                    <button class="u-empty-pick" ng-click="emptyTags()">清空筛选</button>
+                    <a ng-click="confirmHandler()">确定</a>
                 </div>
                 <ul class="m-ft-pick-l">
                     <li ng-click="conditionTypeClickEventHandler(conditionObj, $event)"

@@ -149,6 +149,7 @@ myAppDirectives
                     conditionUrl = userConfig.conditionUrl,
                     reqPromise,
                     codeList = [],
+                    conditionTypeActives = [],
                     linkFn = this;
 
                 scope.renderData = null;
@@ -251,9 +252,9 @@ myAppDirectives
                     scope.isContentShow = true;
                 }
 
-                function hideContent() {
+                scope.hideContent = function() {
                     scope.isContentShow = false;
-                }
+                };
 
                 function toggleContent() {
                     scope.isContentShow = !scope.isContentShow;
@@ -265,6 +266,7 @@ myAppDirectives
 
                 scope.sortClickEventHandler = function(sortObj, event) {
                     scope.sortActive = sortObj.active;
+                    emitData(sortObj);
                 };
 
                 scope.conditionTypeClickEventHandler = function(conditionObj, event) {
@@ -276,6 +278,7 @@ myAppDirectives
                 scope.childConditionClickEventHandler = function(conditionObj, childCondition, event) {
                     scope.childConditionActive = childCondition.active;
                     dataCache.put('childCondition' + scope.conditionTypeActive, childCondition);
+                    conditionTypeActives.push(scope.conditionTypeActive);
                     setConditionTags(conditionObj, childCondition);
                 };
 
@@ -296,6 +299,41 @@ myAppDirectives
                         scope.conditionTags.splice(codeIndex, 1);
                         codeList.splice(codeIndex, 1);
                     }
+                }
+
+                scope.emptyTags = function() {
+                    scope.conditionTags.length = 0;
+                    codeList.length = 0;
+                    scope.childConditionActive = 0;
+                    var i = 0,
+                        len = conditionTypeActives.length;
+                    for(; i < len; i++) {
+                        dataCache.put('childCondition' + conditionTypeActives[i], 0);
+                    }
+                };
+
+                scope.confirmHandler = function() {
+                    emitData(scope.conditionTags);
+                    scope.hideContent();
+                };
+
+                scope.deleteTag = function(condition) {
+                    var conditionIndex = scope.conditionTags.indexOf(condition);
+                    scope.conditionTags.splice(conditionIndex, 1);
+                    scope.childConditionActive = 0;
+                    dataCache.put('childCondition' + scope.conditionTypeActive, 0);
+                };
+
+                function emitData(data) {
+                    var emitData;
+                    if (angular.isArray(data)) {
+                        emitData = {
+                            conditions: data
+                        }
+                    } else {
+                        emitData = data;
+                    }
+                    scope.$emit('conditionSelectedEvent', emitData);
                 }
             }
         }
