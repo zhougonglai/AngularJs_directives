@@ -1,6 +1,6 @@
-myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCache, $http)->
+myAppDirectives.directive('foot', ['$log','dataCache','$http', ($log, dataCache, $http)->
     {
-        restrict: 'A'
+        restrict: 'EA'
         replace: true
         transclude: true
         templateUrl: './templates/directive/footer.tpl.html'
@@ -50,7 +50,6 @@ myAppDirectives.directive('footer', ['$log','dataCache','$http', ($log, dataCach
                                 for condition, k in leftItemObj.condition
                                     condition.active = k
                 return
-
 
 
             scope.btnClickEventHandler = (btnObj)->
