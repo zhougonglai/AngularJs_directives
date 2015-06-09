@@ -1,7 +1,7 @@
 /**
  * Created by dulin on 2015/5/22.
  */
-myAppControllers.controller('KController', ['$scope', '$log', '$window', '$location', '$timeout', '$animate', '$route', '$http',
+myAppControllers.controller('KController', ['$scope', '$log', '$window', '$location', '$timeout', '$animate', '$route', '$http', 'flash',
     function($scope, $log, $window, $location, $timeout, $animate, $route, $http, flash) {
         $log.info('1');
         $scope.reload = function() {
@@ -42,7 +42,14 @@ myAppControllers.controller('KController', ['$scope', '$log', '$window', '$locat
 
 
         $scope.save = function() {
-            flash('Saved!')
+            // flash('Saved Success!');
+            // flash('error', 'Error happened!');
+            flash([
+                {level: 'success', text: 'messages1'}, 
+                {level: 'error', text: 'messages2'},
+                {level: 'warning', text: 'messages3'},
+                {level: 'info', text: 'messages4'}
+            ])
         }
 
 }]);

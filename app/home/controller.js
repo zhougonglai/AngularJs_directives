@@ -2,7 +2,8 @@
  * Created by dulin on 2015/4/27.
  */
 myAppControllers
-    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', '$window', '$route', function ($scope, $log, $location, ngInfo, $window, $route) {
+    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', '$window', '$route', 
+        function ($scope, $log, $location, ngInfo, $window, $route) {
         $scope.directiveListClickHandler = function (e) {
             var target = e.target,
                 id = target.id;

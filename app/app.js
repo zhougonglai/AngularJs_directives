@@ -5,6 +5,7 @@ var myApp = angular.module('myApp', [
     'ngRoute',
     'ngTouch',
     'ngAnimate',
+    'flash',
     'myApp.services',
     'myApp.controllers',
     'myApp.directives'
