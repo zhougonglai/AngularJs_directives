@@ -2,7 +2,7 @@
  * Created by dulin on 2015/5/22.
  */
 myAppControllers.controller('KController', ['$scope', '$log', '$window', '$location', '$timeout', '$animate', '$route', '$http',
-    function($scope, $log, $window, $location, $timeout, $animate, $route, $http) {
+    function($scope, $log, $window, $location, $timeout, $animate, $route, $http, flash) {
         $log.info('1');
         $scope.reload = function() {
             $log.info('刷新');
@@ -39,5 +39,10 @@ myAppControllers.controller('KController', ['$scope', '$log', '$window', '$locat
             $rootEle = angular.element(rootEle);
 
         var $rootS = $rootEle.scope();
+
+
+        $scope.save = function() {
+            flash('Saved!')
+        }
 
 }]);
