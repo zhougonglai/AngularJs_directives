@@ -1,4 +1,4 @@
-myAppControllers.controller('IController', ['$scope', '$log', ($scope, $log)->
+myAppControllers.controller('IController', ['$scope', '$log', '$window', ($scope, $log, $window)->
     $scope.footerConfig = {
         url: './jsonData/customCondition.json'
     }
@@ -7,5 +7,6 @@ myAppControllers.controller('IController', ['$scope', '$log', ($scope, $log)->
         $log.info(data)
         return
     )
+
     return
 ])

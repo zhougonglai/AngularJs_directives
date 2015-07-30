@@ -2,14 +2,15 @@
  * Created by dulin on 2015/4/27.
  */
 myAppControllers
-    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', function ($scope, $log, $location, ngInfo) {
+    .controller('HomeController', ['$scope', '$log', '$location','ngInfo', '$window', '$route', 
+        function ($scope, $log, $location, ngInfo, $window, $route) {
         $scope.directiveListClickHandler = function (e) {
             var target = e.target,
                 id = target.id;
             if (target.nodeName.toLocaleUpperCase() === 'A') {
                 switch (id) {
                     case 'j-modal-dialog':
-                        $location.path('/modalDialog');
+                        $location.path('/modalDialog').replace();
                         break;
                     case 'j-date-picker-base':
                         $location.path('/datePicker/base');
@@ -32,8 +33,17 @@ myAppControllers
                     case 'j-tab':
                         $location.path('/tab');
                         break;
+                    case 'j-tab2':
+                        $location.path('/tab2');
+                        break;
+                    case 'j-test':
+                        $location.path('/test');
+                        break;
                     case 'j-footer':
                         $location.path('/footer');
+                        break;
+                    case 'j-footer2':
+                        $location.path('/footer2');
                         break;
                     default:
                         break;
@@ -61,5 +71,5 @@ myAppControllers
                     ]
                 });
             }
-        }
+        };
     }]);

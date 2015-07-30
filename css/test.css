@@ -1,0 +1,15 @@
+#flash-messages li.error{
+	background-color: red;
+}
+
+#flash-messages>li.success{
+	background-color: green;
+}
+
+#flash-messages>li.info{
+	background-color: lightblue;
+}
+
+#flash-messages>li.warning{
+	background-color: #FF8000;
+}

@@ -1,0 +1,263 @@
+{
+	"navigation": [
+		{
+			"enText": "travel",
+			"cnText": "旅游度假",
+			"active": 0,
+			"sortData": [
+				{
+					"sort": "",
+					"text": "驴妈妈推荐",
+					"sortRule": "default",
+					"active": 0
+				},
+				{
+					"sort": 3,
+					"text": "价格从低到高",
+					"sortRule": "ASC",
+					"active": 1
+				},
+				{
+					"sort": 4,
+					"text": "价格从高到低",
+					"sortRule": "DESC",
+					"active": 2
+				}
+			]
+		},
+		{
+			"enText": "viewspot",
+			"cnText": "景点门票",
+			"active": 1,
+			"sortData": [
+				{
+					"sort": "",
+					"text": "驴妈妈推荐",
+					"sortRule": "default",
+					"active": 0
+				},
+				{
+					"sort": 33,
+					"text": "价格从低到高",
+					"sortRule": "ASC",
+					"active": 1
+				},
+				{
+					"sort": 34,
+					"text": "价格从高到低",
+					"sortRule": "DESC",
+					"active": 2
+				}
+			]
+		},
+		{
+			"enText": "hotel",
+			"cnText": "酒店",
+			"active": 2,
+			"sortData": [
+				{
+					"sort": "",
+					"text": "驴妈妈推荐",
+					"sortRule": "default",
+					"active": 0
+				},
+				{
+					"sort": 14,
+					"text": "价格从低到高",
+					"sortRule": "ASC",
+					"active": 1
+				},
+				{
+					"sort": 13,
+					"text": "价格从高到低",
+					"sortRule": "DESC",
+					"active": 2
+				}
+			]
+		},
+		{
+			"enText": "edph",
+			"cnText": "吃喝玩乐",
+			"active": 3,
+			"sortData": [
+				{
+					"sort": "",
+					"text": "驴妈妈推荐",
+					"sortRule": "default",
+					"active": 0
+				},
+				{
+					"sort": 33,
+					"text": "价格从低到高",
+					"sortRule": "ASC",
+					"active": 1
+				},
+				{
+					"sort": 34,
+					"text": "价格从高到低",
+					"sortRule": "DESC",
+					"active": 2
+				}
+			]
+		},
+		{
+			"enText": "car",
+			"cnText": "用车",
+			"active": 4,
+			"sortData": [
+				{
+					"sort": "",
+					"text": "驴妈妈推荐",
+					"sortRule": "default",
+					"active": 0
+				},
+				{
+					"sort": 33,
+					"text": "价格从低到高",
+					"sortRule": "ASC",
+					"active": 1
+				},
+				{
+					"sort": 34,
+					"text": "价格从高到低",
+					"sortRule": "DESC",
+					"active": 2
+				}
+			]
+		}
+	],
+	"conditionsList": [
+		{
+			"conditionsList": [
+				{
+					"code": "",
+					"value": "不限",
+					"active": 0
+				},
+				{
+
+					"code": "routeNum=2",
+					"value": "2天",
+					"active": 1
+				},
+				{
+					"code": "routeNum=3",
+					"value": "3天",
+					"active": 2
+				},
+				{
+					"code": "routeNum=4",
+					"value": "4天",
+					"active": 3
+				},
+				{
+					"code": "routeNum=5",
+					"value": "5天",
+					"active": 4
+				}
+			],
+			"active": 0,
+			"conditionsType": "游玩天数"
+		},
+		{
+			"conditionsList": [
+				{
+					"code": "",
+					"value": "不限"
+				},
+				{
+					"code": "destId=267",
+					"value": "海南"
+				},
+				{
+					"code": "destId=272",
+					"value": "三亚"
+				},
+				{
+					"code": "destId=231978",
+					"value": "海棠湾镇"
+				},
+				{
+					"code": "destId=496",
+					"value": "陵水"
+				}
+			],
+			"active": 1,
+			"conditionsType": "包含地区"
+		},
+		{
+			"conditionsList": [
+				{
+					"code": "",
+					"value": "不限"
+				},
+				{
+					"code": "viewPiont=10600417",
+					"value": "三亚梦幻水上乐园"
+				},
+				{
+					"code": "viewPiont=153217",
+					"value": "亚龙湾热带天堂森林公园"
+				},
+				{
+					"code": "viewPiont=101548",
+					"value": "蜈支洲岛度假中心"
+				},
+				{
+					"code": "viewPiont=100530",
+					"value": "南山寺"
+				},
+				{
+					"code": "viewPiont=101681",
+					"value": "鹿回头山顶公园"
+				}
+			],
+			"active": 2,
+			"conditionsType": "景点"
+		},
+		{
+			"conditionsList": [
+				{
+					"code": "",
+					"value": "不限"
+				},
+				{
+					"code": "subjectId=87",
+					"value": "海滨岛屿"
+				},
+				{
+					"code": "subjectId=86",
+					"value": "温泉"
+				}
+			],
+			"active": 3,
+			"conditionsType": "主题"
+		},
+		{
+			"conditionsList": [
+				{
+					"code": "",
+					"value": "不限"
+				},
+				{
+					"code": "price=(0,1000)",
+					"value": "1000元以内"
+				},
+				{
+					"code": "price=1000,3000",
+					"value": "1000-3000元"
+				},
+				{
+					"code": "price=3001,5000",
+					"value": "3001-5000元"
+				},
+				{
+					"code": "price=(5000",
+					"value": "5000元以上"
+				}
+			],
+			"active": 4,
+			"conditionsType": "价格范围"
+		}
+	]
+}
