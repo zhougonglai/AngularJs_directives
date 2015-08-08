@@ -1,5 +1,11 @@
 <div isBool="true" isNum="123" config="config" money="vm.money">
     hello world
     <p>&#165;{{vm.money}}</p>
+    <input ng-model="config.name" />
+    <p ng-bind="config.name | uppercase"></p>
+    <form name="userForm" accept-charset="utf-8" ng-submit="submit(userForm)">
+        <input type=" number " ng-model="telephoneNumber " ng-maxLength="11" ng-minLength="11" required />
+        <input type="email" ng-model="email" required>
+        <button>submit</button>
+    </form>
 </div>
-

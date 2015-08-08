@@ -2,7 +2,7 @@
  * Created by dulin on 2015/4/27.
  */
 myAppControllers
-    .controller('FController', ['$scope', '$log', '$interval',function ($scope, $log,$interval) {
+    .controller('FController', ['$scope', '$log', '$interval', function($scope, $log, $interval) {
 
         $scope.config = {
             name: 'novaline',
@@ -19,7 +19,18 @@ myAppControllers
 
         $scope.count = 1;
 
-        $interval(function() {
-            $scope.count ++;
-        }, 1000);
+        // $interval(function() {
+        //     $scope.count ++;
+        // }, 1000);
+
+        $scope.$watch('config.name', function(newVal, oldVal, $scope) {
+            if (newVal !== oldVal) {
+                $scope.config.name = "hi";
+            }
+        });
+
+        $scope.submit = function(userForm) {
+            debugger;
+        }
+
     }]);

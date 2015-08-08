@@ -12,28 +12,26 @@ var myApp = angular.module('myApp', [
 
 var weixinid;
 
-angular.element(document).ready(function () {
-    setTimeout(function () {
-        console.log('start');
-        weixinid = '1sdfsdf213';
-        angular.bootstrap(document, ['myApp']);
-    }, 3000)
+angular.element(document).ready(function() {
+    console.log('start');
+    weixinid = '1sdfsdf213';
+    angular.bootstrap(document, ['myApp']);
 });
 
-myApp.run(['$rootScope', '$log', '$timeout', '$window', function ($rootScope, $log, $timeout, $window) {
+myApp.run(['$rootScope', '$log', '$timeout', '$window', function($rootScope, $log, $timeout, $window) {
     $rootScope.loading = false;
-    $rootScope.$on('$routeChangeStart', function (event, current, previous, rejection) {
+    $rootScope.$on('$routeChangeStart', function(event, current, previous, rejection) {
         $rootScope.loading = true;
     });
-    $rootScope.$on('$routeChangeSuccess', function (event, current, previous, rejection) {
-        $timeout(function () {
+    $rootScope.$on('$routeChangeSuccess', function(event, current, previous, rejection) {
+        $timeout(function() {
             $rootScope.loading = false;
         }, 1000);
     });
-    $rootScope.$on('$routeChangeError', function () {
+    $rootScope.$on('$routeChangeError', function() {
         $window.location.href = './error.html';
     });
-}]).config(['$logProvider', function ($logProvider) {
+}]).config(['$logProvider', function($logProvider) {
     $logProvider.debugEnabled(false);
 }]);
 
@@ -44,7 +42,7 @@ var myAppDirectives = angular.module('myApp.directives', []);
 
 
 myApp.config(['$routeProvider', '$locationProvider', '$httpProvider',
-    function ($routeProvider, $locationProvider, $httpProvider) {
+    function($routeProvider, $locationProvider, $httpProvider) {
 
         var baseViewTplUrl = './templates/view';
         $httpProvider.defaults.headers = weixinid;
@@ -55,7 +53,7 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider',
                 templateUrl: baseViewTplUrl + '/HomeView.tpl.html',
                 controller: 'HomeController',
                 resolve: {
-                    "ngInfo": ['ngInfo', function (ngInfo) {
+                    "ngInfo": ['ngInfo', function(ngInfo) {
                         return ngInfo.getNgVersion();
                     }]
                 }
@@ -99,5 +97,5 @@ myApp.config(['$routeProvider', '$locationProvider', '$httpProvider',
             .otherwise({
                 redirectTo: '/home'
             });
-    }]);
-
+    }
+]);
